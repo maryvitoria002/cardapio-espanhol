@@ -210,62 +210,6 @@ label{
   font-size: 1.5rem;
   font-weight: 700;
 }
-/* toggler
-.sidebar-toggler {
-  background: #EEF2FF;
-  border: none;
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.4s ease;
-}
-.sidebar.collapsed .sidebar-toggler {
-  transform: rotate(180deg);
-} */
-
-/* navegação */
-/* .sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 72px);
-  overflow: hidden;
-}
-.nav-list {
-  list-style: none;
-  padding: 0 15px;
-  margin: 0;
-}
-.primary-nav {
-  flex: 1;
-  overflow-y: auto;
-  padding-top: 10px;
-}
-.secondary-nav {
-  padding-bottom: 20px;
-} */
-
-/* itens
-.nav-item {
-  position: relative;
-}
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  color: #F1F4FF;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background 0.3s, color 0.3s;
-}
-.nav-link:hover {
-  background: #EEF2FF;
-  color: #151A2D;
-} */
 
 /* ícones PNG (de 256×256) ajustados para cerca de 24px */
 .nav-link img {
@@ -274,32 +218,8 @@ label{
   object-fit: contain;
 }
 
-/* labels 
-
-.sidebar-header {
-  position: relative; /* para servir de referência ao toggler */
-} 
-/* 2) Reposiciona o toggler quando a sidebar estiver colapsada */
-.sidebar.collapsed .sidebar-toggler {
-  position: absolute !important;
-  top: 60px;          /* ajuste esse valor até ficar bem embaixo da sua logo */
-  right: 8px;         /* mantém alinhado à direita */
-  transform: none;    /* remove qualquer rotação indesejada */
-  transition: top 0.4s ease; /* suaviza o reposicionamento */
-} */
-
 /* CSS VIDEO */
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 270px;
-  height: 100vh;
-  background: #151A2D;
-  transition: all 0.4s ease;
-}
 .sidebar.collapsed {
   width: 85px;
 }
