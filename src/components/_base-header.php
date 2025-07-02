@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <div class="lateral">
+        <aside class="sidebar">
+        <!-- 
             <nav>
                 <ul>
                     <li>
@@ -33,7 +34,75 @@
                     </a></li>
                 </ul>
             </nav>
-        </div>
+        </div> -->
+
+            <!-- Sidebar Header -->
+            <header class="sidebar-header">
+                <a href="#" class="header-logo">
+                    <span>E.S</span>
+                </a>
+                <button class="sidebar-toggler">
+                    <!-- <i class="fa-solid fa-chevron-right"></i> -->
+                     <!-- Traçinho pra diminuir barra lateral -->
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            </header>
+
+            
+            <nav class="sidebar-nav">
+
+                <!-- Top nav primária -->
+                <ul class="nav-list primary-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/inicio.png" alt="inicio">
+                            <span class="nav-label">Início</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/cardapio.png" alt="cardapio">
+                            <span class="nav-label">Cardápio</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/carrinho.png" alt="carrinho">
+                            <span class="nav-label">Carrinho</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/historico.png" alt="historico">
+                            <span class="nav-label">Histórico</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/configuracoes.png" alt="configuracoes">
+                            <span class="nav-label">Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Top nav secundária -->
+                <ul class="nav-list secondary-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <img src="./assets/sair.png" alt="sair">
+                            <span class="nav-label">Sair</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="esquerda">…</div>
+        <div class="direita"></div>
     </div>
+
+    <!-- Script -->
+    <script src="https://kit.fontawesome.com/9c2b5a2876.js" crossorigin="anonymous"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>
