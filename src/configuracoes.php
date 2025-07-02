@@ -1,5 +1,5 @@
 <?php 
-$titulo = "Configurações";
+$titulo = "configuracoes";
 include_once "./components/_base-header.php";
 ?>
 

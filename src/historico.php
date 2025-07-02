@@ -1,5 +1,5 @@
 <?php 
-$titulo = "Histórico";
+$titulo = "historico";
 include_once "./components/_base-header.php";
 ?>
 

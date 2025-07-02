@@ -1,5 +1,5 @@
 <?php 
-$titulo = "Carrinho";
+$titulo = "carrinho";
 include_once "./components/_base-header.php";
 ?>
 
