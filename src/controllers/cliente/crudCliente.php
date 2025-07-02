@@ -44,10 +44,10 @@ function login($email, $senha) {
         $result = $stm->fetch(PDO::FETCH_ASSOC);
         if($result){
             session_start();
-            $_SESSION["nome"] = $result["nome"];
+            $_SESSION["nome"] = $result["nome_completo"];
             $_SESSION["email"] = $result["email"];
             $_SESSION["nivel_acesso"] = $result["nivel_acesso"];
-            $_SESSION["id"] = $result["id"];
+            $_SESSION["id"] = $result["cpf"];
             header("Location: ./index.php");
         } else {
             echo "<script>alert('Usuário ou senha inválidos')</script>";

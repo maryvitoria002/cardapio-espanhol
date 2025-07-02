@@ -7,7 +7,7 @@
       --azul-escuro: #053161;
       --azul-principal: #1565c0;
       --fundo-claro: #F0F3FF;
-      --amarelo-destaque: #ffc107;
+      --amarelo-destaque: #e9b004;
       --texto-escuro: #0d1836;
       --fundo-branco: #ffffff;
 }
@@ -302,7 +302,7 @@ label{
   transition: 0.4s ease;
 }
 .sidebar-nav .nav-item:is(:hover, .open)>.nav-link:not(.dropdown-title) {
-  background: #EEF2FF;
+  background: var(--amarelo-destaque);
 }
 .sidebar .nav-link .nav-label {
   transition: opacity 0.3s ease;

@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<?php 
+session_start();
+if(!isset($_SESSION["nome"])){
+    header("Location: ./login.php");
+}
+?>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -9,33 +15,7 @@
 <body>
     <div class="container">
         <aside class="sidebar">
-        <!-- 
-            <nav>
-                <ul>
-                    <li>
-                        <img src="./assets/logo.png" alt="Logo">
-                    </li>
-                    <li><a href="./index.php">
-                        <img src="./assets/inicio.png" alt="Menu">
-                    </a></li>
-                    <li><a href="./cardapio.php">
-                            <img src="./assets/cardapio.png" alt="Cardápio">
-                    </a></li>
-                    <li><a href="./carrinho.php">
-                        <img src="./assets/carrinho.png" alt="Carrinho">
-                    </a></li>
-                    <li><a href="./historico.php">
-                        <img src="./assets/historico.png" alt="Histórico">
-                    </a></li>
-                </ul>
-                <ul id="configuracoes">
-                    <li><a href="./configuracoes.php">
-                        <img src="./assets/configuracoes.png" alt="Configurações">
-                    </a></li>
-                </ul>
-            </nav>
-        </div> -->
-
+        
             <!-- Sidebar Header -->
             <header class="sidebar-header">
                 <a href="#" class="header-logo">
@@ -54,31 +34,31 @@
                 <!-- Top nav primária -->
                 <ul class="nav-list primary-nav">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./index.php" class="nav-link">
                             <img src="./assets/inicio.png" alt="inicio">
                             <span class="nav-label">Início</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./cardapio.php" class="nav-link">
                             <img src="./assets/cardapio.png" alt="cardapio">
                             <span class="nav-label">Cardápio</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./carrinho.php" class="nav-link">
                             <img src="./assets/carrinho.png" alt="carrinho">
                             <span class="nav-label">Carrinho</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./historico.php" class="nav-link">
                             <img src="./assets/historico.png" alt="historico">
                             <span class="nav-label">Histórico</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./configuracoes.php" class="nav-link">
                             <img src="./assets/configuracoes.png" alt="configuracoes">
                             <span class="nav-label">Configurações</span>
                         </a>
@@ -88,7 +68,7 @@
                 <!-- Top nav secundária -->
                 <ul class="nav-list secondary-nav">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="./sair.php" class="nav-link">
                             <img src="./assets/sair.png" alt="sair">
                             <span class="nav-label">Sair</span>
                         </a>
@@ -97,12 +77,6 @@
             </nav>
         </aside>
 
-        <div class="esquerda">…</div>
-        <div class="direita"></div>
-    </div>
+        <!-- conteudo da pagina -->
 
-    <!-- Script -->
-    <script src="https://kit.fontawesome.com/9c2b5a2876.js" crossorigin="anonymous"></script>
-    <script src="./js/script.js"></script>
-</body>
-</html>
+
