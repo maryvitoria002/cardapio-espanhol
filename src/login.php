@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <?php 
-require_once "./controllers/cliente/crudCliente.php";
+require_once "./controllers/cliente/CrudCliente.php";
+$cliente = new CrudCliente();
 
 if(isset($_POST["entrar"])){
     $email = $_POST["email"];
-    $senha = $_POST["senha"];
-    login($email, $senha);
+    $senha = md5($_POST["senha"]);
+
+    $cliente->setEmail($email);
+    $cliente->setSenha($senha);
+    $cliente->login();
 }
 
 ?>
@@ -35,7 +39,7 @@ if(isset($_POST["entrar"])){
             <div class="divide">Ou</div>
             
             <form action="./login.php" method="POST">
-                <label for="email">Email ou Nome de Usuário</label>
+                <label for="email">Email</label>
                 <input name="email" type="email" placeholder="Digite aqui..." />
                
                 <label for="senha">Senha</label>
@@ -43,7 +47,7 @@ if(isset($_POST["entrar"])){
                 
                 <div class="links">
                     <a href="#" style="color: grey" >Esqueceu a senha?</a>
-                    <p><strong>Ainda não tem uma conta?</strong><a href="#"><span style="color: #f1c40f">Cadastre-se</span></a></p>
+                    <p><strong>Ainda não tem uma conta?</strong><a href="./cadastro.php"><span style="color: #f1c40f">Cadastre-se</span></a></p>
                 </div>
                 <button id="entrar" name="entrar">ENTRAR</button>
             </form>

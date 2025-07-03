@@ -180,7 +180,13 @@ label{
   margin-top: 20px;
   width: 70%;
   width: 60%;
-  margin: 15px auto 10px auto;
+  /* margin: 15px auto 10px auto; */
+  margin: auto;
+  color: var(--fundo-branco);
+  background-color: var(--azul-escuro);
+  padding: 8px;
+  border: none;
+  border-radius: 12px;
 }
 
 /* ==== Estilos da sidebar CodingNepal adaptados ==== */

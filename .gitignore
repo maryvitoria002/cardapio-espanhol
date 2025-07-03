@@ -1,0 +1,4 @@
+script.sql
+*.sql
+.env
+define.php
