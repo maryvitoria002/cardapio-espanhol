@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+*{
+    font-family: "Outfit", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Mudar dps */
+    --main-color: #c41e67;
+    --dark-color: #a71555;
+    --step-color: #ced7e0;
+    --step-size: 32px;
+    --steps: 4;
+    --progress-width: calc((var(--steps) - 1) / var(--steps) * 100%);
+}
+
+body{
+    /* Mudar dps */
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background-color: lavender;
+    color: #333;
+}
+
+h1{
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Estilização do formulário */
+
+.form-wizard{
+    background-color: #fff;
+    padding: 32px;
+    border-radius: 8px;
+    width: min(600px, 80%);
+    box-shadow: 0 4px 16px rgba(167, 21, 84, 0.1)
+}
+
+.progress-container{
+    position: relative;
+}
+
+.progress-container::before{
+    content: "";
+    position: absolute;
+    top: calc(var(--step-size) / 2);
+    width: var(--progress-width);
+    height: 4px;
+    background-color: var(--step-color);
+    left: 50%;
+    translate: -50% -50%;
+}
+
+.progress-container .progress{
+    position: absolute;
+    top: calc(var(--step-size) / 2);
+    width: var(--progress-width);
+    height: 4px;
+    background-color: var(--main-color);
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 2;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.3s;
+}
+
+.progress-container ol{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    counter-reset: step-number;
+    position: relative;
+    z-index: 3;
+}
+
+.progress-container li{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--step-color);
+    transition: 0.3s linear 0.3s;
+}
+
+
+.progress-container li::before{
+    content: counter(step-number);
+    counter-increment: step-number;
+    width: var(--step-size);
+    height: var(--step-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--step-color);
+    border-radius: 50%;
+    color: #fff;
+}
+
+.progress-container li:where(.done, .current){
+    color: #333;
+    font-weight: 500;
+}
+
+.progress-container li.done::before{
+    background-color: var(--main-color);
+}
+
+.progress-container li.current::before{
+    background-color: var(--main-color);
+    box-shadow: 0 0 0 3px rgba(167, 21, 84, 0.25);
+}
