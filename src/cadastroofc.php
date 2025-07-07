@@ -20,6 +20,13 @@ include_once "./components/_base-header.php";
         </ol>
     </div>
 
+    <!-- Controles -->
+     <div class="controls">
+        <button class="prev-btn">Prev</button>
+        <button class="prev-btn">Prev</button>
+
+     </div>
+
 
 
 

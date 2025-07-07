@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php 
-require_once "./controllers/cliente/CrudCliente.php";
+require_once "./controllers/cliente/crudCliente.php";
 $cliente = new CrudCliente();
 
 if(isset($_POST["cadastrar"])){
