@@ -12,6 +12,7 @@ class Cliente extends Database{
     private $preferencias;
     private $nivel_acesso;
 
+
     public function getCpf():string {
         return $this->cpf;
     }
