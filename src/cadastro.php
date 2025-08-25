@@ -4,21 +4,28 @@ require_once "./controllers/cliente/crudCliente.php";
 $cliente = new CrudCliente();
 
 if(isset($_POST["cadastrar"])){
-    $nome_completo = $_POST["nome"];
-    $nascimento = $_POST["nascimento"];
-    $email = $_POST["email"];
-    $senha = md5($_POST["senha"]);
-    $cpf = $_POST["cpf"];
-    $telefone = $_POST["telefone"];
+    if(empty($_POST["nome1"]) || empty($_POST["nome2"]) || empty($_POST["email"]) || empty($_POST["senha"]) || empty($_POST["telefone"])) {
+        echo "<script>alert('Todos os campos são obrigatórios!');</script>";
+    } else {
+        $primeiro_nome = $_POST["nome1"];
+        $segun_nome = $_POST["nome2"];
+        $email = $_POST["email"];
+        $senha = md5($_POST["senha"]);
+        $telefone = $_POST["telefone"];
 
-    $cliente->setNome($nome_completo);
-    $cliente->setNat($nascimento);
-    $cliente->setEmail($email);
-    $cliente->setSenha($senha);
-    $cliente->setCpf($cpf);
-    $cliente->setTelefone($telefone);
-    $cliente->setNivelAcesso("Comum");
-    $cliente->insert();
+        try {
+            $cliente->setNome1($primeiro_nome);
+            $cliente->setNome2($segun_nome);
+            $cliente->setEmail($email);
+            $cliente->setSenha($senha);
+            $cliente->setTelefone($telefone);
+            $cliente->setData();
+            $cliente->setImagem(NULL);
+            $cliente->insert();
+        } catch (Exception $e) {
+            echo "<script>alert('Erro no cadastro: " . addslashes($e->getMessage()) . "');</script>";
+        }
+    }
 }
 ?>
 <html lang="pt-br">
@@ -39,13 +46,13 @@ if(isset($_POST["cadastrar"])){
             <form action="./cadastro.php" method="POST">
                 <div style="display: flex; gap: 10px">
                     <div style="width: 100%;">
-                        <label for="nome">Nome Completo</label>
-                        <input name="nome" type="text" placeholder="Digite aqui..." />
+                        <label for="nome1">Primeiro nome</label>
+                        <input name="nome1" type="text" placeholder="Digite aqui..." />
                     </div>
                     
                     <div style="width: 100%;">
-                        <label for="nascimento">Nascimento</label>
-                        <input name="nascimento" type="date" placeholder="01/01/0001" />
+                        <label for="nome2">Segundo nome</label>
+                        <input name="nome2" type="text" placeholder="Digite aqui..." />
                     </div>
                 </div>
                 
@@ -54,13 +61,9 @@ if(isset($_POST["cadastrar"])){
                 <input name="email" type="email" placeholder="Digite aqui..." />
 
                 <label for="senha">Senha</label>
-                <input name="senha" type="senha" placeholder="Digite aqui..."   />
+                <input name="senha" type="password" placeholder="Digite aqui..."   />
 
                 <div style="display: flex; gap: 10px">
-                    <div style="width: 100%;">
-                        <label for="cpf">CPF</label>
-                        <input name="cpf" type="text" placeholder="Digite aqui..." />
-                    </div>
                     
                     <div style="width: 100%;">
                         <label for="telefone">Telefone</label>

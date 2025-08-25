@@ -12,7 +12,7 @@ if(isset($_POST["entrar"])){
     $cliente->login();
 }
 
-?>
+// ?>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">

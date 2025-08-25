@@ -6,7 +6,7 @@ include_once "./components/_base-header.php";
     
  <main class="main-container">
     <header class="main-header">
-      <h2 class="user-greeting">Olá, Usu</h2>
+      <h2 class="user-greeting">Olá, Mary!</h2>
       <input type="text" placeholder="O que você quer comer hoje...Kelvin? Eu também!!" class="search-input">
     </header>
 
