@@ -21,7 +21,7 @@ if(isset($_POST["cadastrar"])){
             $cliente->setTelefone($telefone);
             $cliente->setData();
             $cliente->setImagem(NULL);
-            $cliente->insert();
+            $cliente->create();
         } catch (Exception $e) {
             echo "<script>alert('Erro no cadastro: " . addslashes($e->getMessage()) . "');</script>";
         }

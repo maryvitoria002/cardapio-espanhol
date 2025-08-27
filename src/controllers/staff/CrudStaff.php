@@ -1,29 +1,33 @@
 <?php 
-require_once "Usuarios.php";
 
-class CrudCliente extends Usuarios{
+require_once "./Staff.php";
 
+class CrudStaff extends Staff{
+ 
     // CRUD CRIAR (CREATE)
-    
+
     public function create(){
+        $nome1 = $this->getNome1();
+        $nome2 = $this->getNome2();
         $email = $this->getEmail();
-        $primeiro_nome = $this->getNome1();
-        $segun_nome = $this->getNome2();
         $telefone = $this->getTelefone();
+        $acesso = $this->getAcesso();
         $senha = $this->getSenha();
-        $dataCriacao = $this->getData();
-        $imagem_perfil = $this->getImagem();
-        $sql = "INSERT INTO `{$this->tabela}` (email, primei_nome, segun_nome, telefone, senha, dataCriacao, imagem_perfil) VALUES (:email, :primei_nome, :segun_nome, :telefone, :senha, :dataCriacao, :imagem_perfil)";
+        $this->setCriadoEm(); // Vai definir a data atual
+        $criadoEm = $this->getCriadoEm();
+        $imagem_perfil = $this->getImagem_perfil();
+        $sql = "INSERT INTO `{$this->tabela}` (primeiro_nome, segundo_nome, email, telefone, acesso, senha, criadoEm, imagem_perfil) VALUES (:primeiro_nome, :segundo_nome, :email, :telefone, :acesso, :senha, :criadoEm, :imagem_perfil)";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
+        $stmt->bindParam(":primeiro_nome", $nome1, PDO::PARAM_STR);
+        $stmt->bindParam(":segundo_nome", $nome2, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":primei_nome", $primeiro_nome, PDO::PARAM_STR);
-        $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
+        $stmt->bindParam(":acesso", $acesso, PDO::PARAM_STR);
         $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-        $stmt->bindParam(":dataCriacao", $dataCriacao, PDO::PARAM_STR);
+        $stmt->bindParam(":criadoEm", $criadoEm, PDO::PARAM_STR);
         $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
  
         try {
@@ -66,43 +70,39 @@ class CrudCliente extends Usuarios{
 
         try {
             $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($result){
-                session_start();
-                $_SESSION["nome1"] = $result["primei_nome"];
-                $_SESSION["nome2"] = $result["segun_nome"];
-                $_SESSION["id"] = $result["email"];
-                header("Location: ./index.php");
-                exit();
-            } else {
-                echo "<script>alert('Usuário ou senha inválidos')</script>";
-            }
-        } catch (PDOException $e){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
-        
     }
-    
-    // CRUD LER (UPDATE)
+
+    // CRUD ATUALIZAR (UPDATE)
     public function update(){
+        $id = $this->getId();
+        $nome1 = $this->getNome1();
+        $nome2 = $this->getNome2();
         $email = $this->getEmail();
-        $primeiro_nome = $this->getNome1();
-        $segun_nome = $this->getNome2();
         $telefone = $this->getTelefone();
+        $acesso = $this->getAcesso();
         $senha = $this->getSenha();
-        $imagem_perfil = $this->getImagem();
-        $sql = "UPDATE `{$this->tabela}` SET primei_nome = :primei_nome, segun_nome = :segun_nome, telefone = :telefone, senha = :senha, imagem_perfil = :imagem_perfil WHERE email = :email";
+        $this->setAtualizadoEm(); // Vai definir a data atual
+        $atualizadoEm = $this->getAtualizadoEm();
+        $imagem_perfil = $this->getImagem_perfil();
+        $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, email = :email, telefone = :telefone, acesso = :acesso, senha = :senha, atualizadoEm = :atualizadoEm, imagem_perfil = :imagem_perfil WHERE id = :id";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+        $stmt->bindParam(":primeiro_nome", $nome1, PDO::PARAM_STR);
+        $stmt->bindParam(":segundo_nome", $nome2, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":primei_nome", $primeiro_nome, PDO::PARAM_STR);
-        $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
+        $stmt->bindParam(":acesso", $acesso, PDO::PARAM_STR);
         $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
+        $stmt->bindParam(":atualizadoEm", $atualizadoEm, PDO::PARAM_STR);
         $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
- 
+
         try {
             $stmt->execute();
             echo "<script>alert('Atualização realizada com sucesso!'); window.location.href = './perfil.php';</script>";
@@ -112,25 +112,23 @@ class CrudCliente extends Usuarios{
         }
     }
 
-    // CRUD DE APAGAR
-
+    // CRUD DELETAR (DELETE)
     public function delete(){
-        $email = $this->getEmail();
-        $sql = "DELETE FROM `{$this->tabela}` WHERE email = :email";
+        $id = $this->getId();
+        $sql = "DELETE FROM `{$this->tabela}` WHERE id = :id";
         
-        // Create database instance and prepare statement
+        // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
- 
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+
         try {
             $stmt->execute();
-            echo "<script>alert('Conta deletada com sucesso!'); window.location.href = './login.php';</script>";
+            echo "<script>alert('Conta deletada com sucesso!'); window.location.href = '../home/index.php';</script>";
             exit();
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
     }
+    
 }
-
-

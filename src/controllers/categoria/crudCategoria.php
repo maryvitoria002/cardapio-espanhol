@@ -1,25 +1,25 @@
 <?php 
-require_once "Usuarios.php";
+require_once "Categoria.php";
 
-class CrudCliente extends Usuarios{
+class CrudCliente extends Categoria{
 
     // CRUD CRIAR (CREATE)
     
     public function create(){
-        $email = $this->getEmail();
-        $primeiro_nome = $this->getNome1();
+        $id_categ = $this->getid_categ();
+        $nomeCateg = $this->getNomecateg();
         $segun_nome = $this->getNome2();
         $telefone = $this->getTelefone();
         $senha = $this->getSenha();
         $dataCriacao = $this->getData();
         $imagem_perfil = $this->getImagem();
-        $sql = "INSERT INTO `{$this->tabela}` (email, primei_nome, segun_nome, telefone, senha, dataCriacao, imagem_perfil) VALUES (:email, :primei_nome, :segun_nome, :telefone, :senha, :dataCriacao, :imagem_perfil)";
+        $sql = "INSERT INTO `{$this->tabela}` (id_categ, primei_nome, segun_nome, telefone, senha, dataCriacao, imagem_perfil) VALUES (:id_categ, :primei_nome, :segun_nome, :telefone, :senha, :dataCriacao, :imagem_perfil)";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":primei_nome", $primeiro_nome, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
+        $stmt->bindParam(":primei_nome", $nomeCateg, PDO::PARAM_STR);
         $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
         $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
@@ -37,13 +37,13 @@ class CrudCliente extends Usuarios{
 
     // CRUD LER (READ)
     public function read(){;
-        $email = $this->getEmail();
-        $sql = "SELECT * FROM `{$this->tabela}` WHERE email = :email";
+        $id_categ = $this->getid_categ();
+        $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categ = :id_categ";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
 
         try {
             $stmt->execute();
@@ -54,14 +54,14 @@ class CrudCliente extends Usuarios{
     }
 
     public function login() {
-        $email = $this->getEmail();
+        $id_categ = $this->getid_categ();
         $senha = $this->getSenha();
-        $sql = "SELECT * FROM `{$this->tabela}` WHERE email = :email AND senha = :senha";
+        $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categ = :id_categ AND senha = :senha";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
         $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
 
         try {
@@ -71,7 +71,7 @@ class CrudCliente extends Usuarios{
                 session_start();
                 $_SESSION["nome1"] = $result["primei_nome"];
                 $_SESSION["nome2"] = $result["segun_nome"];
-                $_SESSION["id"] = $result["email"];
+                $_SESSION["id"] = $result["id_categ"];
                 header("Location: ./index.php");
                 exit();
             } else {
@@ -85,18 +85,18 @@ class CrudCliente extends Usuarios{
     
     // CRUD LER (UPDATE)
     public function update(){
-        $email = $this->getEmail();
+        $id_categ = $this->getid_categ();
         $primeiro_nome = $this->getNome1();
         $segun_nome = $this->getNome2();
         $telefone = $this->getTelefone();
         $senha = $this->getSenha();
         $imagem_perfil = $this->getImagem();
-        $sql = "UPDATE `{$this->tabela}` SET primei_nome = :primei_nome, segun_nome = :segun_nome, telefone = :telefone, senha = :senha, imagem_perfil = :imagem_perfil WHERE email = :email";
+        $sql = "UPDATE `{$this->tabela}` SET primei_nome = :primei_nome, segun_nome = :segun_nome, telefone = :telefone, senha = :senha, imagem_perfil = :imagem_perfil WHERE id_categ = :id_categ";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
         $stmt->bindParam(":primei_nome", $primeiro_nome, PDO::PARAM_STR);
         $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
@@ -115,13 +115,13 @@ class CrudCliente extends Usuarios{
     // CRUD DE APAGAR
 
     public function delete(){
-        $email = $this->getEmail();
-        $sql = "DELETE FROM `{$this->tabela}` WHERE email = :email";
+        $id_categ = $this->getid_categ();
+        $sql = "DELETE FROM `{$this->tabela}` WHERE id_categ = :id_categ";
         
         // Create database instance and prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
  
         try {
             $stmt->execute();
