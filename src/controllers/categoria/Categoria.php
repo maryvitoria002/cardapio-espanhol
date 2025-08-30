@@ -3,32 +3,32 @@ require_once "./db/conection.php";
 
 class Categoria extends Database{
     protected $tabela = "categoria";
-    private $id_categ;
-    private $nomeCateg;
-    private $dataCriacao;
+    private $id_categoria;
+    private $nome_categoria;
+    private $data_criacao;
 
-    public function getIdcateg():string {
-        return $this->id_categ;
+    public function getId_categoria():string {
+        return $this->id_categoria;
     }
     
-    public function setIdcateg($id_categ) {
-        $this->id_categ = $id_categ;
+    public function setId_categoria($id_categoria) {
+        $this->id_categoria = $id_categoria;
     }
 
-    public function getNomecateg():string {
-        return $this->nomeCateg;
+    public function getNome_categoria():string {
+        return $this->nome_categoria;
     }
 
-    public function setNomecateg($nomeCateg) {
-        $this->nomeCateg = $nomeCateg;
+    public function setNome_categora($nome_categoria) {
+        $this->nome_categoria= $nome_categoria;
     }
 
-    public function getData():string {
-        return $this->dataCriacao ?? "";
+    public function getData_criacao():string {
+        return $this->data_criacao ?? "";
     }
 
-    public function setData() {
-        $this->dataCriacao = date('Y-m-d H:i:s');
+    public function setData_criacao() {
+        $this->data_criacao = date('Y-m-d H:i:s');
     }
 
 }

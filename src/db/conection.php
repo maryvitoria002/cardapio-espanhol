@@ -22,4 +22,5 @@ class Database{
     public function prepare($sql){
         return self::getInstance()->prepare($sql);
     }
+
 }

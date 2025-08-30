@@ -1,33 +1,4 @@
 <!DOCTYPE html>
-<?php 
-require_once "./controllers/cliente/crudCliente.php";
-$cliente = new CrudCliente();
-
-if(isset($_POST["cadastrar"])){
-    if(empty($_POST["nome1"]) || empty($_POST["nome2"]) || empty($_POST["email"]) || empty($_POST["senha"]) || empty($_POST["telefone"])) {
-        echo "<script>alert('Todos os campos são obrigatórios!');</script>";
-    } else {
-        $primeiro_nome = $_POST["nome1"];
-        $segun_nome = $_POST["nome2"];
-        $email = $_POST["email"];
-        $senha = md5($_POST["senha"]);
-        $telefone = $_POST["telefone"];
-
-        try {
-            $cliente->setNome1($primeiro_nome);
-            $cliente->setNome2($segun_nome);
-            $cliente->setEmail($email);
-            $cliente->setSenha($senha);
-            $cliente->setTelefone($telefone);
-            $cliente->setData();
-            $cliente->setImagem(NULL);
-            $cliente->create();
-        } catch (Exception $e) {
-            echo "<script>alert('Erro no cadastro: " . addslashes($e->getMessage()) . "');</script>";
-        }
-    }
-}
-?>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -42,21 +13,21 @@ if(isset($_POST["cadastrar"])){
                 <strong>Écoute</strong> <span>Saveur</span>
             </h1>
             <p id="login">Faça cadastro:</p>
-            
-            <form action="./cadastro.php" method="POST">
+                 
+            <form action="./forms/cadastro_form.php" method="POST">
                 <div style="display: flex; gap: 10px">
                     <div style="width: 100%;">
-                        <label for="nome1">Primeiro nome</label>
-                        <input name="nome1" type="text" placeholder="Digite aqui..." />
+                        <label for="primeiro_nome">Primeiro nome</label>
+                        <input name="primeiro_nome" type="text" placeholder="Digite aqui..." />
                     </div>
                     
                     <div style="width: 100%;">
-                        <label for="nome2">Segundo nome</label>
-                        <input name="nome2" type="text" placeholder="Digite aqui..." />
+                        <label for="segundo_nome">Segundo nome</label>
+                        <input name="segundo_nome" type="text" placeholder="Digite aqui..." />
                     </div>
                 </div>
                 
-        
+
                 <label for="email">Email</label>
                 <input name="email" type="email" placeholder="Digite aqui..." />
 

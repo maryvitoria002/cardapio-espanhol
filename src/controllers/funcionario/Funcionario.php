@@ -1,42 +1,42 @@
 <?php 
 require_once "./db/conection.php";
 
-class Staff extends Database{
-    protected $tabela = "staff";
-    private $id;
+class Funcionario extends Database{
+    protected $tabela = "funcionario";
+    private $id_funcionario;
     private $primeiro_nome;
     private $segundo_nome;
     private $email;
     private $telefone;
     private $acesso;
     private $senha;
-    private $criadoEm;
-    private $atualizadoEm;
+    private $data_criacao;
+    private $data_atualizacao;
     private $imagem_perfil;
 
     // Getters e Setters
 
-    public function getId() {
-        return $this->id;
+    public function getId_funcionario() {
+        return $this->id_funcionario;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($id_funcionario) {
+        $this->id_funcionario = $id_funcionario;
     }
 
-    public function getNome1() {
+    public function getPrimeiro_nome() {
         return $this->primeiro_nome;
     }
 
-    public function setNome1($primeiro_nome) {
+    public function setPrimeiro_nome($primeiro_nome) {
         $this->primeiro_nome = $primeiro_nome;
     }
 
-    public function getNome2() {
+    public function getSegundo_nome() {
         return $this->segundo_nome ?? '';
     }
 
-    public function setNome2($segundo_nome) {
+    public function setSEgundo_nome($segundo_nome) {
         $this->segundo_nome = $segundo_nome;
     }
 
@@ -72,20 +72,20 @@ class Staff extends Database{
         $this->senha = $senha;
     }
 
-    public function getCriadoEm() {
-        return $this->criadoEm ?? "";
+    public function getData_criacao() {
+        return $this->data_criacao ?? "";
     }
 
-    public function setCriadoEm($criadoEm = null) {
-        $this->criadoEm = $criadoEm ?? date('Y-m-d H:i:s');
+    public function setData_criacao($data_criacao = null) {
+        $this->data_criacao = $data_criacao ?? date('Y-m-d H:i:s');
     }
 
-    public function getAtualizadoEm() {
-        return $this->atualizadoEm ?? "";
+    public function getData_atualizacao() {
+        return $this->data_atualizacao?? "";
     }
 
-    public function setAtualizadoEm($atualizadoEm = null) {
-        $this->atualizadoEm = $atualizadoEm ?? date('Y-m-d H:i:s');
+    public function setData_atualizacao($data_atualizacao = null) {
+        $this->data_atualizacao= $data_atualizacao ?? date('Y-m-d H:i:s');
     }
 
     public function getImagem_perfil() {

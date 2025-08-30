@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <?php 
-require_once "./controllers/cliente/CrudCliente.php";
-$cliente = new CrudCliente();
+require_once "./controllers/usuario/Crud_usuario.php";
+$usuario = new Crud_usuario();
 
 if(isset($_POST["entrar"])){
     $email = $_POST["email"];
     $senha = md5($_POST["senha"]);
 
-    $cliente->setEmail($email);
-    $cliente->setSenha($senha);
-    $cliente->login();
+    $usuario->setEmail($email);
+    $usuario->setSenha($senha);
+    $usuario->login();
 }
 
 // ?>

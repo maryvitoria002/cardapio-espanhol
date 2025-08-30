@@ -3,47 +3,42 @@
 require_once "../../db/conection.php";
 
 class Pedidos {
-    protected $tabela = "pedidos";
+    protected $tabela = "pedido";
     private $id_pedido;
-    private $email;
     private $endereco;
-    private $modo_p;
+    private $modo_pagamento;
     private $status_pagamento;
     private $data_pedido;
     private $status_pedido;
     private $motivo_cancelamento;
     private $nota;
+    private $id_usuario;
 
-    // Getters
-    public function getIdpedido() {
+    public function getId_pedido() {
         return $this->id_pedido;
-    }
-
-    public function getEmail() {
-        return $this->email;
     }
 
     public function getEndereco() {
         return $this->endereco;
     }
 
-    public function getModop () {
-        return $this->modo_p;
+    public function getModo_pagamento() {
+        return $this->modo_pagamento;
     }
 
-    public function getStatuspagamento () {
+    public function getStatus_pagamento () {
         return $this->status_pagamento;
     }
 
-    public function getDatapedido () {
+    public function getData_pedido () {
         return $this->data_pedido;
     }
 
-    public function getStatuspedido () {
+    public function getStatus_pedido () {
         return $this->status_pedido;
     }
 
-    public function getMotivocancelamento () {
+    public function getMotivo_cancelamento () {
         return $this->motivo_cancelamento;
     }
 
@@ -51,41 +46,44 @@ class Pedidos {
         return $this->nota;
     }
 
-    // Setters
+    public function getId_usuario(){
+        return $this->id_usuario;
+    }
 
-    public function setIdpedido($id_pedido) {
+    public function setId_pedido($id_pedido) {
         $this->id_pedido = $id_pedido;
     }
 
-    public function setEmail($email) {
-        $this->email = $email;
+    public function setId_usuario($id_usuario){
+        $this->id_usuario = $id_usuario;
     }
 
     public function setEndereco($endereco) {
         $this->endereco = $endereco;
     }
 
-    public function setModop($modo_p) {
-        $this->modo_p = $modo_p;
+    public function setModo_pagamento($modo_pagamento) {
+        $this->modo_pagamento = $modo_pagamento;
     }
 
-    public function setStatuspagamento($status_pagamento) {
+    public function setStatus_pagamento($status_pagamento) {
         $this->status_pagamento = $status_pagamento;
     }
 
-    public function setDatapedido($data_pedido) {
+    public function setData_pedido($data_pedido) {
         $this->data_pedido = $data_pedido;
     }
 
-    public function setStatuspedido($status_pedido) {
+    public function setStatus_pedido($status_pedido) {
         $this->status_pedido = $status_pedido;
     }
 
-    public function setMotivocancelamento($motivo_cancelamento) {
+    public function setMotivo_cancelamento($motivo_cancelamento) {
         $this->motivo_cancelamento = $motivo_cancelamento;
     }
 
     public function setNota($nota) {
         $this->nota = $nota;
     }
+
 }

@@ -1,8 +1,8 @@
 <?php 
 
-require_once "./Carrinho.php";
+require_once "./Pedido.php";
 
-class CrudCarrinho extends Carrinho{
+class CrudPedido extends Pedido{
  
     // CRUD CRIAR (CREATE)
     public function create(){

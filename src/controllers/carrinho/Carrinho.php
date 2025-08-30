@@ -1,43 +1,43 @@
 <?php 
 
-require_once "../../db/conection.php";
+require_once __DIR__ . "/../../db/conection.php";
 
-class Carrinho {
+class Carrinho extends Database{
     protected $tabela = "carrinho";
-    private $id;
-    private $email;
-    private $id_item;
+    private $id_carrinho;
     private $quantidade;
+    private $id_produto;
+    private $id_usuario;
 
     // Getters
-    public function getId() {
-        return $this->id;
+    public function getId_carrinho() {
+        return $this->id_carrinho;
     }
 
-    public function getEmail() {
-        return $this->email;
-    }
-
-    public function getIditem() {
-        return $this->id_item;
+    public function getId_produto() {
+        return $this->id_produto;
     }
 
     public function getQuantidade() {
         return $this->quantidade;
     }
 
+    public function getId_usuario() {
+        return $this->id_usuario;
+    }
+
     // Setters
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId_carrinho($id_carrinho) {
+        $this->id_carrinho = $id_carrinho;
     }
 
-    public function setIdCliente($email) {
-        $this->email = $email;
+    public function setId_usuario($id_usuario) {
+        $this->id_usuario= $id_usuario;
     }
 
-    public function setIditem($id_item) {
-        $this->id_item = $id_item;
+    public function setId_produto($id_produto) {
+        $this->id_produto= $id_produto;
     }
 
     public function setQuantidade($quantidade) {
