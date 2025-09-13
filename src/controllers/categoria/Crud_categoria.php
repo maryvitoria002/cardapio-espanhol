@@ -36,20 +36,28 @@ class Crud_categoria extends Categoria {
     }
 
     // CRUD LER (READ)
-    public function read(){;
-        $id_categ = $this->getid_categ();
-        $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categ = :id_categ";
+    public function read(){
+        $id_categoria = $this->getId_categoria();
         
-        // Criando uma instância para o bd e prepare statement
-        $database = new Database();
-        $stmt = $database->prepare($sql);
-        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
-
-        try {
+        if ($id_categoria) {
+            // Se há ID definido, buscar categoria específica
+            $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categoria = :id_categoria";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_STR);
             $stmt->execute();
+            
             return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e){
-            throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        } else {
+            // Se não há ID, buscar todas as categorias
+            $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria ASC";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 

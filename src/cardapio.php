@@ -28,31 +28,31 @@ try {
     $conexao = $database->getInstance();
     
     // Buscar categorias
-    $stmt = $conexao->prepare("SELECT * FROM categoria ORDER BY nome");
+    $stmt = $conexao->prepare("SELECT * FROM categoria ORDER BY nome_categoria");
     $stmt->execute();
     $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Buscar produtos
-    $sql = "SELECT p.*, c.nome as categoria_nome 
+    $sql = "SELECT p.*, c.nome_categoria as categoria_nome 
             FROM produto p 
             LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
-            WHERE p.disponivel = 1";
+            WHERE p.status = 'Disponivel'";
     
     $params = [];
     
     // Filtrar por categoria se selecionada
     if (!empty($categoria_selecionada)) {
-        $sql .= " AND c.nome = :categoria";
+        $sql .= " AND c.nome_categoria = :categoria";
         $params['categoria'] = $categoria_selecionada;
     }
     
     // Filtrar por termo de busca
     if (!empty($termo_busca)) {
-        $sql .= " AND (p.nome LIKE :busca OR p.descricao LIKE :busca)";
+        $sql .= " AND (p.nome_produto LIKE :busca OR p.descricao LIKE :busca)";
         $params['busca'] = "%$termo_busca%";
     }
     
-    $sql .= " ORDER BY c.nome, p.nome";
+    $sql .= " ORDER BY c.nome_categoria, p.nome_produto";
     
     $stmt = $conexao->prepare($sql);
     foreach ($params as $key => $value) {
@@ -92,7 +92,7 @@ try {
                 </form>
             </div>
             <div class="top-actions">
-                <button class="icon-btn cart-btn" onclick="verCarrinho()">
+                <button class="icon-btn cart-btn" onclick="window.location.href='./carrinho.php'">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">0</span>
                 </button>
@@ -118,6 +118,7 @@ try {
             </div>
             <div class="category-list">
                 <div class="category-item <?= empty($categoria_selecionada) ? 'active' : '' ?>" 
+                     data-categoria=""
                      onclick="filtrarCategoria('')">
                     <div class="category-icon">
                         <i class="fas fa-utensils"></i>
@@ -125,16 +126,17 @@ try {
                     <span>Todos</span>
                 </div>
                 <?php foreach ($categorias as $categoria): ?>
-                <div class="category-item <?= $categoria_selecionada === $categoria['nome'] ? 'active' : '' ?>" 
-                     onclick="filtrarCategoria('<?= htmlspecialchars($categoria['nome']) ?>')">
+                <div class="category-item <?= $categoria_selecionada === $categoria['nome_categoria'] ? 'active' : '' ?>" 
+                     data-categoria="<?= htmlspecialchars($categoria['nome_categoria']) ?>"
+                     onclick="filtrarCategoria('<?= htmlspecialchars($categoria['nome_categoria']) ?>')">
                     <div class="category-icon">
-                        <?php if ($categoria['imagem']): ?>
-                            <img src="<?= htmlspecialchars($categoria['imagem']) ?>" alt="<?= htmlspecialchars($categoria['nome']) ?>">
+                        <?php if (isset($categoria['imagem']) && $categoria['imagem']): ?>
+                            <img src="<?= htmlspecialchars($categoria['imagem']) ?>" alt="<?= htmlspecialchars($categoria['nome_categoria']) ?>">
                         <?php else: ?>
                             <i class="fas fa-utensils"></i>
                         <?php endif; ?>
                     </div>
-                    <span><?= htmlspecialchars($categoria['nome']) ?></span>
+                    <span><?= htmlspecialchars($categoria['nome_categoria']) ?></span>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -151,52 +153,54 @@ try {
                 <div class="product-grid">
                     <?php foreach ($produtos_categoria as $produto): ?>
                     <div class="product-card" data-categoria="<?= htmlspecialchars($categoria_nome) ?>">
-                        <div class="product-image">
-                            <?php if ($produto['imagem']): ?>
-                                <img src="<?= htmlspecialchars($produto['imagem']) ?>" alt="<?= htmlspecialchars($produto['nome']) ?>">
-                            <?php else: ?>
-                                <img src="./assets/placeholder-food.png" alt="<?= htmlspecialchars($produto['nome']) ?>">
-                            <?php endif; ?>
-                            <div class="product-badges">
-                                <?php if ($produto['preco'] < 15): ?>
-                                <span class="badge badge-promo">Promoção</span>
+                        <a href="./produto.php?id=<?= $produto['id_produto'] ?>" class="product-link">
+                            <div class="product-image">
+                                <?php if ($produto['imagem']): ?>
+                                    <img src="./images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
+                                <?php else: ?>
+                                    <img src="./assets/cardapio.png" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
                                 <?php endif; ?>
-                                <?php if (rand(0, 1)): ?>
-                                <span class="badge badge-popular">Popular</span>
-                                <?php endif; ?>
+                                <div class="product-badges">
+                                    <?php if ($produto['preco'] < 15): ?>
+                                    <span class="badge badge-promo">Promoção</span>
+                                    <?php endif; ?>
+                                    <?php if (rand(0, 1)): ?>
+                                    <span class="badge badge-popular">Popular</span>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-name"><?= htmlspecialchars($produto['nome']) ?></h3>
-                            <p class="product-description"><?= htmlspecialchars($produto['descricao']) ?></p>
-                            <div class="product-meta">
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <i class="fas fa-star <?= $i <= 4 ? 'filled' : '' ?>"></i>
-                                        <?php endfor; ?>
+                            <div class="product-info">
+                                <h3 class="product-name"><?= htmlspecialchars($produto['nome_produto']) ?></h3>
+                                <p class="product-description"><?= htmlspecialchars($produto['descricao']) ?></p>
+                                <div class="product-meta">
+                                    <div class="product-rating">
+                                        <div class="stars">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <i class="fas fa-star <?= $i <= 4 ? 'filled' : '' ?>"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <span class="rating-count">(<?= rand(10, 50) ?>)</span>
                                     </div>
-                                    <span class="rating-count">(<?= rand(10, 50) ?>)</span>
+                                    <div class="product-time">
+                                        <i class="fas fa-clock"></i>
+                                        <span><?= rand(15, 30) ?>min</span>
+                                    </div>
                                 </div>
-                                <div class="product-time">
-                                    <i class="fas fa-clock"></i>
-                                    <span><?= rand(15, 30) ?>min</span>
-                                </div>
-                            </div>
-                            <div class="product-footer">
-                                <div class="product-price">
-                                    R$ <?= number_format($produto['preco'], 2, ',', '.') ?>
-                                </div>
-                                <div class="product-actions">
-                                    <button class="qty-btn minus" onclick="diminuirQuantidade(<?= $produto['id_produto'] ?>)">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <span class="qty-display" id="qty-<?= $produto['id_produto'] ?>">0</span>
-                                    <button class="qty-btn plus" onclick="aumentarQuantidade(<?= $produto['id_produto'] ?>)">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                <div class="product-footer">
+                                    <div class="product-price">
+                                        R$ <?= number_format($produto['preco'], 2, ',', '.') ?>
+                                    </div>
                                 </div>
                             </div>
+                        </a>
+                        <div class="product-actions-external">
+                            <button class="qty-btn minus" onclick="diminuirQuantidade(<?= $produto['id_produto'] ?>)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="qty-display" id="qty-<?= $produto['id_produto'] ?>">0</span>
+                            <button class="qty-btn plus" onclick="aumentarQuantidade(<?= $produto['id_produto'] ?>)">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -248,17 +252,20 @@ try {
 
     // Filtrar por categoria
     function filtrarCategoria(categoria) {
+        console.log('Filtrando por categoria:', categoria);
         const url = new URL(window.location);
         if (categoria) {
             url.searchParams.set('categoria', categoria);
         } else {
             url.searchParams.delete('categoria');
         }
+        console.log('Nova URL:', url.toString());
         window.location = url;
     }
 
     // Limpar filtros
     function limparFiltros() {
+        console.log('Limpando filtros');
         window.location = window.location.pathname;
     }
 
@@ -270,6 +277,9 @@ try {
         carrinho[idProduto]++;
         atualizarDisplay(idProduto);
         atualizarCarrinho();
+        
+        // Enviar para o servidor
+        adicionarAoCarrinhoServidor(idProduto, 1);
     }
 
     function diminuirQuantidade(idProduto) {
@@ -280,7 +290,39 @@ try {
             }
             atualizarDisplay(idProduto);
             atualizarCarrinho();
+            
+            // Remover do servidor se quantidade chegou a 0
+            if (carrinho[idProduto] === undefined) {
+                removerDoCarrinhoServidor(idProduto);
+            }
         }
+    }
+    
+    function adicionarAoCarrinhoServidor(idProduto, quantidade) {
+        const formData = new FormData();
+        formData.append('add_to_cart', '1');
+        formData.append('produto_id', idProduto);
+        formData.append('quantidade', quantidade);
+        
+        fetch('./carrinho.php', {
+            method: 'POST',
+            body: formData
+        }).catch(error => {
+            console.error('Erro ao adicionar ao carrinho:', error);
+        });
+    }
+    
+    function removerDoCarrinhoServidor(idProduto) {
+        const formData = new FormData();
+        formData.append('remove_item', '1');
+        formData.append('produto_id', idProduto);
+        
+        fetch('./carrinho.php', {
+            method: 'POST',
+            body: formData
+        }).catch(error => {
+            console.error('Erro ao remover do carrinho:', error);
+        });
     }
 
     function atualizarDisplay(idProduto) {
@@ -335,6 +377,8 @@ try {
 
     // Busca em tempo real
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM carregado - inicializando eventos do cardápio');
+        
         const searchForm = document.querySelector('.search-form');
         const searchInput = searchForm.querySelector('input[name="busca"]');
         
@@ -344,6 +388,38 @@ try {
                 searchForm.submit();
             }
         });
+
+        // Adicionar eventos de clique para categorias (fallback)
+        const categoryItems = document.querySelectorAll('.category-item');
+        console.log('Categorias encontradas:', categoryItems.length);
+        
+        categoryItems.forEach(function(item, index) {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Categoria clicada:', index);
+                
+                // Remover classe active de todos os itens
+                categoryItems.forEach(cat => cat.classList.remove('active'));
+                
+                // Adicionar classe active ao item clicado
+                this.classList.add('active');
+                
+                // Obter categoria do data attribute
+                const categoria = this.getAttribute('data-categoria') || '';
+                console.log('Categoria selecionada:', categoria);
+                
+                filtrarCategoria(categoria);
+            });
+        });
+
+        // Adicionar evento para botão limpar filtros
+        const clearButton = document.querySelector('.clear-filter');
+        if (clearButton) {
+            clearButton.addEventListener('click', function() {
+                console.log('Botão limpar filtros clicado');
+                limparFiltros();
+            });
+        }
     });
 </script>
 

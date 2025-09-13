@@ -11,14 +11,30 @@ if (empty($_SESSION["id"])) {
     exit();
 }
 
+// Incluir controladores necessários
+require_once './controllers/produto/Crud_produto.php';
+require_once './controllers/categoria/Crud_categoria.php';
+
+// Criar instâncias para buscar dados
+$crudProduto = new Crud_produto();
+$crudCategoria = new Crud_categoria();
+
+// Buscar produtos em destaque (limitando a 6 para não sobrecarregar a página)
+$produtos = $crudProduto->read();
+$produtosDestaque = array_slice($produtos, 0, 6); // Pegar apenas os 6 primeiros
+
+// Buscar categorias
+$categorias = $crudCategoria->read();
+
 ?>
+<link rel="stylesheet" href="./styles/inicio_produtos.css">
     <div class="container">
         <!-- Coluna principal (esquerda) -->
         <main class="main-content">
             <!-- Cabeçalho -->
             <header class="header">
                 <div class="greeting">
-                    <h1>Olá, <?= $_SESSION["primeiro_nome"]?></h1>
+                    <h1>Olá, <?= isset($_SESSION["primeiro_nome"]) ? $_SESSION["primeiro_nome"] : "Usuário" ?></h1>
                 </div>
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
@@ -97,127 +113,131 @@ if (empty($_SESSION["id"])) {
             <section class="products">
                 <div class="section-header">
                     <h2>MAIS PEDIDOS</h2>
-                    <button class="see-all">Ver tudo...</button>
+                    <a href="cardapio.php" class="see-all">Ver tudo...</a>
                 </div>
                 <div class="product-list">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="assets/saladaceasar.png" alt="Salada Caesar">
+                    <?php if (!empty($produtosDestaque)): ?>
+                        <?php foreach ($produtosDestaque as $produto): ?>
+                            <div class="product-card">
+                                <a href="produto.php?id=<?php echo $produto['id_produto']; ?>" class="product-link">
+                                    <div class="product-image">
+                                        <?php if (!empty($produto['imagem'])): ?>
+                                            <img src="./images/comidas/<?php echo htmlspecialchars($produto['imagem']); ?>" 
+                                                 alt="<?php echo htmlspecialchars($produto['nome_produto']); ?>">
+                                        <?php else: ?>
+                                            <img src="./assets/avatar.png" alt="Produto sem imagem">
+                                        <?php endif; ?>
+                                    </div>
+                                    <h3 class="product-name"><?php echo htmlspecialchars($produto['nome_produto']); ?></h3>
+                                    <p class="product-price">R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                                    <div class="product-meta">
+                                        <span>Disponível</span>
+                                        <span>Estoque: <?php echo $produto['estoque']; ?></span>
+                                    </div>
+                                </a>
+                                <form method="POST" action="carrinho.php" style="display: inline;" onclick="event.stopPropagation();">
+                                    <input type="hidden" name="acao" value="adicionar">
+                                    <input type="hidden" name="id_produto" value="<?php echo $produto['id_produto']; ?>">
+                                    <input type="hidden" name="quantidade" value="1">
+                                    <button type="submit" class="add-btn" 
+                                            <?php echo $produto['estoque'] <= 0 ? 'disabled' : ''; ?>
+                                            onclick="event.stopPropagation();">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="no-products">
+                            <p>Nenhum produto disponível no momento.</p>
                         </div>
-                        <h3 class="product-name">Salada Caesar</h3>
-                        <p class="product-price">R$ 9,99</p>
-                        <div class="product-meta">
-                            <span>22Min</span>
-                            <span>4,47km</span>
-                        </div>
-                        <button class="add-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="assets/gaspachoverde.png" alt="Gaspacho Verde">
-                        </div>
-                        <h3 class="product-name">Gaspacho Verde</h3>
-                        <p class="product-price">R$ 9,99</p>
-                        <div class="product-meta">
-                            <span>22Min</span>
-                            <span>4,47km</span>
-                        </div>
-                        <button class="add-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="assets/Ramentori.png" alt="Ramen Tori Tamago">
-                        </div>
-                        <h3 class="product-name">Ramen Tori Tamago</h3>
-                        <p class="product-price">R$ 9,99</p>
-                        <div class="product-meta">
-                            <span>22Min</span>
-                            <span>4,47km</span>
-                        </div>
-                        <button class="add-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </section>
         </main>
-
-       
-        <aside class="sidebar">
-            <!-- Card de endereço -->
-            <div class="address-card">
-                <h2>Seu endereço</h2>
-                <div class="address-line">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Rua Manoel Vitorino, 10</span>
-                </div>
-                <p class="address-placeholder">
-                    Apartamento 305<br>
-                    Acima do real móveis<br>
-                    Referência: Casa de dona dedé
-                </p>
-                <div class="address-actions">
-                    <button class="btn-solid">Alterar</button>
-                    <button class="btn-outline">Add Detalhes</button>
-                    <button class="btn-outline">Add Nota</button>
-                </div>
-            </div>
-
-            <div class="order-card">
-                <h2>Menu de Pedidos</h2>
-                <div class="order-list">
-                    <div class="order-item">
-                        <div class="order-thumb">
-                            <img src="assets/Ramentori.png" alt="Ramen Tori Tamago">
-                        </div>
-                        <div class="order-details">
-                            <h3 class="order-name">Ramen Tori Tamago</h3>
-                            <span class="order-price">+R$ 9,99</span>
-                            <span class="order-qty">1x</span>
-                        </div>
-                    </div>
-                    <div class="order-item">
-                        <div class="order-thumb">
-                            <img src="assets/gaspachoverde.png" alt="Gaspacho Verde">
-                        </div>
-                        <div class="order-details">
-                            <h3 class="order-name">Gaspacho Verde</h3>
-                            <span class="order-price">+R$ 9,99</span>
-                            <span class="order-qty">1x</span>
-                        </div>
-                    </div>
-                    <div class="order-fee">
-                        <span>Serviços</span>
-                        <span class="order-price">+R$ 1,00</span>
-                    </div>
-                    <div class="order-total">
-                        <span>TOTAL</span>
-                        <span>R$ 20,98</span>
-                    </div>
-                </div>
-            </div>
-
             
-
     <script>
-        // java script
+        // Feedback visual para botões de adicionar ao carrinho
         document.querySelectorAll('.add-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                // Prevenir que o clique no botão ative o link do produto
+                e.stopPropagation();
+                e.preventDefault();
+                
+                // Adicionar classe de feedback visual
                 this.classList.add('clicked');
+                
+                // Criar elemento de feedback
+                const feedback = document.createElement('div');
+                feedback.textContent = 'Adicionado!';
+                feedback.style.position = 'absolute';
+                feedback.style.top = '-30px';
+                feedback.style.left = '50%';
+                feedback.style.transform = 'translateX(-50%)';
+                feedback.style.background = '#28a745';
+                feedback.style.color = 'white';
+                feedback.style.padding = '5px 10px';
+                feedback.style.borderRadius = '4px';
+                feedback.style.fontSize = '12px';
+                feedback.style.opacity = '0';
+                feedback.style.transition = 'opacity 0.3s';
+                feedback.style.zIndex = '1000';
+                
+                // Adicionar posição relativa ao card se não tiver
+                const card = this.closest('.product-card');
+                card.style.position = 'relative';
+                card.appendChild(feedback);
+                
+                // Mostrar feedback
+                setTimeout(() => {
+                    feedback.style.opacity = '1';
+                }, 10);
+                
+                // Submeter o formulário após o feedback
+                setTimeout(() => {
+                    this.closest('form').submit();
+                }, 800);
+                
+                // Remover feedback após 2 segundos
+                setTimeout(() => {
+                    feedback.style.opacity = '0';
+                    setTimeout(() => {
+                        if (feedback.parentNode) {
+                            feedback.parentNode.removeChild(feedback);
+                        }
+                    }, 300);
+                }, 2000);
+                
+                // Remover classe de clique após animação
                 setTimeout(() => {
                     this.classList.remove('clicked');
                 }, 500);
             });
         });
 
+        // Navegação por categorias
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', function() {
-                document.querySelector('.category-item.active').classList.remove('active');
+                // Remover classe ativa de todos os itens
+                document.querySelectorAll('.category-item').forEach(cat => {
+                    cat.classList.remove('active');
+                });
+                
+                // Adicionar classe ativa ao item clicado
                 this.classList.add('active');
+            });
+        });
+
+        // Melhorar a interação dos cards de produto
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Se não foi clicado no botão, ir para a página do produto
+                if (!e.target.closest('.add-btn') && !e.target.closest('form')) {
+                    const link = this.querySelector('.product-link');
+                    if (link) {
+                        window.location.href = link.href;
+                    }
+                }
             });
         });
     </script>

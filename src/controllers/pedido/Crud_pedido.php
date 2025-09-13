@@ -122,6 +122,54 @@ class Crud_pedido extends Pedido {
         }
     }
     
+    // Método para buscar pedidos de um usuário específico
+    public function readByUser($id_usuario) {
+        try {
+            $sql = "SELECT p.*, 
+                           COALESCE(SUM(pp.quantidade * pp.preco), 0) as total_pedido,
+                           COUNT(pp.id_produto) as total_itens
+                    FROM `{$this->tabela}` p 
+                    LEFT JOIN produto_pedido pp ON p.id_pedido = pp.id_pedido
+                    WHERE p.id_usuario = :id_usuario
+                    GROUP BY p.id_pedido 
+                    ORDER BY p.data_pedido DESC";
+            
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Buscar itens de cada pedido
+            foreach ($pedidos as &$pedido) {
+                $pedido['itens'] = $this->getItensPedido($pedido['id_pedido']);
+            }
+            
+            return $pedidos;
+        } catch (PDOException $e) {
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+    }
+    
+    // Método para buscar itens de um pedido específico
+    public function getItensPedido($id_pedido) {
+        try {
+            $sql = "SELECT pp.*, prod.nome_produto, prod.imagem
+                    FROM produto_pedido pp
+                    INNER JOIN produto prod ON pp.id_produto = prod.id_produto
+                    WHERE pp.id_pedido = :id_pedido
+                    ORDER BY prod.nome_produto";
+            
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar itens do pedido: " . $e->getMessage());
+        }
+    }
+    
     // CRUD ATUALIZAR (UPDATE)
     public function update($id){
         $endereco = $this->getEndereco();

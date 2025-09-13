@@ -106,27 +106,22 @@ class Crud_usuario extends Usuario{
         $id_usuario = $this->getId_usuario();
         $primeiro_nome = $this->getPrimeiro_nome();
         $segundo_nome = $this->getSegundo_nome();
-        $email = $this->getEmail();
         $telefone = $this->getTelefone();
         $data_atualizacao = $this->getData_atualizacao();
-        $imagem_perfil = $this->getImagem_perfil();
-        $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, email = :email, telefone = :telefone, data_atualizacao = :data_atualizacao, imagem_perfil = :imagem_perfil WHERE id_usuario = :id_usuario)";
+        $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, telefone = :telefone, data_atualizacao = :data_atualizacao WHERE id_usuario = :id_usuario";
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
         $stmt->bindParam(":primeiro_nome", $primeiro_nome, PDO::PARAM_STR);
         $stmt->bindParam(":segundo_nome", $segundo_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
         $stmt->bindParam(":data_atualizacao", $data_atualizacao, PDO::PARAM_STR);
-        $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
         $stmt->bindParam(":id_usuario", $id_usuario, PDO::PARAM_STR);
  
         try {
             $stmt->execute();
-            echo "<script>alert('Dados atualizados'); window.location.href = './index.php';</script>";
-            exit();
+            return true;
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }

@@ -7,7 +7,7 @@ class Categoria extends Database{
     private $nome_categoria;
     private $data_criacao;
 
-    public function getId_categoria():string {
+    public function getId_categoria():?string {
         return $this->id_categoria;
     }
     
@@ -15,7 +15,7 @@ class Categoria extends Database{
         $this->id_categoria = $id_categoria;
     }
 
-    public function getNome_categoria():string {
+    public function getNome_categoria():?string {
         return $this->nome_categoria;
     }
 

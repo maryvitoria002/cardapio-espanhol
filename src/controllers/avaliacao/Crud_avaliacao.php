@@ -246,4 +246,28 @@ class Crud_avaliacao extends Avaliacao {
             throw new Exception("Erro ao responder avaliação: " . $e->getMessage());
         }
     }
+    
+    // Método para buscar avaliações por produto
+    public function readByProduto($id_produto) {
+        try {
+            $sql = "SELECT av.*, 
+                           CONCAT(u.primeiro_nome, ' ', u.segundo_nome) AS nome_usuario,
+                           u.email
+                    FROM `{$this->tabela}` av 
+                    LEFT JOIN pedido p ON av.id_pedido = p.id_pedido
+                    LEFT JOIN produto_pedido pp ON p.id_pedido = pp.id_pedido
+                    LEFT JOIN usuario u ON av.id_usuario = u.id_usuario
+                    WHERE pp.id_produto = :id_produto 
+                    AND av.status IN ('Aprovada', 'Respondida')
+                    ORDER BY av.data_avaliacao DESC";
+            
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar avaliações do produto: " . $e->getMessage());
+        }
+    }
 }

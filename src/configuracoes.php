@@ -11,6 +11,24 @@ if (!isset($_SESSION['id'])) {
 $usuario = new Crud_usuario();
 $usuario->setId_usuario($_SESSION['id']);
 $dadosUsuario = $usuario->read();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+    $primeiro_nome = $_POST['primeiro_nome'] ?? '';
+    $segundo_nome = $_POST['segundo_nome'] ?? '';
+    $telefone = $_POST['telefone'] ?? '';
+
+    $usuario->setPrimeiro_nome($primeiro_nome);
+    $usuario->setSegundo_nome($segundo_nome);
+    $usuario->setTelefone($telefone);
+    $usuario->setData_atualizacao();
+
+    if ($usuario->update()) {
+        echo "<script>alert('Informações atualizadas com sucesso!'); window.location.href = './configuracoes.php';</script>";
+        exit();
+    } else {
+        echo "<script>alert('Erro ao atualizar informações. Tente novamente.');</script>";
+    }
+}
 ?>
 
 <div class="config-container">
@@ -50,7 +68,7 @@ $dadosUsuario = $usuario->read();
         <!-- Seção pra atualizar as informações Pessoais -->
         <div class="config-section active" id="informacoes">
             <h1>Informações Pessoais</h1>
-            <form class="form-config">
+            <form class="form-config" method="POST" action="./configuracoes.php">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nome</label>
@@ -72,18 +90,9 @@ $dadosUsuario = $usuario->read();
                         <label>Telefone</label>
                         <input type="tel" name="telefone" value="<?= htmlspecialchars($dadosUsuario['telefone'] ?? '') ?>">
                     </div>
-                    <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <input type="date" name="data_nascimento" value="<?= htmlspecialchars($dadosUsuario['data_nascimento'] ?? '') ?>">
-                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Endereço</label>
-                    <input type="text" name="endereco" value="<?= htmlspecialchars($dadosUsuario['endereco'] ?? '') ?>" placeholder="Ex: Rua dos caba la, 123">
-                </div>
-
-                <button type="submit" class="btn-save">Salvar Alterações</button>
+                
+                <button type="submit" class="btn-save" name="update">Salvar Alterações</button>
             </form>
         </div>
 

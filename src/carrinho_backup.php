@@ -8,33 +8,10 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Exibir mensagens de erro ou sucesso
-$mensagem_erro = '';
-$mensagem_sucesso = '';
-
-if (isset($_SESSION['erro_checkout'])) {
-    $mensagem_erro = $_SESSION['erro_checkout'];
-    unset($_SESSION['erro_checkout']);
-}
-
-if (isset($_SESSION['sucesso_checkout'])) {
-    $mensagem_sucesso = $_SESSION['sucesso_checkout'];
-    unset($_SESSION['sucesso_checkout']);
-}
-
 // Inicializar carrinho se não existir
 if (!isset($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
 }
-
-// Limpar itens inválidos do carrinho
-$carrinho_limpo = [];
-foreach ($_SESSION['carrinho'] as $item) {
-    if (is_array($item) && isset($item['id_produto'], $item['nome'], $item['preco'], $item['quantidade'])) {
-        $carrinho_limpo[] = $item;
-    }
-}
-$_SESSION['carrinho'] = $carrinho_limpo;
 
 // Instanciar controlador de produtos
 $produtoController = new Crud_produto();
@@ -123,11 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $total_itens = 0;
 $subtotal = 0;
 foreach ($_SESSION['carrinho'] as $item) {
-    // Verificar se o item é um array válido
-    if (is_array($item) && isset($item['quantidade']) && isset($item['preco'])) {
-        $total_itens += $item['quantidade'];
-        $subtotal += $item['preco'] * $item['quantidade'];
-    }
+    $total_itens += $item['quantidade'];
+    $subtotal += $item['preco'] * $item['quantidade'];
 }
 
 $taxa_entrega = $subtotal > 0 ? 8.90 : 0; // Taxa de entrega fixa
@@ -136,21 +110,6 @@ $total = $subtotal + $taxa_entrega - $desconto;
 ?>
 
 <div class="carrinho-container">
-    <!-- Mensagens de erro e sucesso -->
-    <?php if ($mensagem_erro): ?>
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i>
-            <?= htmlspecialchars($mensagem_erro) ?>
-        </div>
-    <?php endif; ?>
-    
-    <?php if ($mensagem_sucesso): ?>
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i>
-            <?= htmlspecialchars($mensagem_sucesso) ?>
-        </div>
-    <?php endif; ?>
-    
     <div class="carrinho-header">
         <div class="breadcrumb">
             <a href="./cardapio.php"><i class="fas fa-utensils"></i> Cardápio</a>
@@ -192,11 +151,10 @@ $total = $subtotal + $taxa_entrega - $desconto;
                 <!-- Lista de itens -->
                 <div class="items-list">
                     <?php foreach ($_SESSION['carrinho'] as $item): ?>
-                        <?php if (is_array($item) && isset($item['id_produto'], $item['nome'], $item['preco'], $item['quantidade'])): ?>
                         <div class="carrinho-item">
                             <div class="item-imagem">
                                 <?php 
-                                $imagemPath = "./images/comidas/" . (isset($item['categoria']) && $item['categoria'] ? str_replace(' ', '_', $item['categoria']) . '/' : '') . ($item['imagem'] ?? '');
+                                $imagemPath = "./images/comidas/" . ($item['categoria'] ? str_replace(' ', '_', $item['categoria']) . '/' : '') . $item['imagem'];
                                 if (!empty($item['imagem']) && file_exists($imagemPath)): ?>
                                     <img src="<?= htmlspecialchars($imagemPath) ?>" 
                                          alt="<?= htmlspecialchars($item['nome']) ?>">
@@ -244,7 +202,6 @@ $total = $subtotal + $taxa_entrega - $desconto;
                                 </form>
                             </div>
                         </div>
-                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
 
@@ -324,28 +281,11 @@ $total = $subtotal + $taxa_entrega - $desconto;
 <script>
 // Função para finalizar pedido
 function finalizarPedido() {
-    // Verificar se há itens no carrinho
-    const itensCarrinho = document.querySelectorAll('.carrinho-item');
-    if (itensCarrinho.length === 0) {
-        alert('Seu carrinho está vazio!');
-        return;
-    }
-    
+    // Aqui você pode implementar a lógica para finalizar o pedido
+    // Por exemplo, redirecionar para uma página de checkout
     if (confirm('Finalizar pedido no valor de R$ <?= number_format($total, 2, ',', '.') ?>?')) {
-        // Criar form para enviar para checkout_processar.php
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = './checkout_processar.php';
-        
-        // Adicionar token CSRF se necessário
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = 'csrf_token';
-        csrfToken.value = '<?= isset($_SESSION["csrf_token"]) ? $_SESSION["csrf_token"] : "" ?>';
-        form.appendChild(csrfToken);
-        
-        document.body.appendChild(form);
-        form.submit();
+        alert('Funcionalidade de checkout será implementada em breve!');
+        // window.location.href = './checkout.php';
     }
 }
 
@@ -363,35 +303,6 @@ function atualizarQuantidadeComDelay(form) {
     }, 500);
 }
 </script>
-
-<style>
-/* Alertas */
-.alert {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert i {
-    font-size: 1.1rem;
-}
-</style>
 
 <?php 
 include_once "./components/_base-footer.php";

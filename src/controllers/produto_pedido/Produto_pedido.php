@@ -1,6 +1,6 @@
 <?php 
 
-require_once "../../db/conection.php";
+require_once __DIR__ . "/../../db/conection.php";
 
 class Produto_pedido {
     protected $tabela = "produto_pedido";

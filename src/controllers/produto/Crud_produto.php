@@ -36,13 +36,28 @@ class Crud_produto extends Produto {
     
     // CRUD LER (READ)
     public function read(){
-        $sql = "SELECT * FROM `{$this->tabela}` ORDER BY data_criacao DESC";
+        $id_produto = $this->getId_produto();
         
-        $database = new Database();
-        $stmt = $database->prepare($sql);
-        $stmt->execute();
-        
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($id_produto) {
+            // Se há ID definido, buscar produto específico
+            $sql = "SELECT * FROM `{$this->tabela}` WHERE id_produto = :id";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":id", $id_produto, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            // Se não há ID, buscar todos os produtos
+            $sql = "SELECT * FROM `{$this->tabela}` ORDER BY data_criacao DESC";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
     
     // CRUD LER POR ID
@@ -183,6 +198,36 @@ class Crud_produto extends Produto {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Exception("Erro ao buscar produtos com baixo estoque: " . $e->getMessage());
+        }
+    }
+    
+    // Método para buscar produtos por categoria (excluindo um produto específico)
+    public function readByCategoria($id_categoria, $limite = 4, $excluir_id = null) {
+        try {
+            $sql = "SELECT * FROM `{$this->tabela}` 
+                    WHERE id_categoria = :id_categoria 
+                    AND status = 'Disponivel'";
+            
+            if ($excluir_id) {
+                $sql .= " AND id_produto != :excluir_id";
+            }
+            
+            $sql .= " ORDER BY RAND() LIMIT :limite";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+            $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
+            
+            if ($excluir_id) {
+                $stmt->bindParam(':excluir_id', $excluir_id, PDO::PARAM_INT);
+            }
+            
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar produtos relacionados: " . $e->getMessage());
         }
     }
 }
