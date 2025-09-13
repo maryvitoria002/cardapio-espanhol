@@ -1,0 +1,12 @@
+DirectoryIndex index.php
+Options +FollowSymLinks
+RewriteEngine On
+
+# Redirect trailing slashes if not a folder...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Handle front controller...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]

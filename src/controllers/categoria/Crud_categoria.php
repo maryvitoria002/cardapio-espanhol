@@ -12,9 +12,8 @@ class Crud_categoria extends Categoria {
         $sql = "INSERT INTO `{$this->tabela}` (nome_categoria, data_criacao) 
                 VALUES (:nome_categoria, :data_criacao)";
 
-        // Criando uma instância para o bd e prepare statement
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        // Usando o método prepare da classe pai Database
+        $stmt = $this->prepare($sql);
         $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
         $stmt->bindParam(":data_criacao", $data_criacao, PDO::PARAM_STR);
  
@@ -34,8 +33,7 @@ class Crud_categoria extends Categoria {
             // Se há ID definido, buscar categoria específica
             $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categoria = :id_categoria";
             
-            $database = new Database();
-            $stmt = $database->prepare($sql);
+            $stmt = $this->prepare($sql);
             $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
             $stmt->execute();
             
@@ -44,8 +42,7 @@ class Crud_categoria extends Categoria {
             // Se não há ID, buscar todas as categorias
             $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria";
             
-            $database = new Database();
-            $stmt = $database->prepare($sql);
+            $stmt = $this->prepare($sql);
             $stmt->execute();
             
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,8 +58,7 @@ class Crud_categoria extends Categoria {
                 nome_categoria = :nome_categoria
                 WHERE id_categoria = :id_categoria";
 
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        $stmt = $this->prepare($sql);
         $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
         $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
 
@@ -79,8 +75,7 @@ class Crud_categoria extends Categoria {
         $id_categoria = $this->getId_categoria();
         $sql = "DELETE FROM `{$this->tabela}` WHERE id_categoria = :id_categoria";
         
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        $stmt = $this->prepare($sql);
         $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
 
         try {
@@ -95,8 +90,7 @@ class Crud_categoria extends Categoria {
     public function readByName($nome_categoria){
         $sql = "SELECT * FROM `{$this->tabela}` WHERE nome_categoria = :nome_categoria";
         
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        $stmt = $this->prepare($sql);
         $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
         $stmt->execute();
         
@@ -107,8 +101,7 @@ class Crud_categoria extends Categoria {
     public function countProdutos($id_categoria){
         $sql = "SELECT COUNT(*) as total FROM produto WHERE id_categoria = :id_categoria";
         
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        $stmt = $this->prepare($sql);
         $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
         $stmt->execute();
         
@@ -120,10 +113,20 @@ class Crud_categoria extends Categoria {
     public function readAll(){
         $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria";
         
-        $database = new Database();
-        $stmt = $database->prepare($sql);
+        $stmt = $this->prepare($sql);
         $stmt->execute();
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Método para contar total de categorias
+    public function count(){
+        $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
+        
+        $stmt = $this->prepare($sql);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
     }
 }
