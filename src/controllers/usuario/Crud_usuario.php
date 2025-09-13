@@ -54,7 +54,7 @@ class Crud_usuario extends Usuario{
     }
 
     // CRUD LER (READ)
-    public function read(){;
+    public function read(){
         $id_usuario = $this->getId_usuario();
         $sql = "SELECT * FROM `{$this->tabela}` WHERE id_usuario = :id_usuario";
         

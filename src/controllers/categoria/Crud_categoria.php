@@ -1,40 +1,31 @@
 <?php 
+
 require_once "Categoria.php";
 
 class Crud_categoria extends Categoria {
-
+ 
     // CRUD CRIAR (CREATE)
-    
     public function create(){
-        $id_categ = $this->getid_categ();
-        $nomeCateg = $this->getNomecateg();
-        $segun_nome = $this->getNome2();
-        $telefone = $this->getTelefone();
-        $senha = $this->getSenha();
-        $dataCriacao = $this->getData();
-        $imagem_perfil = $this->getImagem();
-        $sql = "INSERT INTO `{$this->tabela}` (id_categ, primei_nome, segun_nome, telefone, senha, dataCriacao, imagem_perfil) VALUES (:id_categ, :primei_nome, :segun_nome, :telefone, :senha, :dataCriacao, :imagem_perfil)";
+        $nome_categoria = $this->getNome_categoria();
+        $data_criacao = $this->getData_criacao();
         
+        $sql = "INSERT INTO `{$this->tabela}` (nome_categoria, data_criacao) 
+                VALUES (:nome_categoria, :data_criacao)";
+
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
-        $stmt->bindParam(":primei_nome", $nomeCateg, PDO::PARAM_STR);
-        $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
-        $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-        $stmt->bindParam(":dataCriacao", $dataCriacao, PDO::PARAM_STR);
-        $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
+        $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
+        $stmt->bindParam(":data_criacao", $data_criacao, PDO::PARAM_STR);
  
         try {
             $stmt->execute();
-            echo "<script>alert('Cadastro realizado com sucesso!'); window.location.href = './login.php';</script>";
-            exit();
+            return true;
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
     }
-
+    
     // CRUD LER (READ)
     public function read(){
         $id_categoria = $this->getId_categoria();
@@ -45,13 +36,13 @@ class Crud_categoria extends Categoria {
             
             $database = new Database();
             $stmt = $database->prepare($sql);
-            $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_STR);
+            $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
             $stmt->execute();
             
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
             // Se não há ID, buscar todas as categorias
-            $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria ASC";
+            $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria";
             
             $database = new Database();
             $stmt = $database->prepare($sql);
@@ -60,101 +51,79 @@ class Crud_categoria extends Categoria {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
-
-    public function login() {
-        $id_categ = $this->getid_categ();
-        $senha = $this->getSenha();
-        $sql = "SELECT * FROM `{$this->tabela}` WHERE id_categ = :id_categ AND senha = :senha";
-        
-        // Criando uma instância para o bd e prepare statement
-        $database = new Database();
-        $stmt = $database->prepare($sql);
-        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
-        $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-
-        try {
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($result){
-                session_start();
-                $_SESSION["nome1"] = $result["primei_nome"];
-                $_SESSION["nome2"] = $result["segun_nome"];
-                $_SESSION["id"] = $result["id_categ"];
-                header("Location: ./index.php");
-                exit();
-            } else {
-                echo "<script>alert('Usuário ou senha inválidos')</script>";
-            }
-        } catch (PDOException $e){
-            throw new Exception("Erro no banco de dados: " . $e->getMessage());
-        }
-        
-    }
     
-    // CRUD LER (UPDATE)
+    // CRUD ATUALIZAR (UPDATE)
     public function update(){
-        $id_categ = $this->getid_categ();
-        $primeiro_nome = $this->getNome1();
-        $segun_nome = $this->getNome2();
-        $telefone = $this->getTelefone();
-        $senha = $this->getSenha();
-        $imagem_perfil = $this->getImagem();
-        $sql = "UPDATE `{$this->tabela}` SET primei_nome = :primei_nome, segun_nome = :segun_nome, telefone = :telefone, senha = :senha, imagem_perfil = :imagem_perfil WHERE id_categ = :id_categ";
+        $id_categoria = $this->getId_categoria();
+        $nome_categoria = $this->getNome_categoria();
         
-        // Criando uma instância para o bd e prepare statement
+        $sql = "UPDATE `{$this->tabela}` SET 
+                nome_categoria = :nome_categoria
+                WHERE id_categoria = :id_categoria";
+
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
-        $stmt->bindParam(":primei_nome", $primeiro_nome, PDO::PARAM_STR);
-        $stmt->bindParam(":segun_nome", $segun_nome, PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
-        $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-        $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
- 
+        $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
+        $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
+
         try {
             $stmt->execute();
-            echo "<script>alert('Atualização realizada com sucesso!'); window.location.href = './perfil.php';</script>";
-            exit();
-        } catch (PDOException $e) {
-            throw new Exception("Erro no banco de dados: " . $e->getMessage());
-        }
-    }
-
-    // CRUD DE APAGAR
-
-    public function delete(){
-        $id_categ = $this->getid_categ();
-        $sql = "DELETE FROM `{$this->tabela}` WHERE id_categ = :id_categ";
-        
-        // Create database instance and prepare statement
-        $database = new Database();
-        $stmt = $database->prepare($sql);
-        $stmt->bindParam(":id_categ", $id_categ, PDO::PARAM_STR);
- 
-        try {
-            $stmt->execute();
-            echo "<script>alert('Conta deletada com sucesso!'); window.location.href = './login.php';</script>";
-            exit();
+            return true;
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
     }
     
-    // Método para contar todas as categorias
-    public function count() {
+    // CRUD DELETAR (DELETE)
+    public function delete(){
+        $id_categoria = $this->getId_categoria();
+        $sql = "DELETE FROM `{$this->tabela}` WHERE id_categoria = :id_categoria";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
+
         try {
-            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
-            
-            $database = new Database();
-            $stmt = $database->prepare($sql);
             $stmt->execute();
-            
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result['total'];
+            return true;
         } catch (PDOException $e) {
-            throw new Exception("Erro ao contar categorias: " . $e->getMessage());
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
+    }
+    
+    // Método para buscar categoria por nome
+    public function readByName($nome_categoria){
+        $sql = "SELECT * FROM `{$this->tabela}` WHERE nome_categoria = :nome_categoria";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":nome_categoria", $nome_categoria, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    // Método para contar produtos por categoria
+    public function countProdutos($id_categoria){
+        $sql = "SELECT COUNT(*) as total FROM produto WHERE id_categoria = :id_categoria";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":id_categoria", $id_categoria, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+    
+    // Método para listar todas as categorias
+    public function readAll(){
+        $sql = "SELECT * FROM `{$this->tabela}` ORDER BY nome_categoria";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-
-

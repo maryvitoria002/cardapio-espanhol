@@ -23,8 +23,35 @@ $crudCategoria = new Crud_categoria();
 $produtos = $crudProduto->read();
 $produtosDestaque = array_slice($produtos, 0, 6); // Pegar apenas os 6 primeiros
 
-// Buscar categorias
-$categorias = $crudCategoria->read();
+// Buscar categorias usando o método correto
+$categorias = $crudCategoria->readAll();
+
+// Função para obter imagem padrão baseada no nome da categoria
+function getImagemPadrao($nome_categoria) {
+    $nome_lower = strtolower($nome_categoria);
+    
+    if (strpos($nome_lower, 'bebida') !== false || strpos($nome_lower, 'drink') !== false || strpos($nome_lower, 'smoothie') !== false) {
+        return 'assets/bebidas.png';
+    } elseif (strpos($nome_lower, 'bowl') !== false || strpos($nome_lower, 'salada') !== false) {
+        return 'assets/bowls.png';
+    } elseif (strpos($nome_lower, 'lanche') !== false || strpos($nome_lower, 'sanduiche') !== false || strpos($nome_lower, 'pão') !== false || strpos($nome_lower, 'toast') !== false) {
+        return 'assets/lanches.png';
+    } elseif (strpos($nome_lower, 'sobremesa') !== false || strpos($nome_lower, 'doce') !== false) {
+        return 'assets/sobremesa.png';
+    } elseif (strpos($nome_lower, 'carne') !== false || strpos($nome_lower, 'proteina') !== false || strpos($nome_lower, 'grelhado') !== false) {
+        return 'assets/carnes.png';
+    } elseif (strpos($nome_lower, 'sopa') !== false) {
+        return 'assets/sopas.png';
+    } elseif (strpos($nome_lower, 'massa') !== false || strpos($nome_lower, 'noodle') !== false) {
+        return 'assets/massas.png';
+    } elseif (strpos($nome_lower, 'molho') !== false || strpos($nome_lower, 'condimento') !== false) {
+        return 'assets/molhos.png';
+    } elseif (strpos($nome_lower, 'frito') !== false || strpos($nome_lower, 'petisco') !== false || strpos($nome_lower, 'entrada') !== false) {
+        return 'assets/fritos.png';
+    } else {
+        return 'assets/bowls.png'; // padrão
+    }
+}
 
 ?>
 <link rel="stylesheet" href="./styles/inicio_produtos.css">
@@ -69,43 +96,61 @@ $categorias = $crudCategoria->read();
             <section class="categories">
                 <div class="section-header">
                     <h2>CATEGORIAS</h2>
-                    <button class="see-all">Ver tudo...</button>
+                    <a href="cardapio.php" class="see-all">Ver tudo...</a>
                 </div>
                 <div class="category-list">
-                    <div class="category-item">
-                        <div class="category-icon">
-                            <img src="assets/bebidas.png" alt="Bebidas">
+                    <?php if (!empty($categorias)): ?>
+                        <?php foreach (array_slice($categorias, 0, 6) as $index => $categoria): ?>
+                            <div class="category-item <?= $index === 0 ? 'active' : '' ?>" 
+                                 data-categoria-id="<?= $categoria['id_categoria'] ?>"
+                                 data-categoria-nome="<?= htmlspecialchars($categoria['nome_categoria']) ?>"
+                                 onclick="navegarCategoria('<?= htmlspecialchars($categoria['nome_categoria']) ?>')">>
+                                <div class="category-icon">
+                                    <?php if (!empty($categoria['imagem'])): ?>
+                                        <img src="./images/categorias/<?= htmlspecialchars($categoria['imagem']) ?>" 
+                                             alt="<?= htmlspecialchars($categoria['nome_categoria']) ?>"
+                                             onerror="this.src='<?= getImagemPadrao($categoria['nome_categoria']) ?>'">
+                                    <?php else: ?>
+                                        <img src="<?= getImagemPadrao($categoria['nome_categoria']) ?>" 
+                                             alt="<?= htmlspecialchars($categoria['nome_categoria']) ?>">
+                                    <?php endif; ?>
+                                </div>
+                                <span><?= htmlspecialchars($categoria['nome_categoria']) ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <!-- Categorias padrão caso não haja no banco -->
+                        <div class="category-item active" onclick="navegarCategoria('todas')">
+                            <div class="category-icon">
+                                <img src="assets/bebidas.png" alt="Bebidas">
+                            </div>
+                            <span>Bebidas</span>
                         </div>
-                        <span>Bebidas</span>
-                    </div>
-                    <div class="category-item active">
-                        <div class="category-icon">
-                            
-                            <img src="assets/bowls.png" alt="Bowls">
+                        <div class="category-item" onclick="navegarCategoria('todas')">
+                            <div class="category-icon">
+                                <img src="assets/bowls.png" alt="Bowls">
+                            </div>
+                            <span>Bowls</span>
                         </div>
-                        <span>Bowls</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-icon">
-                            
-                            <img src="./images/usuário.jpeg" alt="Lanches">
+                        <div class="category-item" onclick="navegarCategoria('todas')">
+                            <div class="category-icon">
+                                <img src="assets/lanches.png" alt="Lanches">
+                            </div>
+                            <span>Lanches</span>
                         </div>
-                        <span>Lanches</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-icon">
-                            
-                            <img src="assets/sobremesa.png" alt="Sobremesa">
+                        <div class="category-item" onclick="navegarCategoria('todas')">
+                            <div class="category-icon">
+                                <img src="assets/sobremesa.png" alt="Sobremesa">
+                            </div>
+                            <span>Sobremesa</span>
                         </div>
-                        <span>Sobremesa</span>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-icon">
-                            
-                            <img src="assets/carnes.png" alt="Carnes">
+                        <div class="category-item" onclick="navegarCategoria('todas')">
+                            <div class="category-icon">
+                                <img src="assets/carnes.png" alt="Carnes">
+                            </div>
+                            <span>Carnes</span>
                         </div>
-                        <span>Carnes</span>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </section>
 
@@ -155,8 +200,53 @@ $categorias = $crudCategoria->read();
                 </div>
             </section>
         </main>
+    </div>
             
     <script>
+        // Função para navegar para categoria
+        function navegarCategoria(categoriaNome) {
+            // Adicionar efeito de loading
+            const categoriaElement = event.target.closest('.category-item');
+            if (categoriaElement) {
+                categoriaElement.style.opacity = '0.7';
+                categoriaElement.style.transform = 'scale(0.95)';
+            }
+            
+            // Navegar após breve delay para mostrar feedback
+            setTimeout(() => {
+                if (categoriaNome === 'todas') {
+                    window.location.href = 'cardapio.php';
+                } else {
+                    window.location.href = `cardapio.php?categoria=${encodeURIComponent(categoriaNome)}`;
+                }
+            }, 200);
+        }
+
+        // Funcionalidade de busca
+        const searchInput = document.querySelector('.search-bar input');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const termo = this.value.trim();
+                    if (termo) {
+                        window.location.href = `cardapio.php?busca=${encodeURIComponent(termo)}`;
+                    }
+                }
+            });
+        }
+
+        // Melhorar interação com categorias
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remover classe ativa de todos os itens
+                document.querySelectorAll('.category-item').forEach(cat => {
+                    cat.classList.remove('active');
+                });
+                
+                // Adicionar classe ativa ao item clicado
+                this.classList.add('active');
+            });
+        });
         // Feedback visual para botões de adicionar ao carrinho
         document.querySelectorAll('.add-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {

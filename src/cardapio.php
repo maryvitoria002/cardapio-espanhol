@@ -20,6 +20,7 @@ require_once __DIR__ . '/controllers/categoria/Crud_categoria.php';
 $produtos = [];
 $categorias = [];
 $categoria_selecionada = isset($_GET['categoria']) ? $_GET['categoria'] : '';
+$categoria_id_selecionada = isset($_GET['categoria_id']) ? $_GET['categoria_id'] : '';
 $termo_busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
 
 try {
@@ -44,6 +45,9 @@ try {
     if (!empty($categoria_selecionada)) {
         $sql .= " AND c.nome_categoria = :categoria";
         $params['categoria'] = $categoria_selecionada;
+    } elseif (!empty($categoria_id_selecionada)) {
+        $sql .= " AND c.id_categoria = :categoria_id";
+        $params['categoria_id'] = $categoria_id_selecionada;
     }
     
     // Filtrar por termo de busca

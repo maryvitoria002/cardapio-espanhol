@@ -12,6 +12,12 @@ $usuario = new Crud_usuario();
 $usuario->setId_usuario($_SESSION['id']);
 $dadosUsuario = $usuario->read();
 
+// Verificar se os dados do usuário foram encontrados
+if (!$dadosUsuario) {
+    echo "<script>alert('Erro ao carregar dados do usuário. Faça login novamente.'); window.location.href = './login.php';</script>";
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $primeiro_nome = $_POST['primeiro_nome'] ?? '';
     $segundo_nome = $_POST['segundo_nome'] ?? '';
