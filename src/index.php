@@ -252,45 +252,64 @@ function getImagemPadrao($nome_categoria) {
             btn.addEventListener('click', function(e) {
                 // Prevenir que o clique no botão ative o link do produto
                 e.stopPropagation();
-                e.preventDefault();
                 
-                // Adicionar classe de feedback visual
+                // Verificar se o produto está em estoque
+                if (this.disabled) {
+                    return false;
+                }
+                
+                // Adicionar efeito de clique
                 this.classList.add('clicked');
                 
-                // Criar elemento de feedback
+                // Criar elemento de feedback moderno
                 const feedback = document.createElement('div');
-                feedback.textContent = 'Adicionado!';
-                feedback.style.position = 'absolute';
-                feedback.style.top = '-30px';
-                feedback.style.left = '50%';
-                feedback.style.transform = 'translateX(-50%)';
-                feedback.style.background = '#28a745';
-                feedback.style.color = 'white';
-                feedback.style.padding = '5px 10px';
-                feedback.style.borderRadius = '4px';
-                feedback.style.fontSize = '12px';
-                feedback.style.opacity = '0';
-                feedback.style.transition = 'opacity 0.3s';
-                feedback.style.zIndex = '1000';
+                feedback.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                feedback.style.cssText = `
+                    position: absolute;
+                    top: -40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #28a745, #20963d);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    opacity: 0;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+                    white-space: nowrap;
+                `;
                 
                 // Adicionar posição relativa ao card se não tiver
                 const card = this.closest('.product-card');
                 card.style.position = 'relative';
                 card.appendChild(feedback);
                 
-                // Mostrar feedback
+                // Animação de entrada
                 setTimeout(() => {
                     feedback.style.opacity = '1';
+                    feedback.style.transform = 'translateX(-50%) translateY(-5px)';
                 }, 10);
                 
-                // Submeter o formulário após o feedback
+                // Efeito de sucesso no botão
                 setTimeout(() => {
-                    this.closest('form').submit();
-                }, 800);
+                    this.classList.add('success');
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                }, 200);
                 
-                // Remover feedback após 2 segundos
+                // Voltar ao estado normal
+                setTimeout(() => {
+                    this.classList.remove('success');
+                    this.innerHTML = '<i class="fas fa-plus"></i>';
+                    this.classList.remove('clicked');
+                }, 1500);
+                
+                // Remover feedback
                 setTimeout(() => {
                     feedback.style.opacity = '0';
+                    feedback.style.transform = 'translateX(-50%) translateY(-10px)';
                     setTimeout(() => {
                         if (feedback.parentNode) {
                             feedback.parentNode.removeChild(feedback);
@@ -298,10 +317,7 @@ function getImagemPadrao($nome_categoria) {
                     }, 300);
                 }, 2000);
                 
-                // Remover classe de clique após animação
-                setTimeout(() => {
-                    this.classList.remove('clicked');
-                }, 500);
+                // Permitir que o formulário seja enviado normalmente
             });
         });
 

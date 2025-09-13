@@ -20,11 +20,11 @@
 }
 
 .see-all {
-    color: var(--accent-color, #ff6b35);
+    color: var(--accent-color, #f39c12);
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--accent-color, #ff6b35);
+    border: 1px solid var(--accent-color, #f39c12);
     border-radius: 6px;
     transition: all 0.3s ease;
     background: transparent;
@@ -32,7 +32,7 @@
 }
 
 .see-all:hover {
-    background: var(--accent-color, #ff6b35);
+    background: var(--accent-color, #f39c12);
     color: white;
     transform: translateY(-1px);
 }
@@ -109,7 +109,7 @@
 .product-price {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--accent-color, #ff6b35);
+    color: var(--accent-color, #f39c12);
     margin: 0 1rem 0.5rem;
 }
 
@@ -134,42 +134,62 @@
     position: absolute;
     bottom: 1rem;
     right: 1rem;
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: var(--accent-color, #ff6b35);
+    background: linear-gradient(135deg, #f39c12, #e67e22);
     color: white;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-    font-size: 1.1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    font-size: 1.2rem;
+    z-index: 10;
 }
 
 .add-btn:hover {
-    background: var(--accent-dark, #e55a2b);
+    background: linear-gradient(135deg, #e67e22, #d68910);
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
 }
 
 .add-btn:active,
 .add-btn.clicked {
     transform: scale(0.95);
-    background: var(--success-color, #28a745);
+    background: linear-gradient(135deg, #28a745, #20963d);
+    box-shadow: 0 3px 8px rgba(40, 167, 69, 0.4);
 }
 
 .add-btn:disabled {
-    background: #ccc;
+    background: linear-gradient(135deg, #ccc, #bbb);
     cursor: not-allowed;
     opacity: 0.6;
+    transform: none !important;
 }
 
 .add-btn:disabled:hover {
-    transform: none;
+    transform: none !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito de sucesso */
+.add-btn.success {
+    background: linear-gradient(135deg, #28a745, #20963d) !important;
+}
+
+.add-btn.success::after {
+    content: '✓';
+    position: absolute;
+    font-size: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 /* Mensagem quando não há produtos */
@@ -250,7 +270,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent-color, #ff6b35), var(--accent-dark, #e55a2b));
+    background: linear-gradient(90deg, var(--accent-color, #f39c12), var(--accent-dark, #e67e22));
     opacity: 0;
     transition: opacity 0.3s ease;
 }

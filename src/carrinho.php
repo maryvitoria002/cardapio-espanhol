@@ -22,6 +22,17 @@ if (isset($_SESSION['sucesso_checkout'])) {
     unset($_SESSION['sucesso_checkout']);
 }
 
+// Adicionar mensagens para ações do carrinho
+if (isset($_SESSION['sucesso_carrinho'])) {
+    $mensagem_sucesso = $_SESSION['sucesso_carrinho'];
+    unset($_SESSION['sucesso_carrinho']);
+}
+
+if (isset($_SESSION['erro_carrinho'])) {
+    $mensagem_erro = $_SESSION['erro_carrinho'];
+    unset($_SESSION['erro_carrinho']);
+}
+
 // Inicializar carrinho se não existir
 if (!isset($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
@@ -42,14 +53,14 @@ $produtoController = new Crud_produto();
 // Processar ações do carrinho
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // Adicionar produto ao carrinho
-    if (isset($_POST['add_to_cart'])) {
-        $produto_id = (int)$_POST['produto_id'];
+    // Adicionar produto ao carrinho (suporte para ambas as formas: add_to_cart e acao=adicionar)
+    if (isset($_POST['add_to_cart']) || (isset($_POST['acao']) && $_POST['acao'] === 'adicionar')) {
+        $produto_id = (int)($_POST['produto_id'] ?? $_POST['id_produto']);
         $quantidade = (int)($_POST['quantidade'] ?? 1);
         
         if ($produto_id > 0 && $quantidade > 0) {
-            // Buscar dados do produto
-            $dadosProduto = $produtoController->read($produto_id);
+            // Buscar dados do produto usando readById para garantir que funcione
+            $dadosProduto = $produtoController->readById($produto_id);
             
             if ($dadosProduto) {
                 $item_carrinho = [
@@ -74,7 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!$found) {
                     $_SESSION['carrinho'][] = $item_carrinho;
                 }
+                
+                // Adicionar mensagem de sucesso
+                $_SESSION['sucesso_carrinho'] = "Produto adicionado ao carrinho com sucesso!";
+            } else {
+                // Produto não encontrado
+                $_SESSION['erro_carrinho'] = "Produto não encontrado.";
             }
+        } else {
+            // Dados inválidos
+            $_SESSION['erro_carrinho'] = "Dados inválidos para adicionar ao carrinho.";
         }
     }
     
@@ -114,7 +134,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['carrinho'] = [];
     }
     
-    // Redirecionar para evitar reenvio do formulário
+    // Verificar se a requisição é AJAX
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    
+    // Se for AJAX, retornar resposta JSON
+    if ($isAjax) {
+        header('Content-Type: application/json');
+        
+        if (isset($_SESSION['sucesso_carrinho'])) {
+            echo json_encode(['success' => true, 'message' => $_SESSION['sucesso_carrinho']]);
+            unset($_SESSION['sucesso_carrinho']);
+        } elseif (isset($_SESSION['erro_carrinho'])) {
+            echo json_encode(['success' => false, 'message' => $_SESSION['erro_carrinho']]);
+            unset($_SESSION['erro_carrinho']);
+        } else {
+            echo json_encode(['success' => true]);
+        }
+        exit();
+    }
+    
+    // Se não for AJAX, redirecionar normalmente
     header("Location: ./carrinho.php");
     exit();
 }

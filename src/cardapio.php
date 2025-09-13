@@ -197,15 +197,16 @@ try {
                                 </div>
                             </div>
                         </a>
-                        <div class="product-actions-external">
-                            <button class="qty-btn minus" onclick="diminuirQuantidade(<?= $produto['id_produto'] ?>)">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <span class="qty-display" id="qty-<?= $produto['id_produto'] ?>">0</span>
-                            <button class="qty-btn plus" onclick="aumentarQuantidade(<?= $produto['id_produto'] ?>)">
+                        <form method="POST" action="carrinho.php" style="display: inline;" onclick="event.stopPropagation();">
+                            <input type="hidden" name="acao" value="adicionar">
+                            <input type="hidden" name="id_produto" value="<?= $produto['id_produto'] ?>">
+                            <input type="hidden" name="quantidade" value="1">
+                            <button type="submit" class="add-btn" 
+                                    <?= $produto['estoque'] <= 0 ? 'disabled' : '' ?>
+                                    onclick="event.stopPropagation();">
                                 <i class="fas fa-plus"></i>
                             </button>
-                        </div>
+                        </form>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -225,28 +226,6 @@ try {
         </div>
         <?php endif; ?>
     </main>
-    
-    <!-- Carrinho flutuante -->
-    <div class="floating-cart" id="floatingCart" style="display: none;">
-        <div class="cart-header">
-            <h3>Seu Pedido</h3>
-            <button class="close-cart" onclick="fecharCarrinho()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <!-- Items serão adicionados via JavaScript -->
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
-            </div>
-            <button class="checkout-btn" onclick="finalizarPedido()">
-                <i class="fas fa-check"></i>
-                Finalizar Pedido
-            </button>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -273,112 +252,6 @@ try {
         window.location = window.location.pathname;
     }
 
-    // Controle de quantidade
-    function aumentarQuantidade(idProduto) {
-        if (!carrinho[idProduto]) {
-            carrinho[idProduto] = 0;
-        }
-        carrinho[idProduto]++;
-        atualizarDisplay(idProduto);
-        atualizarCarrinho();
-        
-        // Enviar para o servidor
-        adicionarAoCarrinhoServidor(idProduto, 1);
-    }
-
-    function diminuirQuantidade(idProduto) {
-        if (carrinho[idProduto] && carrinho[idProduto] > 0) {
-            carrinho[idProduto]--;
-            if (carrinho[idProduto] === 0) {
-                delete carrinho[idProduto];
-            }
-            atualizarDisplay(idProduto);
-            atualizarCarrinho();
-            
-            // Remover do servidor se quantidade chegou a 0
-            if (carrinho[idProduto] === undefined) {
-                removerDoCarrinhoServidor(idProduto);
-            }
-        }
-    }
-    
-    function adicionarAoCarrinhoServidor(idProduto, quantidade) {
-        const formData = new FormData();
-        formData.append('add_to_cart', '1');
-        formData.append('produto_id', idProduto);
-        formData.append('quantidade', quantidade);
-        
-        fetch('./carrinho.php', {
-            method: 'POST',
-            body: formData
-        }).catch(error => {
-            console.error('Erro ao adicionar ao carrinho:', error);
-        });
-    }
-    
-    function removerDoCarrinhoServidor(idProduto) {
-        const formData = new FormData();
-        formData.append('remove_item', '1');
-        formData.append('produto_id', idProduto);
-        
-        fetch('./carrinho.php', {
-            method: 'POST',
-            body: formData
-        }).catch(error => {
-            console.error('Erro ao remover do carrinho:', error);
-        });
-    }
-
-    function atualizarDisplay(idProduto) {
-        const qtyDisplay = document.getElementById(`qty-${idProduto}`);
-        if (qtyDisplay) {
-            qtyDisplay.textContent = carrinho[idProduto] || 0;
-        }
-    }
-
-    function atualizarCarrinho() {
-        const cartCount = document.querySelector('.cart-count');
-        const totalItens = Object.values(carrinho).reduce((sum, qty) => sum + qty, 0);
-        
-        cartCount.textContent = totalItens;
-        cartCount.style.display = totalItens > 0 ? 'block' : 'none';
-        
-        // Atualizar carrinho flutuante
-        if (totalItens > 0) {
-            mostrarCarrinhoFlutuante();
-        } else {
-            fecharCarrinho();
-        }
-    }
-
-    function mostrarCarrinhoFlutuante() {
-        const floatingCart = document.getElementById('floatingCart');
-        floatingCart.style.display = 'block';
-        
-        // Aqui você implementaria a lógica para mostrar os itens
-        // Por enquanto, apenas mostra o carrinho
-    }
-
-    function verCarrinho() {
-        const floatingCart = document.getElementById('floatingCart');
-        floatingCart.style.display = floatingCart.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function fecharCarrinho() {
-        const floatingCart = document.getElementById('floatingCart');
-        floatingCart.style.display = 'none';
-    }
-
-    function finalizarPedido() {
-        if (Object.keys(carrinho).length === 0) {
-            alert('Seu carrinho está vazio!');
-            return;
-        }
-        
-        // Redirecionar para página do carrinho
-        window.location.href = './carrinho.php';
-    }
-
     // Busca em tempo real
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM carregado - inicializando eventos do cardápio');
@@ -393,7 +266,7 @@ try {
             }
         });
 
-        // Adicionar eventos de clique para categorias (fallback)
+        // Adicionar eventos de clique para categorias
         const categoryItems = document.querySelectorAll('.category-item');
         console.log('Categorias encontradas:', categoryItems.length);
         
@@ -424,6 +297,91 @@ try {
                 limparFiltros();
             });
         }
+
+        // Feedback visual para botões de adicionar ao carrinho
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Prevenir que o clique no botão ative o link do produto
+                e.stopPropagation();
+                
+                // Verificar se o produto está em estoque
+                if (this.disabled) {
+                    return false;
+                }
+                
+                // Adicionar efeito de clique
+                this.classList.add('clicked');
+                
+                // Criar elemento de feedback moderno
+                const feedback = document.createElement('div');
+                feedback.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                feedback.style.cssText = `
+                    position: absolute;
+                    top: -40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #28a745, #20963d);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    opacity: 0;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+                    white-space: nowrap;
+                `;
+                
+                // Adicionar posição relativa ao card se não tiver
+                const card = this.closest('.product-card');
+                card.style.position = 'relative';
+                card.appendChild(feedback);
+                
+                // Animação de entrada
+                setTimeout(() => {
+                    feedback.style.opacity = '1';
+                    feedback.style.transform = 'translateX(-50%) translateY(-5px)';
+                }, 10);
+                
+                // Efeito de sucesso no botão
+                setTimeout(() => {
+                    this.classList.add('success');
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                }, 200);
+                
+                // Voltar ao estado normal
+                setTimeout(() => {
+                    this.classList.remove('success');
+                    this.innerHTML = '<i class="fas fa-plus"></i>';
+                    this.classList.remove('clicked');
+                }, 1500);
+                
+                // Remover feedback
+                setTimeout(() => {
+                    feedback.style.opacity = '0';
+                    feedback.style.transform = 'translateX(-50%) translateY(-10px)';
+                    setTimeout(() => {
+                        if (feedback.parentNode) {
+                            feedback.parentNode.removeChild(feedback);
+                        }
+                    }, 300);
+                }, 2000);
+            });
+        });
+
+        // Melhorar a interação dos cards de produto
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Se não foi clicado no botão, ir para a página do produto
+                if (!e.target.closest('.add-btn') && !e.target.closest('form')) {
+                    const link = this.querySelector('.product-link');
+                    if (link) {
+                        window.location.href = link.href;
+                    }
+                }
+            });
+        });
     });
 </script>
 

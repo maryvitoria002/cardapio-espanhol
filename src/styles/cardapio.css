@@ -732,3 +732,82 @@ body {
         justify-content: center;
     }
 }
+
+/* Estilos para botão de adicionar ao carrinho */
+.add-btn {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    font-size: 1.2rem;
+    z-index: 10;
+}
+
+.add-btn:hover {
+    background: linear-gradient(135deg, #e67e22, #d68910);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+}
+
+.add-btn:active,
+.add-btn.clicked {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #28a745, #20963d);
+    box-shadow: 0 3px 8px rgba(40, 167, 69, 0.4);
+}
+
+.add-btn:disabled {
+    background: linear-gradient(135deg, #ccc, #bbb);
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none !important;
+}
+
+.add-btn:disabled:hover {
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Garantir que o card do produto tenha posição relativa */
+.product-card {
+    position: relative;
+}
+
+/* Efeito de pulso quando produto é adicionado */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.add-btn.pulse {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Efeito de sucesso */
+.add-btn.success {
+    background: linear-gradient(135deg, #28a745, #20963d) !important;
+}
+
+.add-btn.success::after {
+    content: '✓';
+    position: absolute;
+    font-size: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
