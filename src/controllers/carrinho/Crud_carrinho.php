@@ -237,4 +237,22 @@ class Crud_carrinho extends Carrinho{
             throw new Exception("Erro ao calcular subtotal: " . $e->getMessage());
         }
     }
+
+    public function atualizarQuantidade($incremento) {
+        $sql = "UPDATE carrinho SET quantidade = quantidade + :incremento WHERE id_carrinho = :id_carrinho";
+        
+        try {
+            $id_carrinho = $this->getId_carrinho(); // Usa o getter
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":incremento", $incremento, PDO::PARAM_INT);
+            $stmt->bindParam(":id_carrinho", $id_carrinho, PDO::PARAM_INT);
+            
+            $stmt->execute();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }

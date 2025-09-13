@@ -1,29 +1,188 @@
 <?php 
 
-require_once "./Carrinho.php";
+require_once "Produto.php";
 
-class CrudCarrinho extends Carrinho{
+class Crud_produto extends Produto {
  
     // CRUD CRIAR (CREATE)
     public function create(){
-        $email = $this->getEmail();
-        $id_produto = $this->getIdProduto();
-        $quantidade = $this->getQuantidade();
-        $sql = "INSERT INTO `{$this->tabela}` (email, id_produto, quantidade) VALUES (:email, :id_produto, :quantidade)";
+        $nome_produto = $this->getNome_produto();
+        $preco = $this->getPreco();
+        $estoque = $this->getEstoque();
+        $status = $this->getStatus();
+        $descricao = $this->getDescricao();
+        $imagem = $this->getImagem();
+        
+        $sql = "INSERT INTO `{$this->tabela}` (nome_produto, preco, estoque, status, descricao, imagem, data_criacao) 
+                VALUES (:nome_produto, :preco, :estoque, :status, :descricao, :imagem, NOW())";
 
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
         $stmt = $database->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
-        $stmt->bindParam(":quantidade", $quantidade, PDO::PARAM_INT);
+        $stmt->bindParam(":nome_produto", $nome_produto, PDO::PARAM_STR);
+        $stmt->bindParam(":preco", $preco, PDO::PARAM_STR);
+        $stmt->bindParam(":estoque", $estoque, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
+        $stmt->bindParam(":imagem", $imagem, PDO::PARAM_STR);
  
         try {
             $stmt->execute();
-            echo "<script>alert('Cadastro realizado com sucesso!'); window.location.href = './login.php';</script>";
-            exit();
+            return true;
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+    }
+    
+    // CRUD LER (READ)
+    public function read(){
+        $sql = "SELECT * FROM `{$this->tabela}` ORDER BY data_criacao DESC";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // CRUD LER POR ID
+    public function readById($id){
+        $sql = "SELECT * FROM `{$this->tabela}` WHERE id_produto = :id";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    // CRUD ATUALIZAR (UPDATE)
+    public function update($id){
+        $nome_produto = $this->getNome_produto();
+        $preco = $this->getPreco();
+        $estoque = $this->getEstoque();
+        $status = $this->getStatus();
+        $descricao = $this->getDescricao();
+        $imagem = $this->getImagem();
+        
+        $sql = "UPDATE `{$this->tabela}` SET 
+                nome_produto = :nome_produto,
+                preco = :preco,
+                estoque = :estoque,
+                status = :status,
+                descricao = :descricao,
+                imagem = :imagem,
+                data_atualizacao = NOW()
+                WHERE id_produto = :id";
+
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":nome_produto", $nome_produto, PDO::PARAM_STR);
+        $stmt->bindParam(":preco", $preco, PDO::PARAM_STR);
+        $stmt->bindParam(":estoque", $estoque, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
+        $stmt->bindParam(":imagem", $imagem, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+        try {
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+    }
+    
+    // CRUD DELETAR (DELETE)
+    public function delete($id){
+        $sql = "DELETE FROM `{$this->tabela}` WHERE id_produto = :id";
+        
+        $database = new Database();
+        $stmt = $database->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        
+        try {
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+    }
+    
+    // Método para buscar produtos mais vendidos
+    public function getMaisVendidos($limite = 5) {
+        try {
+            $sql = "SELECT p.*, SUM(pp.quantidade) as total_vendido 
+                    FROM produto p
+                    INNER JOIN produto_pedido pp ON p.id_produto = pp.id_produto
+                    INNER JOIN pedido ped ON pp.id_pedido = ped.id_pedido
+                    WHERE ped.status_pedido = 'concluido'
+                    GROUP BY p.id_produto
+                    ORDER BY total_vendido DESC
+                    LIMIT :limite";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar produtos mais vendidos: " . $e->getMessage());
+        }
+    }
+    
+    // Método para contar todos os produtos
+    public function count() {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
+            
+            $database = new Database();
+            $conexao = $database->getInstance();
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute();
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao contar produtos: " . $e->getMessage());
+        }
+    }
+
+    // Método para contar produtos por status
+    public function countByStatus($status) {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}` WHERE status = :status";
+            
+            $database = new Database();
+            $conexao = $database->getInstance();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao contar produtos: " . $e->getMessage());
+        }
+    }
+    
+    // Método para buscar produtos com baixo estoque
+    public function getBaixoEstoque($limite = 10) {
+        try {
+            $sql = "SELECT * FROM `{$this->tabela}` 
+                    WHERE estoque <= :limite AND status = 'ativo'
+                    ORDER BY estoque ASC";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar produtos com baixo estoque: " . $e->getMessage());
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php 
-require_once "./db/conection.php";
+require_once __DIR__ . "/../../db/conection.php";
 
 class Categoria extends Database{
     protected $tabela = "categoria";

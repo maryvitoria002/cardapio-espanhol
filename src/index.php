@@ -1,25 +1,28 @@
 <?php 
 $titulo = "inicio";
 include_once "./components/_base-header.php";
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (empty($_SESSION["id"])) {
+    header("Location: ./login.php");
+    exit();
+}
+
 ?>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/inicio.css">
-</head>
-<body>
     <div class="container">
         <!-- Coluna principal (esquerda) -->
         <main class="main-content">
             <!-- Cabeçalho -->
             <header class="header">
                 <div class="greeting">
-                    <h1>Olá, Mary!</h1>
+                    <h1>Olá, <?= $_SESSION["primeiro_nome"]?></h1>
                 </div>
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="O que você quer comer hoje...">
+                    <input type="text" placeholder="O que você quer comer hoje...Kelvin?Eu também!">
                 </div>
                 <div class="top-actions">
                     <button class="icon-btn">
@@ -29,7 +32,7 @@ include_once "./components/_base-header.php";
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="avatar">
-                        <img src="" alt="Usuário">
+                        <img src="./images/usuário.jpeg" alt="Usuário">
                         <span class="status"></span>
                     </div>
                 </div>
@@ -42,7 +45,7 @@ include_once "./components/_base-header.php";
                     <h3>VIVA O <span class="highlight">ENCANTO</span></h3>
                 </div>
                 <div class="banner-image">
-                    <img src="https://i.imgur.com/zX0lPkr.png" alt="Pratos diversos">
+                    <img src="assets/Logo.png" alt="Pratos diversos">
                 </div>
             </section>
 
@@ -62,14 +65,14 @@ include_once "./components/_base-header.php";
                     <div class="category-item active">
                         <div class="category-icon">
                             
-                            <img src="assets/bebida.png" alt="Bowls">
+                            <img src="assets/bowls.png" alt="Bowls">
                         </div>
                         <span>Bowls</span>
                     </div>
                     <div class="category-item">
                         <div class="category-icon">
                             
-                            <img src="assets/lanches.png" alt="Lanches">
+                            <img src="./images/usuário.jpeg" alt="Lanches">
                         </div>
                         <span>Lanches</span>
                     </div>
@@ -99,7 +102,7 @@ include_once "./components/_base-header.php";
                 <div class="product-list">
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://i.imgur.com/5r3Tj6f.jpg" alt="Salada Caesar">
+                            <img src="assets/saladaceasar.png" alt="Salada Caesar">
                         </div>
                         <h3 class="product-name">Salada Caesar</h3>
                         <p class="product-price">R$ 9,99</p>
@@ -113,7 +116,7 @@ include_once "./components/_base-header.php";
                     </div>
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://i.imgur.com/9xY71qj.jpg" alt="Gaspacho Verde">
+                            <img src="assets/gaspachoverde.png" alt="Gaspacho Verde">
                         </div>
                         <h3 class="product-name">Gaspacho Verde</h3>
                         <p class="product-price">R$ 9,99</p>
@@ -127,7 +130,7 @@ include_once "./components/_base-header.php";
                     </div>
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://i.imgur.com/VLbXa0h.jpg" alt="Ramen Tori Tamago">
+                            <img src="assets/Ramentori.png" alt="Ramen Tori Tamago">
                         </div>
                         <h3 class="product-name">Ramen Tori Tamago</h3>
                         <p class="product-price">R$ 9,99</p>
@@ -150,17 +153,51 @@ include_once "./components/_base-header.php";
                 <h2>Seu endereço</h2>
                 <div class="address-line">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Rua Joaquim Manuel, 10</span>
+                    <span>Rua Manoel Vitorino, 10</span>
                 </div>
                 <p class="address-placeholder">
-                    Apartamento 102, Bloco B<br>
-                    Próximo ao mercado<br>
-                    Referência: prédio azul
+                    Apartamento 305<br>
+                    Acima do real móveis<br>
+                    Referência: Casa de dona dedé
                 </p>
                 <div class="address-actions">
                     <button class="btn-solid">Alterar</button>
                     <button class="btn-outline">Add Detalhes</button>
                     <button class="btn-outline">Add Nota</button>
+                </div>
+            </div>
+
+            <div class="order-card">
+                <h2>Menu de Pedidos</h2>
+                <div class="order-list">
+                    <div class="order-item">
+                        <div class="order-thumb">
+                            <img src="assets/Ramentori.png" alt="Ramen Tori Tamago">
+                        </div>
+                        <div class="order-details">
+                            <h3 class="order-name">Ramen Tori Tamago</h3>
+                            <span class="order-price">+R$ 9,99</span>
+                            <span class="order-qty">1x</span>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-thumb">
+                            <img src="assets/gaspachoverde.png" alt="Gaspacho Verde">
+                        </div>
+                        <div class="order-details">
+                            <h3 class="order-name">Gaspacho Verde</h3>
+                            <span class="order-price">+R$ 9,99</span>
+                            <span class="order-qty">1x</span>
+                        </div>
+                    </div>
+                    <div class="order-fee">
+                        <span>Serviços</span>
+                        <span class="order-price">+R$ 1,00</span>
+                    </div>
+                    <div class="order-total">
+                        <span>TOTAL</span>
+                        <span>R$ 20,98</span>
+                    </div>
                 </div>
             </div>
 
@@ -184,8 +221,9 @@ include_once "./components/_base-header.php";
             });
         });
     </script>
-</body>
-</html>
+
+
+
 
 <?php 
 include_once "./components/_base-footer.php";

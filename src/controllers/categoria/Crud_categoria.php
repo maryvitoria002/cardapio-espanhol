@@ -1,7 +1,7 @@
 <?php 
 require_once "Categoria.php";
 
-class CrudCategoria extends Categoria{
+class Crud_categoria extends Categoria {
 
     // CRUD CRIAR (CREATE)
     
@@ -129,6 +129,22 @@ class CrudCategoria extends Categoria{
             exit();
         } catch (PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+    }
+    
+    // Método para contar todas as categorias
+    public function count() {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->execute();
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'];
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao contar categorias: " . $e->getMessage());
         }
     }
 }

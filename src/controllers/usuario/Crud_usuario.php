@@ -151,6 +151,141 @@ class Crud_usuario extends Usuario{
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
     }
+    
+    // Métodos adicionais para o admin
+    public function readAll($search = '', $status = '', $offset = 0, $limit = 10) {
+        try {
+            $sql = "SELECT * FROM `{$this->tabela}`";
+            $params = [];
+            $whereConditions = [];
+            
+            if (!empty($search)) {
+                $whereConditions[] = "(primeiro_nome LIKE :search OR segundo_nome LIKE :search OR email LIKE :search)";
+                $params['search'] = "%$search%";
+            }
+            
+            if (!empty($whereConditions)) {
+                $sql .= " WHERE " . implode(" AND ", $whereConditions);
+            }
+            
+            $sql .= " ORDER BY data_criacao DESC LIMIT :offset, :limit";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar usuários: " . $e->getMessage());
+        }
+    }
+    
+    public function count($search = '', $status = '') {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
+            $params = [];
+            $whereConditions = [];
+            
+            if (!empty($search)) {
+                $whereConditions[] = "(primeiro_nome LIKE :search OR segundo_nome LIKE :search OR email LIKE :search)";
+                $params['search'] = "%$search%";
+            }
+            
+            if (!empty($whereConditions)) {
+                $sql .= " WHERE " . implode(" AND ", $whereConditions);
+            }
+            
+            $database = new Database();
+            $conexao = $database->getInstance();
+            $stmt = $conexao->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result['total'];
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao contar usuários: " . $e->getMessage());
+        }
+    }
+    
+    public function readById($id) {
+        try {
+            $sql = "SELECT * FROM `{$this->tabela}` WHERE id_usuario = :id";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar usuário: " . $e->getMessage());
+        }
+    }
+    
+    public function createUser($dados) {
+        try {
+            $sql = "INSERT INTO `{$this->tabela}` (primeiro_nome, segundo_nome, email, senha, telefone, endereco, data_criacao) 
+                    VALUES (:primeiro_nome, :segundo_nome, :email, :senha, :telefone, :endereco, NOW())";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":primeiro_nome", $dados['primeiro_nome'], PDO::PARAM_STR);
+            $stmt->bindParam(":segundo_nome", $dados['segundo_nome'], PDO::PARAM_STR);
+            $stmt->bindParam(":email", $dados['email'], PDO::PARAM_STR);
+            $stmt->bindParam(":senha", $dados['senha'], PDO::PARAM_STR);
+            $stmt->bindParam(":telefone", $dados['telefone'], PDO::PARAM_STR);
+            $stmt->bindParam(":endereco", $dados['endereco'], PDO::PARAM_STR);
+            
+            $stmt->execute();
+            return true;
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao criar usuário: " . $e->getMessage());
+        }
+    }
+    
+    public function updateUser($id, $dados) {
+        try {
+            $sql = "UPDATE `{$this->tabela}` SET 
+                    primeiro_nome = :primeiro_nome,
+                    segundo_nome = :segundo_nome,
+                    email = :email,
+                    telefone = :telefone,
+                    endereco = :endereco,
+                    data_atualizacao = NOW()
+                    WHERE id_usuario = :id";
+            
+            $database = new Database();
+            $stmt = $database->prepare($sql);
+            $stmt->bindParam(":primeiro_nome", $dados['primeiro_nome'], PDO::PARAM_STR);
+            $stmt->bindParam(":segundo_nome", $dados['segundo_nome'], PDO::PARAM_STR);
+            $stmt->bindParam(":email", $dados['email'], PDO::PARAM_STR);
+            $stmt->bindParam(":telefone", $dados['telefone'], PDO::PARAM_STR);
+            $stmt->bindParam(":endereco", $dados['endereco'], PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            
+            $stmt->execute();
+            return true;
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao atualizar usuário: " . $e->getMessage());
+        }
+    }
 }
 
 

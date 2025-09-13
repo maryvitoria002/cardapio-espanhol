@@ -1,8 +1,8 @@
 <?php 
 
-require_once "../../db/conection.php";
+require_once __DIR__ . "/../../db/conection.php";
 
-class Pedidos {
+class Pedido {
     protected $tabela = "pedido";
     private $id_pedido;
     private $endereco;

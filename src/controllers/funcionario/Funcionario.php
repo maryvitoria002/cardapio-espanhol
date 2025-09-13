@@ -1,5 +1,5 @@
 <?php 
-require_once "./db/conection.php";
+require_once __DIR__ . "/../../db/conection.php";
 
 class Funcionario extends Database{
     protected $tabela = "funcionario";
@@ -31,12 +31,30 @@ class Funcionario extends Database{
     public function setPrimeiro_nome($primeiro_nome) {
         $this->primeiro_nome = $primeiro_nome;
     }
+    
+    // Alias para compatibilidade
+    public function getNome1() {
+        return $this->primeiro_nome;
+    }
+
+    public function setNome1($primeiro_nome) {
+        $this->primeiro_nome = $primeiro_nome;
+    }
 
     public function getSegundo_nome() {
         return $this->segundo_nome ?? '';
     }
 
-    public function setSEgundo_nome($segundo_nome) {
+    public function setSegundo_nome($segundo_nome) {
+        $this->segundo_nome = $segundo_nome;
+    }
+    
+    // Alias para compatibilidade
+    public function getNome2() {
+        return $this->segundo_nome ?? '';
+    }
+
+    public function setNome2($segundo_nome) {
         $this->segundo_nome = $segundo_nome;
     }
 
@@ -77,6 +95,15 @@ class Funcionario extends Database{
     }
 
     public function setData_criacao($data_criacao = null) {
+        $this->data_criacao = $data_criacao ?? date('Y-m-d H:i:s');
+    }
+    
+    // Alias para compatibilidade
+    public function getCriadoEm() {
+        return $this->data_criacao ?? "";
+    }
+
+    public function setCriadoEm($data_criacao = null) {
         $this->data_criacao = $data_criacao ?? date('Y-m-d H:i:s');
     }
 
