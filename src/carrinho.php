@@ -2,7 +2,11 @@
 $titulo = "carrinho";
 include_once "./components/_base-header.php";
 require_once "./controllers/produto/Crud_produto.php";
+?>
 
+<link rel="stylesheet" href="./styles/carrinho.css">
+
+<?php
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
     exit();
@@ -388,62 +392,6 @@ function atualizarQuantidadeComDelay(form) {
     }, 500);
 }
 </script>
-
-<style>
-/* Alertas */
-.alert {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert i {
-    font-size: 1.1rem;
-}
-
-.carrinho-container {
-    width: 100%;
-    margin: 0;
-    padding: 24px 32px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    box-sizing: border-box;
-    overflow: visible;
-}
-.carrinho-container * {
-    box-sizing: border-box;
-    max-width: 100%;
-    word-wrap: break-word;
-}
-.carrinho-header, .carrinho-content, .carrinho-resumo {
-    width: 100%;
-    margin: 0 auto;
-}
-.carrinho-resumo {
-    margin-top: 30px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    border: 1px solid #e9ecef;
-}
-</style>
 
 <?php 
 include_once "./components/_base-footer.php";
