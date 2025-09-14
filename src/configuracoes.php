@@ -2,6 +2,7 @@
 $titulo = "configuracoes";
 include_once "./components/_base-header.php";
 require_once "./controllers/usuario/Crud_usuario.php";
+require_once "./controllers/favorito/Crud_favorito.php";
 
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
@@ -11,6 +12,10 @@ if (!isset($_SESSION['id'])) {
 $usuario = new Crud_usuario();
 $usuario->setId_usuario($_SESSION['id']);
 $dadosUsuario = $usuario->read();
+
+// Buscar favoritos do usuário
+$crudFavorito = new Crud_favorito();
+$favoritos = $crudFavorito->getFavoritosByUsuario($_SESSION['id']);
 
 // Verificar se os dados do usuário foram encontrados
 if (!$dadosUsuario) {
@@ -40,10 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 <div class="config-container">
     <div class="retangulo_branco">
         <div class="fotoperfil">
-            <img src="./assets/perfil.png" alt="foto de perfil">
-            <button class="btn-change-photo">
+            <img id="foto-perfil-img" src="<?= !empty($dadosUsuario['imagem_perfil']) ? './images/usuarios/' . htmlspecialchars($dadosUsuario['imagem_perfil']) : './images/usuário.jpeg' ?>" alt="foto de perfil">
+            <button class="btn-change-photo" onclick="document.getElementById('input-foto').click()">
                 <i class="fas fa-camera"></i>
             </button>
+            <input type="file" id="input-foto" accept="image/*" style="display: none;" onchange="uploadFotoPerfil(this)">
         </div>
         <div class="nomeperfil">
            <div class="nome">
@@ -125,15 +131,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         <!-- Seção de Favoritos -->
         <div class="config-section" id="favoritos">
             <h1>Itens Favoritos</h1>
-            <div class="favorites-grid">
-                <!-- Aqui você pode adicionar uma grid de itens favoritos -->
-                <p>Você ainda não tem itens favoritos.</p>
-            </div>
+            <?php if (empty($favoritos)): ?>
+                <div class="empty-favorites">
+                    <i class="fas fa-heart"></i>
+                    <h3>Nenhum produto favoritado ainda</h3>
+                    <p>Comece a adicionar produtos aos seus favoritos para vê-los aqui!</p>
+                    <a href="cardapio.php" class="btn-primary">Explorar Cardápio</a>
+                </div>
+            <?php else: ?>
+                <div class="favorites-counter">
+                    <p><?= count($favoritos) ?> <?= count($favoritos) == 1 ? 'produto favoritado' : 'produtos favoritados' ?></p>
+                </div>
+                <div class="favorites-grid-config">
+                    <?php foreach ($favoritos as $produto): ?>
+                        <div class="product-card-config" data-produto-id="<?= $produto['id_produto'] ?>">
+                            <div class="product-image-config">
+                                <?php if (!empty($produto['imagem'])): ?>
+                                    <img src="./images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                         alt="<?= htmlspecialchars($produto['nome_produto']) ?>"
+                                         onerror="this.src='./assets/avatar.png'">
+                                <?php else: ?>
+                                    <img src="./assets/avatar.png" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
+                                <?php endif; ?>
+                                <button class="favorite-btn-config active" onclick="toggleFavorito(<?= $produto['id_produto'] ?>)">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="product-info-config">
+                                <h4><?= htmlspecialchars($produto['nome_produto']) ?></h4>
+                                <p class="product-description-config"><?= htmlspecialchars(substr($produto['descricao'], 0, 80)) ?>...</p>
+                                <div class="product-footer-config">
+                                    <span class="price-config">R$ <?= number_format($produto['preco'], 2, ',', '.') ?></span>
+                                    <button class="btn-add-cart-config" onclick="adicionarAoCarrinho(<?= $produto['id_produto'] ?>)">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 
 <script>
+// Detectar hash na URL para mostrar seção específica
+document.addEventListener('DOMContentLoaded', function() {
+    const hash = window.location.hash.substring(1); // Remove o #
+    if (hash && document.getElementById(hash)) {
+        // Remove active de todos os itens
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
+        
+        // Ativa o item correspondente ao hash
+        const menuItem = document.querySelector(`[data-section="${hash}"]`);
+        const section = document.getElementById(hash);
+        
+        if (menuItem && section) {
+            menuItem.classList.add('active');
+            section.classList.add('active');
+        }
+    }
+});
+
 document.querySelectorAll('.menu-item').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
@@ -150,6 +211,134 @@ document.querySelectorAll('.menu-item').forEach(item => {
         document.getElementById(section).classList.add('active');
     });
 });
+
+function uploadFotoPerfil(input) {
+    if (input.files && input.files[0]) {
+        const formData = new FormData();
+        formData.append('foto_perfil', input.files[0]);
+        
+        // Mostrar loading
+        const img = document.getElementById('foto-perfil-img');
+        const originalSrc = img.src;
+        
+        fetch('./upload_foto_perfil.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Atualizar imagem com timestamp para forçar reload
+                img.src = data.foto_url + '?t=' + new Date().getTime();
+                
+                // Atualizar todas as imagens de perfil na página
+                updateAllProfileImages(data.foto_url);
+                
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message, 'error');
+                input.value = ''; // Limpar input
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            showNotification('Erro ao fazer upload da foto', 'error');
+            input.value = ''; // Limpar input
+        });
+    }
+}
+
+function updateAllProfileImages(newImageUrl) {
+    // Atualizar todas as imagens de perfil na aplicação
+    const profileImages = document.querySelectorAll('img[alt="Usuário"], img[alt="foto de perfil"]');
+    profileImages.forEach(img => {
+        img.src = newImageUrl + '?t=' + new Date().getTime();
+    });
+}
+
+function showNotification(message, type) {
+    // Criar elemento de notificação
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Adicionar ao body
+    document.body.appendChild(notification);
+    
+    // Mostrar com animação
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+function toggleFavorito(idProduto) {
+    fetch('./process_favorito.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=toggle&id_produto=${idProduto}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.action === 'removed') {
+                // Remove o produto da página
+                const productCard = document.querySelector(`[data-produto-id="${idProduto}"]`);
+                if (productCard) {
+                    productCard.remove();
+                    
+                    // Atualizar contador
+                    const counter = document.querySelector('.favorites-counter p');
+                    if (counter) {
+                        const currentCount = parseInt(counter.textContent.split(' ')[0]) - 1;
+                        counter.textContent = `${currentCount} ${currentCount == 1 ? 'produto favoritado' : 'produtos favoritados'}`;
+                        
+                        // Se não há mais favoritos, recarregar a página para mostrar mensagem vazia
+                        if (currentCount === 0) {
+                            location.reload();
+                        }
+                    }
+                }
+            }
+            
+            // Mostrar notificação
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        showNotification('Erro ao processar favorito', 'error');
+    });
+}
+
+function adicionarAoCarrinho(idProduto) {
+    fetch('./carrinho.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=add&produto_id=${idProduto}&quantidade=1`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Produto adicionado ao carrinho!', 'success');
+        } else {
+            showNotification(data.message || 'Erro ao adicionar produto', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        showNotification('Erro ao adicionar produto ao carrinho', 'error');
+    });
+}
 </script>
 
 <?php 

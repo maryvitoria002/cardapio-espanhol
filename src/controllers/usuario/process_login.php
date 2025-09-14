@@ -29,7 +29,7 @@ try {
     }
 
     // Buscar usuário no banco
-    $stmt = $pdo->prepare("SELECT id, nome, sobrenome, email, senha FROM usuarios WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT id_usuario as id, primeiro_nome as nome, segundo_nome as sobrenome, email, senha, imagem_perfil FROM usuario WHERE email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -63,6 +63,7 @@ try {
     $_SESSION['primeiro_nome'] = $usuario['nome'];
     $_SESSION['segundo_nome'] = $usuario['sobrenome'];
     $_SESSION['email'] = $usuario['email'];
+    $_SESSION['foto_perfil'] = $usuario['imagem_perfil'];
 
     // Configurar cookie se "lembrar" estiver marcado
     if ($lembrar) {

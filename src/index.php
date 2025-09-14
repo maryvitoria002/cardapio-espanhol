@@ -11,6 +11,21 @@ if (empty($_SESSION["id"])) {
     exit();
 }
 
+// Carregar foto de perfil na sessão se não estiver definida
+if (!isset($_SESSION['foto_perfil'])) {
+    try {
+        require_once './controllers/usuario/Crud_usuario.php';
+        $crudUsuario = new Crud_usuario();
+        $crudUsuario->setId_usuario($_SESSION["id"]);
+        $dadosUsuario = $crudUsuario->read();
+        if ($dadosUsuario && isset($dadosUsuario['imagem_perfil'])) {
+            $_SESSION['foto_perfil'] = $dadosUsuario['imagem_perfil'];
+        }
+    } catch (Exception $e) {
+        // Silenciar erro para não quebrar a página
+    }
+}
+
 // Incluir controladores necessários
 require_once './controllers/produto/Crud_produto.php';
 require_once './controllers/categoria/Crud_categoria.php';
@@ -71,11 +86,11 @@ function getImagemPadrao($nome_categoria) {
                     <button class="icon-btn">
                         <i class="fas fa-comment"></i>
                     </button>
-                    <button class="icon-btn">
+                    <button class="icon-btn" onclick="window.location.href='configuracoes.php#favoritos'" title="Meus Favoritos">
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="avatar">
-                        <img src="./images/usuário.jpeg" alt="Usuário">
+                        <img src="<?= !empty($_SESSION['foto_perfil']) ? './images/usuarios/' . $_SESSION['foto_perfil'] : './images/usuário.jpeg' ?>" alt="Usuário">
                         <span class="status"></span>
                     </div>
                 </div>

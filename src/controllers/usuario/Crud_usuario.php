@@ -107,8 +107,15 @@ class Crud_usuario extends Usuario{
         $primeiro_nome = $this->getPrimeiro_nome();
         $segundo_nome = $this->getSegundo_nome();
         $telefone = $this->getTelefone();
+        $imagem_perfil = $this->getImagem_perfil();
         $data_atualizacao = $this->getData_atualizacao();
-        $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, telefone = :telefone, data_atualizacao = :data_atualizacao WHERE id_usuario = :id_usuario";
+        
+        // Incluir imagem_perfil apenas se estiver definida
+        if (!empty($imagem_perfil)) {
+            $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, telefone = :telefone, imagem_perfil = :imagem_perfil, data_atualizacao = :data_atualizacao WHERE id_usuario = :id_usuario";
+        } else {
+            $sql = "UPDATE `{$this->tabela}` SET primeiro_nome = :primeiro_nome, segundo_nome = :segundo_nome, telefone = :telefone, data_atualizacao = :data_atualizacao WHERE id_usuario = :id_usuario";
+        }
         
         // Criando uma instância para o bd e prepare statement
         $database = new Database();
@@ -116,6 +123,9 @@ class Crud_usuario extends Usuario{
         $stmt->bindParam(":primeiro_nome", $primeiro_nome, PDO::PARAM_STR);
         $stmt->bindParam(":segundo_nome", $segundo_nome, PDO::PARAM_STR);
         $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
+        if (!empty($imagem_perfil)) {
+            $stmt->bindParam(":imagem_perfil", $imagem_perfil, PDO::PARAM_STR);
+        }
         $stmt->bindParam(":data_atualizacao", $data_atualizacao, PDO::PARAM_STR);
         $stmt->bindParam(":id_usuario", $id_usuario, PDO::PARAM_STR);
  

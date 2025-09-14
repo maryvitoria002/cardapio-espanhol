@@ -212,7 +212,7 @@ $produtoAdicionado = isset($_GET['added']) && $_GET['added'] == '1';
                             Adicionar ao Carrinho
                         </button>
                         
-                        <button type="button" class="btn-favoritar" onclick="toggleFavorito()">
+                        <button type="button" class="btn-favoritar" onclick="toggleFavorito(<?= $dadosProduto['id_produto'] ?>)">
                             <i class="far fa-heart"></i>
                         </button>
                     </div>
@@ -350,17 +350,56 @@ function atualizarPrecoTotal() {
 }
 
 // Função para favoritar
-function toggleFavorito() {
-    const btnFavoritar = document.querySelector('.btn-favoritar i');
-    if (btnFavoritar.classList.contains('far')) {
-        btnFavoritar.classList.remove('far');
-        btnFavoritar.classList.add('fas');
-        btnFavoritar.style.color = '#e9b004';
-    } else {
-        btnFavoritar.classList.remove('fas');
-        btnFavoritar.classList.add('far');
-        btnFavoritar.style.color = '';
-    }
+function toggleFavorito(idProduto) {
+    fetch('./process_favorito.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=toggle&id_produto=${idProduto}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const btnFavoritar = document.querySelector('.btn-favoritar i');
+            if (data.action === 'added') {
+                btnFavoritar.classList.remove('far');
+                btnFavoritar.classList.add('fas');
+                btnFavoritar.style.color = '#e74c3c';
+                showNotification('Produto adicionado aos favoritos!', 'success');
+            } else {
+                btnFavoritar.classList.remove('fas');
+                btnFavoritar.classList.add('far');
+                btnFavoritar.style.color = '';
+                showNotification('Produto removido dos favoritos!', 'success');
+            }
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        showNotification('Erro ao processar favorito', 'error');
+    });
+}
+
+function showNotification(message, type) {
+    // Criar elemento de notificação
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Adicionar ao body
+    document.body.appendChild(notification);
+    
+    // Mostrar com animação
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 // Event listeners
@@ -372,6 +411,37 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('quantidade').addEventListener('change', atualizarPrecoTotal);
 });
 </script>
+
+<style>
+/* Notificações */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: #27ae60;
+}
+
+.notification.error {
+    background: #e74c3c;
+}
+</style>
 
 <?php 
 include_once "./components/_base-footer.php";

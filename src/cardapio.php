@@ -11,6 +11,21 @@ if (empty($_SESSION["id"])) {
     exit();
 }
 
+// Carregar foto de perfil na sessão se não estiver definida
+if (!isset($_SESSION['foto_perfil'])) {
+    try {
+        require_once __DIR__ . '/controllers/usuario/Crud_usuario.php';
+        $crudUsuario = new Crud_usuario();
+        $crudUsuario->setId_usuario($_SESSION["id"]);
+        $dadosUsuario = $crudUsuario->read();
+        if ($dadosUsuario && isset($dadosUsuario['imagem_perfil'])) {
+            $_SESSION['foto_perfil'] = $dadosUsuario['imagem_perfil'];
+        }
+    } catch (Exception $e) {
+        // Silenciar erro para não quebrar a página
+    }
+}
+
 // Incluir as classes necessárias
 require_once __DIR__ . '/db/conection.php';
 require_once __DIR__ . '/controllers/produto/Crud_produto.php';
@@ -101,7 +116,7 @@ try {
                     <span class="cart-count">0</span>
                 </button>
                 <div class="avatar">
-                    <img src="./images/usuário.jpeg" alt="Usuário">
+                    <img src="<?= !empty($_SESSION['foto_perfil']) ? './images/usuarios/' . $_SESSION['foto_perfil'] : './images/usuário.jpeg' ?>" alt="Usuário">
                     <span class="status"></span>
                 </div>
             </div>
@@ -164,6 +179,9 @@ try {
                                 <?php else: ?>
                                     <img src="./assets/cardapio.png" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
                                 <?php endif; ?>
+                                <button class="favorite-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleFavorito(<?= $produto['id_produto'] ?>)">
+                                    <i class="far fa-heart"></i>
+                                </button>
                                 <div class="product-badges">
                                     <?php if ($produto['preco'] < 15): ?>
                                     <span class="badge badge-promo">Promoção</span>
@@ -383,7 +401,131 @@ try {
             });
         });
     });
+
+    // Função para favoritar
+    function toggleFavorito(idProduto) {
+        fetch('./process_favorito.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `action=toggle&id_produto=${idProduto}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const btnFavoritar = document.querySelector(`[onclick*="${idProduto}"] i`);
+                if (btnFavoritar) {
+                    if (data.action === 'added') {
+                        btnFavoritar.classList.remove('far');
+                        btnFavoritar.classList.add('fas');
+                        btnFavoritar.style.color = '#e74c3c';
+                        showNotification('Produto adicionado aos favoritos!', 'success');
+                    } else {
+                        btnFavoritar.classList.remove('fas');
+                        btnFavoritar.classList.add('far');
+                        btnFavoritar.style.color = '';
+                        showNotification('Produto removido dos favoritos!', 'success');
+                    }
+                }
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            showNotification('Erro ao processar favorito', 'error');
+        });
+    }
+
+    function showNotification(message, type) {
+        // Criar elemento de notificação
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        // Adicionar ao body
+        document.body.appendChild(notification);
+        
+        // Mostrar com animação
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Remover após 3 segundos
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
 </script>
+
+<style>
+/* Botão de favorito */
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.favorite-btn:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+.favorite-btn i {
+    color: #666;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.favorite-btn:hover i {
+    color: #e74c3c;
+}
+
+.favorite-btn i.fas {
+    color: #e74c3c !important;
+}
+
+/* Notificações */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: #27ae60;
+}
+
+.notification.error {
+    background: #e74c3c;
+}
+</style>
 
 <?php 
 include_once "./components/_base-footer.php";
