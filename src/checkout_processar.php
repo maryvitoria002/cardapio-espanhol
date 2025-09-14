@@ -14,6 +14,50 @@ if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
     exit();
 }
 
+// Verifica se os dados do formulário foram enviados
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: ./checkout.php");
+    exit();
+}
+
+// Processar dados do formulário
+$endereco_entrega = '';
+$telefone_contato = trim($_POST['telefone_contato'] ?? '');
+$modo_pagamento = trim($_POST['modo_pagamento'] ?? '');
+$observacoes = trim($_POST['observacoes'] ?? '');
+$referencia = trim($_POST['referencia'] ?? '');
+
+// Determinar endereço a ser usado
+if (isset($_POST['endereco_entrega']) && !empty(trim($_POST['endereco_entrega']))) {
+    // Usar endereço preenchido no formulário
+    $endereco_entrega = trim($_POST['endereco_entrega']);
+} elseif (isset($_POST['endereco_salvo']) && !empty(trim($_POST['endereco_salvo']))) {
+    // Usar endereço salvo do usuário
+    $endereco_entrega = trim($_POST['endereco_salvo']);
+} else {
+    $_SESSION['erro_checkout'] = "Endereço de entrega é obrigatório!";
+    header("Location: ./checkout.php");
+    exit();
+}
+
+// Adicionar referência ao endereço se fornecida
+if (!empty($referencia)) {
+    $endereco_entrega .= " (Ref: " . $referencia . ")";
+}
+
+// Validar campos obrigatórios
+if (empty($telefone_contato)) {
+    $_SESSION['erro_checkout'] = "Telefone de contato é obrigatório!";
+    header("Location: ./checkout.php");
+    exit();
+}
+
+if (empty($modo_pagamento)) {
+    $_SESSION['erro_checkout'] = "Forma de pagamento é obrigatória!";
+    header("Location: ./checkout.php");
+    exit();
+}
+
 try {
     require_once "./controllers/pedido/Crud_pedido.php";
     require_once "./controllers/produto_pedido/Crud_produto_pedido.php";
@@ -25,6 +69,7 @@ try {
     
     // Calcular total do pedido
     $totalPedido = 0;
+    $frete = 2.00; // Taxa de entrega fixa
     $itensCarrinho = [];
     
     foreach ($_SESSION['carrinho'] as $item) {
@@ -48,17 +93,29 @@ try {
         }
     }
     
+    // Adicionar frete ao total
+    $totalPedido += $frete;
+    
     if (empty($itensCarrinho)) {
         throw new Exception("Nenhum produto válido encontrado no carrinho!");
     }
     
-    // Criar o pedido
+    // Criar o pedido com dados do formulário
     $crudPedido->setId_usuario($_SESSION['id']);
     $crudPedido->setStatus_pedido('Pendente');
     $crudPedido->setStatus_pagamento('Pendente');
-    $crudPedido->setModo_pagamento('Dinheiro');  // Padrão
-    $crudPedido->setEndereco('A definir');        // Padrão
-    $crudPedido->setNota('Pedido realizado online');  // Nota padrão
+    $crudPedido->setModo_pagamento($modo_pagamento);
+    $crudPedido->setEndereco($endereco_entrega);
+    
+    // Criar nota com observações e telefone
+    $nota_pedido = "Pedido realizado online";
+    if (!empty($telefone_contato)) {
+        $nota_pedido .= " | Tel: " . $telefone_contato;
+    }
+    if (!empty($observacoes)) {
+        $nota_pedido .= " | Obs: " . $observacoes;
+    }
+    $crudPedido->setNota($nota_pedido);
     
     $idPedidoCriado = $crudPedido->create();
     

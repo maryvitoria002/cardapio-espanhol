@@ -185,8 +185,7 @@ class Crud_pedido extends Pedido {
                 status_pagamento = :status_pagamento,
                 status_pedido = :status_pedido,
                 motivo_cancelamento = :motivo_cancelamento,
-                nota = :nota,
-                data_atualizacao = NOW()
+                nota = :nota
                 WHERE id_pedido = :id";
 
         $database = new Database();

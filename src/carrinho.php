@@ -169,7 +169,7 @@ foreach ($_SESSION['carrinho'] as $item) {
     }
 }
 
-$taxa_entrega = $subtotal > 0 ? 8.90 : 0; // Taxa de entrega fixa
+$taxa_entrega = $subtotal > 0 ? 2.00 : 0; // Taxa de entrega fixa
 $desconto = 0; // Aqui pode implementar lógica de desconto
 $total = $subtotal + $taxa_entrega - $desconto;
 ?>
@@ -370,22 +370,8 @@ function finalizarPedido() {
         return;
     }
     
-    if (confirm('Finalizar pedido no valor de R$ <?= number_format($total, 2, ',', '.') ?>?')) {
-        // Criar form para enviar para checkout_processar.php
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = './checkout_processar.php';
-        
-        // Adicionar token CSRF se necessário
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = 'csrf_token';
-        csrfToken.value = '<?= isset($_SESSION["csrf_token"]) ? $_SESSION["csrf_token"] : "" ?>';
-        form.appendChild(csrfToken);
-        
-        document.body.appendChild(form);
-        form.submit();
-    }
+    // Redirecionar para página de checkout em vez de processar diretamente
+    window.location.href = './checkout.php';
 }
 
 // Confirmar antes de limpar carrinho

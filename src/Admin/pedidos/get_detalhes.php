@@ -69,10 +69,9 @@ try {
                     $badge_class = 'secondary';
                     switch($pedido['status_pedido']) {
                         case 'Pendente': $badge_class = 'warning'; break;
-                        case 'Em Preparacao': $badge_class = 'info'; break;
-                        case 'Pronto': $badge_class = 'primary'; break;
-                        case 'Em Entrega': $badge_class = 'light text-dark'; break;
-                        case 'Entregue': $badge_class = 'success'; break;
+                        case 'Processando': $badge_class = 'info'; break;
+                        case 'A caminho': $badge_class = 'primary'; break;
+                        case 'Concluido': $badge_class = 'success'; break;
                         case 'Cancelado': $badge_class = 'danger'; break;
                     }
                     ?>

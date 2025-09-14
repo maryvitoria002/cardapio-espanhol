@@ -43,7 +43,7 @@ try {
     $total_geral = $crudPedido->count();
     $pedidos_hoje = $crudPedido->countToday();
     $pedidos_pendentes = $crudPedido->countByStatus('Pendente');
-    $pedidos_concluidos = $crudPedido->countByStatus('Entregue');
+    $pedidos_concluidos = $crudPedido->countByStatus('Concluido');
     
     // Buscar receitas (se métodos existirem)
     if (method_exists($crudPedido, 'getReceitaTotal')) {
@@ -248,10 +248,9 @@ try {
                             <select class="form-select" id="status" name="status">
                                 <option value="">Todos os status</option>
                                 <option value="Pendente" <?= $status_filter === 'Pendente' ? 'selected' : '' ?>>Pendente</option>
-                                <option value="Em Preparacao" <?= $status_filter === 'Em Preparacao' ? 'selected' : '' ?>>Em Preparação</option>
-                                <option value="Pronto" <?= $status_filter === 'Pronto' ? 'selected' : '' ?>>Pronto</option>
-                                <option value="Em Entrega" <?= $status_filter === 'Em Entrega' ? 'selected' : '' ?>>Em Entrega</option>
-                                <option value="Entregue" <?= $status_filter === 'Entregue' ? 'selected' : '' ?>>Entregue</option>
+                                <option value="Processando" <?= $status_filter === 'Processando' ? 'selected' : '' ?>>Processando</option>
+                                <option value="A caminho" <?= $status_filter === 'A caminho' ? 'selected' : '' ?>>A caminho</option>
+                                <option value="Concluido" <?= $status_filter === 'Concluido' ? 'selected' : '' ?>>Concluído</option>
                                 <option value="Cancelado" <?= $status_filter === 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
                             </select>
                         </div>
@@ -309,10 +308,9 @@ try {
                                         $badge_class = 'secondary';
                                         switch($pedido['status_pedido']) {
                                             case 'Pendente': $badge_class = 'warning'; break;
-                                            case 'Em Preparacao': $badge_class = 'info'; break;
-                                            case 'Pronto': $badge_class = 'primary'; break;
-                                            case 'Em Entrega': $badge_class = 'light text-dark'; break;
-                                            case 'Entregue': $badge_class = 'success'; break;
+                                            case 'Processando': $badge_class = 'info'; break;
+                                            case 'A caminho': $badge_class = 'primary'; break;
+                                            case 'Concluido': $badge_class = 'success'; break;
                                             case 'Cancelado': $badge_class = 'danger'; break;
                                         }
                                         ?>
@@ -401,10 +399,9 @@ try {
                             <label for="novoStatus" class="form-label">Novo Status:</label>
                             <select class="form-select" id="novoStatus" name="status" required>
                                 <option value="Pendente">Pendente</option>
-                                <option value="Em Preparacao">Em Preparação</option>
-                                <option value="Pronto">Pronto</option>
-                                <option value="Em Entrega">Em Entrega</option>
-                                <option value="Entregue">Entregue</option>
+                                <option value="Processando">Processando</option>
+                                <option value="A caminho">A caminho</option>
+                                <option value="Concluido">Concluído</option>
                                 <option value="Cancelado">Cancelado</option>
                             </select>
                         </div>
