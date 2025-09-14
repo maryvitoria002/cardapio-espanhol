@@ -418,10 +418,8 @@ body {
 /* Remove estilos da sidebar para manter o padrão do sistema */
 .container .sidebar {
     /* Remove override, mantém estilos originais */
-    background: var(--azul-escuro) !important;
-    width: 300px !important;
-    padding: 0 !important;
-    border: none !important;
+    background: var(--azul-escuro);
+    /* Removido !important para permitir comportamento responsivo */
 }
 
 /* Responsividade */
@@ -429,10 +427,6 @@ body {
     .container {
         width: 98%;
         margin: 1vh auto;
-    }
-    
-    .container .sidebar {
-        width: 300px !important;
     }
 }
 

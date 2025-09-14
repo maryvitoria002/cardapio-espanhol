@@ -43,12 +43,18 @@ body {
     box-shadow: 0 20px 40px var(--sombra-leve);
 }
 
-/* Sidebar - mantém estilo original do sistema */
+/* Sidebar - removido !important para permitir comportamento responsivo */
 .container .sidebar {
-    background: var(--azul-escuro) !important;
-    width: 300px !important;
-    padding: 0 !important;
-    border: none !important;
+    background: var(--azul-escuro);
+    width: 300px;
+    padding: 0;
+    border: none;
+    transition: width 0.4s ease;
+}
+
+/* Sidebar collapsed - especificidade maior para funcionar */
+.container .sidebar.collapsed {
+    width: 85px !important;
 }
 
 /* Conteúdo principal */
@@ -647,7 +653,11 @@ body {
     }
     
     .container .sidebar {
-        width: 300px !important;
+        width: 300px;
+    }
+    
+    .container .sidebar.collapsed {
+        width: 85px !important;
     }
 }
 
@@ -659,9 +669,15 @@ body {
     }
     
     .container .sidebar {
-        width: 100% !important;
+        width: 100%;
         order: -1;
-        background: var(--azul-escuro) !important;
+        background: var(--azul-escuro);
+    }
+    
+    /* Em mobile, collapsed pode ser menor mas ainda funcional */
+    .container .sidebar.collapsed {
+        width: 85px !important;
+        order: -1;
     }
     
     .header {
@@ -713,8 +729,8 @@ body {
     }
     
     .container .sidebar {
-        background: var(--azul-escuro) !important;
-        padding: 0 !important;
+        background: var(--azul-escuro);
+        padding: 0;
     }
     
     .product-grid {
