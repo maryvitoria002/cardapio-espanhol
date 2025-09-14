@@ -416,6 +416,33 @@ function atualizarQuantidadeComDelay(form) {
 .alert i {
     font-size: 1.1rem;
 }
+
+.carrinho-container {
+    width: 100%;
+    margin: 0;
+    padding: 24px 32px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-sizing: border-box;
+    overflow: visible;
+}
+.carrinho-container * {
+    box-sizing: border-box;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+.carrinho-header, .carrinho-content, .carrinho-resumo {
+    width: 100%;
+    margin: 0 auto;
+}
+.carrinho-resumo {
+    margin-top: 30px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
 </style>
 
 <?php 
