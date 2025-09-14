@@ -16,8 +16,23 @@
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     --border-radius: 12px;
+    --primary-blue: #2563eb;
+    --primary-orange: #f59e0b;
+    --dark-blue: #1e40af;
+    --light-gray: #f8fafc;
+    --medium-gray: #64748b;
+    --dark-gray: #334155;
+    --white: #ffffff;
+    --success-green: #10b981;
+    --error-red: #ef4444;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --border-radius: 12px;
 }
 
+/* Reset */
 /* Reset */
 * {
     margin: 0;
@@ -51,16 +66,21 @@
 
 .breadcrumb a {
     color: var(--primary-blue);
+    color: var(--primary-blue);
     text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .breadcrumb a:hover {
     color: var(--dark-blue);
+    color: var(--dark-blue);
 }
 
 .breadcrumb .current {
+    color: var(--dark-gray);
     color: var(--dark-gray);
     font-weight: 600;
 }
@@ -70,16 +90,26 @@
     font-weight: 700;
     color: var(--dark-gray);
     margin-bottom: 0.5rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
 }
 
 .carrinho-header p {
     color: var(--medium-gray);
     font-size: 1rem;
+    color: var(--medium-gray);
+    font-size: 1rem;
 }
 
 /* Layout principal */
+/* Layout principal */
 .carrinho-content {
     display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    align-items: start;
     grid-template-columns: 1fr 380px;
     gap: 2rem;
     align-items: start;
@@ -120,10 +150,13 @@
 .carrinho-vazio {
     text-align: center;
     padding: 4rem 2rem;
+    padding: 4rem 2rem;
 }
 
 .empty-icon {
     font-size: 4rem;
+    color: var(--border-color);
+    margin-bottom: 1.5rem;
     color: var(--border-color);
     margin-bottom: 1.5rem;
 }
@@ -133,9 +166,15 @@
     color: var(--dark-gray);
     margin-bottom: 0.75rem;
     font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--dark-gray);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
 }
 
 .carrinho-vazio p {
+    color: var(--medium-gray);
+    margin-bottom: 2rem;
     color: var(--medium-gray);
     margin-bottom: 2rem;
 }
@@ -147,16 +186,25 @@
     padding: 0.75rem 1.5rem;
     background: var(--primary-blue);
     color: var(--white);
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-blue);
+    color: var(--white);
     text-decoration: none;
     border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
     font-weight: 600;
+    transition: all 0.2s ease;
     transition: all 0.2s ease;
 }
 
 .btn-voltar-cardapio:hover {
     background: var(--dark-blue);
     transform: translateY(-1px);
+    background: var(--dark-blue);
+    transform: translateY(-1px);
     text-decoration: none;
+    color: var(--white);
     color: var(--white);
 }
 
@@ -168,9 +216,15 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .items-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark-gray);
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--dark-gray);
@@ -183,15 +237,25 @@
     padding: 0.5rem 1rem;
     background: var(--error-red);
     color: var(--white);
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--error-red);
+    color: var(--white);
     border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
     border-radius: var(--border-radius);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 0.875rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
 }
 
 .btn-limpar-carrinho:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
     background: #dc2626;
     transform: translateY(-1px);
 }
@@ -201,6 +265,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    gap: 1rem;
 }
 
 /* Item do carrinho */
@@ -208,7 +273,14 @@
     display: grid;
     grid-template-columns: 80px 1fr auto auto auto;
     gap: 1rem;
+    grid-template-columns: 80px 1fr auto auto auto;
+    gap: 1rem;
     align-items: center;
+    padding: 1rem;
+    background: var(--light-gray);
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
     padding: 1rem;
     background: var(--light-gray);
     border-radius: var(--border-radius);
@@ -219,6 +291,8 @@
 .carrinho-item:hover {
     box-shadow: var(--shadow-md);
     border-color: var(--primary-blue);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-blue);
 }
 
 /* Imagem do item */
@@ -226,7 +300,11 @@
     width: 80px;
     height: 80px;
     border-radius: var(--border-radius);
+    width: 80px;
+    height: 80px;
+    border-radius: var(--border-radius);
     overflow: hidden;
+    background: var(--white);
     background: var(--white);
 }
 
@@ -239,6 +317,7 @@
 /* Informações do item */
 .item-info {
     min-width: 0;
+    min-width: 0;
 }
 
 .item-nome {
@@ -247,9 +326,16 @@
     color: var(--dark-gray);
     margin-bottom: 0.25rem;
     line-height: 1.4;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
 }
 
 .item-preco-unitario {
+    color: var(--medium-gray);
+    font-size: 0.875rem;
     color: var(--medium-gray);
     font-size: 0.875rem;
     margin: 0;
@@ -269,9 +355,16 @@
     padding: 0.5rem 0.75rem;
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
+    gap: 0.75rem;
+    background: var(--white);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
 .qty-btn {
+    width: 28px;
+    height: 28px;
     width: 28px;
     height: 28px;
     border: none;
@@ -279,24 +372,40 @@
     background: var(--primary-blue);
     color: var(--white);
     font-size: 0.75rem;
+    border-radius: 6px;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: 0.75rem;
     cursor: pointer;
+    transition: all 0.2s ease;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 500;
     font-weight: 500;
 }
 
 .qty-btn:hover {
     background: var(--dark-blue);
     transform: scale(1.05);
+    background: var(--dark-blue);
+    transform: scale(1.05);
 }
 
 .qty-btn.minus {
     background: var(--medium-gray);
+    background: var(--medium-gray);
 }
 
 .qty-btn.minus:hover {
+    background: var(--error-red);
+}
+
+.qty-btn:disabled {
+    background: var(--border-color);
+    cursor: not-allowed;
+    transform: none;
     background: var(--error-red);
 }
 
@@ -310,6 +419,9 @@
     font-weight: 600;
     font-size: 0.875rem;
     color: var(--dark-gray);
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--dark-gray);
     min-width: 20px;
     text-align: center;
 }
@@ -318,9 +430,14 @@
 .item-subtotal {
     text-align: right;
     min-width: 80px;
+    text-align: right;
+    min-width: 80px;
 }
 
 .preco-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-orange);
     font-size: 1rem;
     font-weight: 700;
     color: var(--primary-orange);
@@ -335,12 +452,19 @@
 .btn-remover {
     width: 32px;
     height: 32px;
+    width: 32px;
+    height: 32px;
     border: none;
     border-radius: 6px;
     background: var(--error-red);
     color: var(--white);
     font-size: 0.875rem;
+    border-radius: 6px;
+    background: var(--error-red);
+    color: var(--white);
+    font-size: 0.875rem;
     cursor: pointer;
+    transition: all 0.2s ease;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
@@ -348,6 +472,8 @@
 }
 
 .btn-remover:hover {
+    background: #dc2626;
+    transform: scale(1.05);
     background: #dc2626;
     transform: scale(1.05);
 }
@@ -367,9 +493,16 @@
     padding: 0.75rem 1.5rem;
     background: var(--white);
     color: var(--primary-blue);
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--white);
+    color: var(--primary-blue);
     text-decoration: none;
     border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
     font-weight: 600;
+    border: 2px solid var(--primary-blue);
+    transition: all 0.2s ease;
     border: 2px solid var(--primary-blue);
     transition: all 0.2s ease;
 }
@@ -377,7 +510,10 @@
 .btn-continuar:hover {
     background: var(--primary-blue);
     color: var(--white);
+    background: var(--primary-blue);
+    color: var(--white);
     text-decoration: none;
+    transform: translateY(-1px);
     transform: translateY(-1px);
 }
 
@@ -401,6 +537,10 @@
     font-weight: 600;
     color: var(--dark-gray);
     margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
     text-align: center;
 }
 
@@ -412,14 +552,23 @@
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
     font-size: 0.875rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.875rem;
 }
 
 .resumo-linha.desconto {
+    color: var(--success-green);
     color: var(--success-green);
 }
 
 .resumo-linha.total {
     border-bottom: none;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 2px solid var(--border-color);
+    font-size: 1rem;
+    font-weight: 600;
     padding-top: 1rem;
     margin-top: 0.5rem;
     border-top: 2px solid var(--border-color);
@@ -433,9 +582,17 @@
     padding: 1rem;
     background: var(--light-gray);
     border-radius: var(--border-radius);
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--light-gray);
+    border-radius: var(--border-radius);
 }
 
 .cupom-desconto h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.75rem;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--dark-gray);
@@ -445,10 +602,16 @@
 .cupom-form {
     display: flex;
     gap: 0.5rem;
+    gap: 0.5rem;
 }
 
 .cupom-input {
     flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -460,9 +623,14 @@
     outline: none;
     border-color: var(--primary-blue);
     box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
 }
 
 .btn-aplicar-cupom {
+    padding: 0.5rem 1rem;
+    background: var(--primary-blue);
+    color: var(--white);
     padding: 0.5rem 1rem;
     background: var(--primary-blue);
     color: var(--white);
@@ -470,16 +638,22 @@
     border-radius: var(--border-radius);
     font-weight: 500;
     font-size: 0.875rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
+    transition: background 0.2s ease;
     transition: background 0.2s ease;
 }
 
 .btn-aplicar-cupom:hover {
     background: var(--dark-blue);
+    background: var(--dark-blue);
 }
 
 /* Finalizar pedido */
 .finalizar-pedido {
+    margin: 1.5rem 0;
     margin: 1.5rem 0;
 }
 
@@ -488,15 +662,23 @@
     padding: 1rem;
     background: var(--primary-orange);
     color: var(--white);
+    padding: 1rem;
+    background: var(--primary-orange);
+    color: var(--white);
     border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
     border-radius: var(--border-radius);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
     gap: 0.5rem;
 }
 
@@ -504,10 +686,15 @@
     background: #d97706;
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+    background: #d97706;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
 .preco-btn {
     margin-left: auto;
+    font-size: 1.1rem;
+    font-weight: 700;
     font-size: 1.1rem;
     font-weight: 700;
 }
@@ -518,9 +705,16 @@
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .metodos-pagamento h4 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--medium-gray);
+    margin-bottom: 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--medium-gray);
@@ -531,9 +725,13 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
+    gap: 1rem;
 }
 
 .pagamento-icons i {
+    font-size: 1.25rem;
+    color: var(--medium-gray);
+    transition: color 0.2s ease;
     font-size: 1.25rem;
     color: var(--medium-gray);
     transition: color 0.2s ease;
@@ -541,12 +739,16 @@
 
 .pagamento-icons i:hover {
     color: var(--primary-blue);
+    color: var(--primary-blue);
 }
 
 /* Responsividade */
 @media (max-width: 1024px) {
+@media (max-width: 1024px) {
     .container {
         width: 98%;
+        margin: 2vh auto;
+    }
         margin: 2vh auto;
     }
     
@@ -557,32 +759,50 @@
     
     .carrinho-container {
         padding: 1.5rem;
+        grid-template-columns: 1fr 320px;
+        gap: 1.5rem;
+    }
+    
+    .carrinho-container {
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 768px) {
+@media (max-width: 768px) {
     .container {
         width: 100%;
         margin: 0;
+        border-radius: 0;
         border-radius: 0;
         min-height: 100vh;
     }
     
     .carrinho-container {
         padding: 1rem;
+        padding: 1rem;
     }
     
     .carrinho-content {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
         gap: 1.5rem;
     }
     
     .carrinho-resumo {
         position: static;
         order: -1;
+        order: -1;
     }
     
     .carrinho-item {
+        grid-template-columns: 60px 1fr;
+        grid-template-areas: 
+            "imagem info"
+            "imagem quantidade"
+            "subtotal acoes";
+        gap: 0.75rem;
+        padding: 1rem;
         grid-template-columns: 60px 1fr;
         grid-template-areas: 
             "imagem info"
@@ -600,9 +820,18 @@
     
     .item-info {
         grid-area: info;
+        grid-area: imagem;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .item-info {
+        grid-area: info;
     }
     
     .item-quantidade {
+        grid-area: quantidade;
+        justify-self: start;
         grid-area: quantidade;
         justify-self: start;
     }
@@ -610,9 +839,13 @@
     .item-subtotal {
         grid-area: subtotal;
         text-align: left;
+        grid-area: subtotal;
+        text-align: left;
     }
     
     .item-acoes {
+        grid-area: acoes;
+        justify-self: end;
         grid-area: acoes;
         justify-self: end;
     }
@@ -620,7 +853,12 @@
     .items-header {
         flex-direction: column;
         gap: 1rem;
+        gap: 1rem;
         text-align: center;
+    }
+    
+    .carrinho-header h1 {
+        font-size: 1.875rem;
     }
     
     .carrinho-header h1 {
@@ -633,8 +871,15 @@
         font-size: 1.5rem;
     }
     
+@media (max-width: 480px) {
+    .carrinho-header h1 {
+        font-size: 1.5rem;
+    }
+    
     .breadcrumb {
         flex-wrap: wrap;
+        font-size: 0.75rem;
+        gap: 0.25rem;
         font-size: 0.75rem;
         gap: 0.25rem;
     }
@@ -642,9 +887,11 @@
     .carrinho-items,
     .resumo-card {
         padding: 1rem;
+        padding: 1rem;
     }
     
     .carrinho-item {
+        padding: 0.75rem;
         padding: 0.75rem;
     }
     
@@ -663,7 +910,19 @@
     .quantidade-form {
         gap: 0.5rem;
         padding: 0.375rem 0.5rem;
+    .item-nome {
+        font-size: 0.875rem;
     }
+    
+    .quantidade-form {
+        gap: 0.5rem;
+        padding: 0.375rem 0.5rem;
+    }
+    
+    .qty-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.625rem;
     
     .qty-btn {
         width: 24px;
