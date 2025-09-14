@@ -43,7 +43,7 @@ try {
     $total_geral = $crudPedido->count();
     $pedidos_hoje = $crudPedido->countToday();
     $pedidos_pendentes = $crudPedido->countByStatus('Pendente');
-    $pedidos_concluidos = $crudPedido->countByStatus('Entregue');
+    $pedidos_concluidos = $crudPedido->countByStatus('Concluido');
     
     // Buscar receitas (se métodos existirem)
     if (method_exists($crudPedido, 'getReceitaTotal')) {
@@ -248,10 +248,9 @@ try {
                             <select class="form-select" id="status" name="status">
                                 <option value="">Todos os status</option>
                                 <option value="Pendente" <?= $status_filter === 'Pendente' ? 'selected' : '' ?>>Pendente</option>
-                                <option value="Em Preparacao" <?= $status_filter === 'Em Preparacao' ? 'selected' : '' ?>>Em Preparação</option>
-                                <option value="Pronto" <?= $status_filter === 'Pronto' ? 'selected' : '' ?>>Pronto</option>
-                                <option value="Em Entrega" <?= $status_filter === 'Em Entrega' ? 'selected' : '' ?>>Em Entrega</option>
-                                <option value="Entregue" <?= $status_filter === 'Entregue' ? 'selected' : '' ?>>Entregue</option>
+                                <option value="Processando" <?= $status_filter === 'Processando' ? 'selected' : '' ?>>Processando</option>
+                                <option value="A caminho" <?= $status_filter === 'A caminho' ? 'selected' : '' ?>>A caminho</option>
+                                <option value="Concluido" <?= $status_filter === 'Concluido' ? 'selected' : '' ?>>Concluído</option>
                                 <option value="Cancelado" <?= $status_filter === 'Cancelado' ? 'selected' : '' ?>>Cancelado</option>
                             </select>
                         </div>
@@ -309,10 +308,9 @@ try {
                                         $badge_class = 'secondary';
                                         switch($pedido['status_pedido']) {
                                             case 'Pendente': $badge_class = 'warning'; break;
-                                            case 'Em Preparacao': $badge_class = 'info'; break;
-                                            case 'Pronto': $badge_class = 'primary'; break;
-                                            case 'Em Entrega': $badge_class = 'light text-dark'; break;
-                                            case 'Entregue': $badge_class = 'success'; break;
+                                            case 'Processando': $badge_class = 'info'; break;
+                                            case 'A caminho': $badge_class = 'primary'; break;
+                                            case 'Concluido': $badge_class = 'success'; break;
                                             case 'Cancelado': $badge_class = 'danger'; break;
                                         }
                                         ?>
@@ -385,6 +383,46 @@ try {
         </div>
     </div>
 
+    <!-- Modal para alterar status -->
+    <div class="modal fade" id="modalAlterarStatus" tabindex="-1" aria-labelledby="modalAlterarStatusLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAlterarStatusLabel">Alterar Status do Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAlterarStatus">
+                        <input type="hidden" id="idPedido" name="id_pedido">
+                        
+                        <div class="mb-3">
+                            <label for="novoStatus" class="form-label">Novo Status:</label>
+                            <select class="form-select" id="novoStatus" name="status" required>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Processando">Processando</option>
+                                <option value="A caminho">A caminho</option>
+                                <option value="Concluido">Concluído</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">Observações (opcional):</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3" 
+                                      placeholder="Digite observações sobre a mudança de status..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmarAlteracaoStatus()">
+                        <i class="fas fa-save me-1"></i>Alterar Status
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function verDetalhes(idPedido) {
@@ -392,11 +430,60 @@ try {
         }
 
         function alterarStatus(idPedido, statusAtual) {
-            const novoStatus = prompt('Digite o novo status para o pedido #' + idPedido + ':\n\nOpções: Pendente, Em Preparacao, Pronto, Em Entrega, Entregue, Cancelado', statusAtual);
-            if (novoStatus && novoStatus !== statusAtual) {
-                // Aqui implementaríamos a atualização via AJAX
-                alert('Status alterado para: ' + novoStatus + '\n(Funcionalidade será implementada)');
-            }
+            // Preencher o modal com os dados
+            document.getElementById('idPedido').value = idPedido;
+            document.getElementById('novoStatus').value = statusAtual;
+            document.getElementById('observacoes').value = '';
+            
+            // Atualizar o título do modal
+            document.getElementById('modalAlterarStatusLabel').textContent = `Alterar Status do Pedido #${idPedido}`;
+            
+            // Mostrar o modal
+            const modal = new bootstrap.Modal(document.getElementById('modalAlterarStatus'));
+            modal.show();
+        }
+
+        function confirmarAlteracaoStatus() {
+            const formData = new FormData(document.getElementById('formAlterarStatus'));
+            const idPedido = formData.get('id_pedido');
+            const novoStatus = formData.get('status');
+            
+            // Mostrar loading
+            const btnConfirmar = document.querySelector('#modalAlterarStatus .btn-primary');
+            const textoOriginal = btnConfirmar.innerHTML;
+            btnConfirmar.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Alterando...';
+            btnConfirmar.disabled = true;
+
+            // Enviar via AJAX
+            fetch('update_status.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Mostrar sucesso
+                    alert('Status alterado com sucesso!');
+                    
+                    // Fechar modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalAlterarStatus'));
+                    modal.hide();
+                    
+                    // Recarregar a página para mostrar a mudança
+                    window.location.reload();
+                } else {
+                    alert('Erro ao alterar status: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro de conexão. Tente novamente.');
+            })
+            .finally(() => {
+                // Restaurar botão
+                btnConfirmar.innerHTML = textoOriginal;
+                btnConfirmar.disabled = false;
+            });
         }
 
         function confirmarExclusao(idPedido, identificacao) {
