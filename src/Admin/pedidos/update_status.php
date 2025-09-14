@@ -33,7 +33,7 @@ $novoStatus = trim($_POST['status']);
 $observacoes = trim($_POST['observacoes'] ?? '');
 
 // Validar status
-$statusValidos = ['Pendente', 'Processando', 'A caminho', 'Concluido', 'Cancelado'];
+$statusValidos = ['Pendente', 'Em Preparacao', 'Pronto', 'Em Entrega', 'Entregue', 'Cancelado'];
 if (!in_array($novoStatus, $statusValidos)) {
     echo json_encode(['success' => false, 'message' => 'Status inválido']);
     exit;
