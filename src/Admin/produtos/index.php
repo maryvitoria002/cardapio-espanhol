@@ -2,6 +2,7 @@
 session_start();
 require_once '../../controllers/produto/Crud_produto.php';
 require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../helpers/image_helper.php';
 
 // Permitir acesso direto - criar sessão admin automática se não existir
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
@@ -147,7 +148,7 @@ try {
                                     <td>#<?= $produto['id_produto'] ?></td>
                                     <td>
                                         <?php if ($produto['imagem']): ?>
-                                            <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                            <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                                                  alt="<?= htmlspecialchars($produto['nome_produto']) ?>" 
                                                  class="product-thumb">
                                         <?php else: ?>

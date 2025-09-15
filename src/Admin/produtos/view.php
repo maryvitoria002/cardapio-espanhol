@@ -2,6 +2,7 @@
 session_start();
 require_once '../../controllers/produto/Crud_produto.php';
 require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../helpers/image_helper.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática
@@ -84,7 +85,7 @@ try {
                         </div>
                         <div class="card-body text-center">
                             <?php if ($produto['imagem']): ?>
-                                <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                                      alt="<?= htmlspecialchars($produto['nome_produto']) ?>" 
                                      class="product-image">
                             <?php else: ?>

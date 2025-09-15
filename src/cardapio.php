@@ -30,6 +30,7 @@ if (!isset($_SESSION['foto_perfil'])) {
 require_once __DIR__ . '/db/conection.php';
 require_once __DIR__ . '/controllers/produto/Crud_produto.php';
 require_once __DIR__ . '/controllers/categoria/Crud_categoria.php';
+require_once __DIR__ . '/helpers/image_helper.php';
 
 // Inicializar variáveis
 $produtos = [];
@@ -175,7 +176,7 @@ try {
                         <a href="./produto.php?id=<?= $produto['id_produto'] ?>" class="product-link">
                             <div class="product-image">
                                 <?php if ($produto['imagem']): ?>
-                                    <img src="./images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
+                                    <img src="<?= getImageSrc($produto['imagem']) ?>" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
                                 <?php else: ?>
                                     <img src="./assets/cardapio.png" alt="<?= htmlspecialchars($produto['nome_produto']) ?>">
                                 <?php endif; ?>

@@ -29,6 +29,7 @@ if (!isset($_SESSION['foto_perfil'])) {
 // Incluir controladores necessários
 require_once './controllers/produto/Crud_produto.php';
 require_once './controllers/categoria/Crud_categoria.php';
+require_once './helpers/image_helper.php';
 
 // Criar instâncias para buscar dados
 $crudProduto = new Crud_produto();
@@ -183,7 +184,7 @@ function getImagemPadrao($nome_categoria) {
                                 <a href="produto.php?id=<?php echo $produto['id_produto']; ?>" class="product-link">
                                     <div class="product-image">
                                         <?php if (!empty($produto['imagem'])): ?>
-                                            <img src="./images/comidas/<?php echo htmlspecialchars($produto['imagem']); ?>" 
+                                            <img src="<?php echo getImageSrc($produto['imagem']); ?>" 
                                                  alt="<?php echo htmlspecialchars($produto['nome_produto']); ?>">
                                         <?php else: ?>
                                             <img src="./assets/avatar.png" alt="Produto sem imagem">

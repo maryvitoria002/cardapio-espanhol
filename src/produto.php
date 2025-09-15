@@ -4,6 +4,7 @@ include_once "./components/_base-header.php";
 require_once "./controllers/produto/Crud_produto.php";
 require_once "./controllers/categoria/Crud_categoria.php";
 require_once "./controllers/avaliacao/Crud_avaliacao.php";
+require_once "./helpers/image_helper.php";
 
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
@@ -113,8 +114,8 @@ $produtoAdicionado = isset($_GET['added']) && $_GET['added'] == '1';
         <!-- Imagem do produto -->
         <div class="produto-imagem">
             <div class="imagem-principal">
-                <?php if (!empty($dadosProduto['imagem']) && file_exists("./images/comidas/" . $dadosProduto['imagem'])): ?>
-                    <img src="./images/comidas/<?= htmlspecialchars($dadosProduto['imagem']) ?>" 
+                <?php if (!empty($dadosProduto['imagem']) && imageExists($dadosProduto['imagem'])): ?>
+                    <img src="<?= getImageSrc($dadosProduto['imagem']) ?>" 
                          alt="<?= htmlspecialchars($dadosProduto['nome_produto']) ?>" 
                          id="imagemPrincipal">
                 <?php else: ?>
