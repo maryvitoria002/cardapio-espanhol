@@ -123,6 +123,18 @@ try {
         throw new Exception("Erro ao criar pedido!");
     }
     
+    // Verificar e diminuir estoque antes de adicionar itens do pedido
+    foreach ($itensCarrinho as $item) {
+        try {
+            $crudProduto->diminuirEstoque($item['id_produto'], $item['quantidade']);
+        } catch (Exception $e) {
+            // Se houver erro de estoque, cancelar o pedido criado
+            $crudPedido->setId_pedido($idPedidoCriado);
+            $crudPedido->delete($idPedidoCriado);
+            throw new Exception("Erro de estoque para " . $item['nome'] . ": " . $e->getMessage());
+        }
+    }
+    
     // Adicionar itens do pedido
     foreach ($itensCarrinho as $item) {
         $crudProdutoPedido->setId_pedido($idPedidoCriado);

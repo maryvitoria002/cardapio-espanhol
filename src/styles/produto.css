@@ -171,12 +171,11 @@ body {
 .produto-info {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 10px;
 }
 
 .info-header {
     border-bottom: 2px solid var(--fundo-claro);
-    padding-bottom: 20px;
 }
 
 .produto-nome {
@@ -281,7 +280,7 @@ body {
 /* Seção de compra */
 .produto-compra {
     background: var(--fundo-branco);
-    padding: 30px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 10px 25px var(--sombra-leve);
 }
@@ -306,13 +305,16 @@ body {
 /* Controles de quantidade */
 .quantidade-container {
     margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .quantidade-container label {
-    display: block;
     font-weight: 600;
     color: var(--azul-escuro);
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    white-space: nowrap;
 }
 
 .quantidade-controles {

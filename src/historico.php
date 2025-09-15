@@ -55,12 +55,33 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
                     } elseif (strtolower($pedido['status_pedido']) !== 'pendente') {
                         $mensagem_acao = "❌ Só é possível cancelar pedidos pendentes. Status atual: " . $pedido['status_pedido'];
                     } else {
+                        // Buscar itens do pedido para restituir estoque antes de cancelar
+                        require_once "./controllers/produto/Crud_produto.php";
+                        $crudProduto = new Crud_produto();
+                        
+                        // Buscar produtos do pedido
+                        $sql_itens = "SELECT id_produto, quantidade FROM produto_pedido WHERE id_pedido = ?";
+                        $stmt_itens = $conexao->prepare($sql_itens);
+                        $stmt_itens->execute([$id_pedido]);
+                        $itens_pedido = $stmt_itens->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        // Restituir estoque dos produtos
+                        $estoque_restaurado = 0;
+                        foreach ($itens_pedido as $item) {
+                            try {
+                                $crudProduto->aumentarEstoque($item['id_produto'], $item['quantidade']);
+                                $estoque_restaurado++;
+                            } catch (Exception $e) {
+                                error_log("Erro ao restituir estoque do produto {$item['id_produto']}: " . $e->getMessage());
+                            }
+                        }
+                        
                         // Cancelar o pedido
                         $stmt = $conexao->prepare("UPDATE pedido SET status_pedido = 'Cancelado' WHERE id_pedido = ?");
                         $resultado = $stmt->execute([$id_pedido]);
                         
                         if ($resultado) {
-                            $mensagem_acao = "✅ Pedido #$id_pedido cancelado com sucesso!";
+                            $mensagem_acao = "✅ Pedido #$id_pedido cancelado com sucesso! Estoque de $estoque_restaurado itens restaurado.";
                         } else {
                             $mensagem_acao = "❌ Falha ao executar o cancelamento";
                         }
@@ -143,16 +164,6 @@ try {
 
 <div class="historico-container">
     <h1>Histórico de Pedidos</h1>
-    
-    <!-- DEBUG INFO -->
-    <div style="background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; font-size: 12px;">
-        <strong>🔍 DEBUG:</strong><br>
-        - Ação GET: <?= $_GET['acao'] ?? 'nenhuma' ?><br>
-        - ID GET: <?= $_GET['id'] ?? 'nenhum' ?><br>
-        - Session ID: <?= $_SESSION['id'] ?? 'não definido' ?><br>
-        - Mensagem ação: <?= $mensagem_acao ?? 'nenhuma' ?><br>
-        - Timestamp: <?= date('H:i:s') ?>
-    </div>
     
     <?php if ($mensagem_sucesso): ?>
         <div class="alert alert-success">
@@ -1044,18 +1055,17 @@ document.getElementById('formCancelar').addEventListener('submit', function(e) {
         formData.append('motivo', formData.get('motivo') + ': ' + observacoes);
     }
     
-    fetch('./cancelar_pedido.php', {
+    // Usar o próprio historico.php para cancelamento
+    formData.append('acao', 'cancelar');
+    formData.append('id', pedidoAtual);
+    
+    fetch('./historico.php', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Pedido cancelado com sucesso!');
-            location.reload();
-        } else {
-            alert('Erro ao cancelar pedido: ' + data.message);
-        }
+    .then(response => {
+        // Como agora usamos GET redirect, vamos simplesmente recarregar
+        location.reload();
     })
     .catch(error => {
         console.error('Erro:', error);

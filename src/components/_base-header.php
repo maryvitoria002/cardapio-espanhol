@@ -11,9 +11,13 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="./assets/favicon.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="./assets/favicon.jpg">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/<?=$titulo?>.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <title>Écoute Saveur | <?= $titulo ?></title>
 </head>
 <body>

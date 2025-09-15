@@ -351,4 +351,88 @@ class Crud_produto extends Produto {
             throw new Exception("Erro no upload da imagem: " . $e->getMessage());
         }
     }
+
+    // Método para diminuir estoque de um produto
+    public function diminuirEstoque($id_produto, $quantidade) {
+        try {
+            $database = new Database();
+            
+            // Primeiro verificar o estoque atual
+            $sql_check = "SELECT estoque FROM `{$this->tabela}` WHERE id_produto = :id_produto";
+            $stmt_check = $database->prepare($sql_check);
+            $stmt_check->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
+            $stmt_check->execute();
+            
+            $produto = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$produto) {
+                throw new Exception("Produto não encontrado");
+            }
+            
+            $estoque_atual = (int)$produto['estoque'];
+            
+            if ($estoque_atual < $quantidade) {
+                throw new Exception("Estoque insuficiente. Disponível: {$estoque_atual}, Solicitado: {$quantidade}");
+            }
+            
+            // Diminuir o estoque
+            $novo_estoque = $estoque_atual - $quantidade;
+            
+            $sql_update = "UPDATE `{$this->tabela}` SET estoque = :novo_estoque WHERE id_produto = :id_produto";
+            $stmt_update = $database->prepare($sql_update);
+            $stmt_update->bindParam(":novo_estoque", $novo_estoque, PDO::PARAM_INT);
+            $stmt_update->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
+            
+            $resultado = $stmt_update->execute();
+            
+            if (!$resultado) {
+                throw new Exception("Erro ao atualizar estoque");
+            }
+            
+            return $novo_estoque;
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao diminuir estoque: " . $e->getMessage());
+        }
+    }
+
+    // Método para aumentar estoque de um produto (para cancelamentos)
+    public function aumentarEstoque($id_produto, $quantidade) {
+        try {
+            $database = new Database();
+            
+            // Primeiro verificar se o produto existe
+            $sql_check = "SELECT estoque FROM `{$this->tabela}` WHERE id_produto = :id_produto";
+            $stmt_check = $database->prepare($sql_check);
+            $stmt_check->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
+            $stmt_check->execute();
+            
+            $produto = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$produto) {
+                throw new Exception("Produto não encontrado");
+            }
+            
+            $estoque_atual = (int)$produto['estoque'];
+            
+            // Aumentar o estoque
+            $novo_estoque = $estoque_atual + $quantidade;
+            
+            $sql_update = "UPDATE `{$this->tabela}` SET estoque = :novo_estoque WHERE id_produto = :id_produto";
+            $stmt_update = $database->prepare($sql_update);
+            $stmt_update->bindParam(":novo_estoque", $novo_estoque, PDO::PARAM_INT);
+            $stmt_update->bindParam(":id_produto", $id_produto, PDO::PARAM_INT);
+            
+            $resultado = $stmt_update->execute();
+            
+            if (!$resultado) {
+                throw new Exception("Erro ao atualizar estoque");
+            }
+            
+            return $novo_estoque;
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao aumentar estoque: " . $e->getMessage());
+        }
+    }
 }
