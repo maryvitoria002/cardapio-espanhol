@@ -28,7 +28,7 @@ try {
     $database = new Database();
     $conexao = $database->getInstance();
     
-    $stmt = $conexao->prepare("SELECT primeiro_nome, segundo_nome, endereco, telefone FROM usuario WHERE id_usuario = ?");
+    $stmt = $conexao->prepare("SELECT primeiro_nome, segundo_nome, telefone FROM usuario WHERE id_usuario = ?");
     $stmt->execute([$_SESSION['id']]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -87,24 +87,12 @@ try {
             <div class="section">
                 <h2>📍 Endereço de Entrega</h2>
                 
-                <?php if (!empty($usuario['endereco'])): ?>
-                    <div class="endereco-salvo">
-                        <strong>Endereço cadastrado:</strong><br>
-                        <?= htmlspecialchars($usuario['endereco']) ?>
-                        <br><br>
-                        <label>
-                            <input type="checkbox" id="usar-endereco-salvo" checked onchange="toggleEndereco()">
-                            Usar este endereço
-                        </label>
-                    </div>
-                <?php endif; ?>
-                
-                <div id="form-endereco" class="<?= !empty($usuario['endereco']) ? 'hidden' : '' ?>">
+                <div id="form-endereco">
                     <div class="form-group">
                         <label for="endereco_entrega">Endereço Completo *</label>
                         <textarea name="endereco_entrega" id="endereco_entrega" 
                                   placeholder="Rua, número, complemento, bairro, cidade - CEP"
-                                  required><?= !empty($usuario['endereco']) ? htmlspecialchars($usuario['endereco']) : '' ?></textarea>
+                                  required></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -189,44 +177,20 @@ try {
         </div>
         
         <!-- Campo hidden para endereço quando usar o salvo -->
-        <input type="hidden" name="endereco_salvo" value="<?= htmlspecialchars($usuario['endereco'] ?? '') ?>">
+        <input type="hidden" name="endereco_salvo" value="">
     </form>
 </div>
 
 <script>
-function toggleEndereco() {
-    const checkbox = document.getElementById('usar-endereco-salvo');
-    const formEndereco = document.getElementById('form-endereco');
-    const enderecoTextarea = document.getElementById('endereco_entrega');
-    
-    if (checkbox.checked) {
-        formEndereco.classList.add('hidden');
-        enderecoTextarea.required = false;
-    } else {
-        formEndereco.classList.remove('hidden');
-        enderecoTextarea.required = true;
-    }
-}
-
 // Validação do formulário
 document.getElementById('checkout-form').addEventListener('submit', function(e) {
-    const usarEnderecoSalvo = document.getElementById('usar-endereco-salvo');
     const enderecoTextarea = document.getElementById('endereco_entrega');
-    const enderecoSalvo = document.querySelector('input[name="endereco_salvo"]').value;
     
     // Verificar se tem endereço
-    if (usarEnderecoSalvo && usarEnderecoSalvo.checked) {
-        if (!enderecoSalvo.trim()) {
-            alert('Erro: Endereço salvo não encontrado. Por favor, preencha um novo endereço.');
-            e.preventDefault();
-            return;
-        }
-    } else {
-        if (!enderecoTextarea.value.trim()) {
-            alert('Por favor, preencha o endereço de entrega.');
-            e.preventDefault();
-            return;
-        }
+    if (!enderecoTextarea.value.trim()) {
+        alert('Por favor, preencha o endereço de entrega.');
+        e.preventDefault();
+        return;
     }
     
     // Confirmação final

@@ -244,8 +244,8 @@ class Crud_usuario extends Usuario{
     
     public function createUser($dados) {
         try {
-            $sql = "INSERT INTO `{$this->tabela}` (primeiro_nome, segundo_nome, email, senha, telefone, endereco, data_criacao) 
-                    VALUES (:primeiro_nome, :segundo_nome, :email, :senha, :telefone, :endereco, NOW())";
+            $sql = "INSERT INTO `{$this->tabela}` (primeiro_nome, segundo_nome, email, senha, telefone, data_criacao) 
+                    VALUES (:primeiro_nome, :segundo_nome, :email, :senha, :telefone, NOW())";
             
             $database = new Database();
             $stmt = $database->prepare($sql);
@@ -254,7 +254,6 @@ class Crud_usuario extends Usuario{
             $stmt->bindParam(":email", $dados['email'], PDO::PARAM_STR);
             $stmt->bindParam(":senha", $dados['senha'], PDO::PARAM_STR);
             $stmt->bindParam(":telefone", $dados['telefone'], PDO::PARAM_STR);
-            $stmt->bindParam(":endereco", $dados['endereco'], PDO::PARAM_STR);
             
             $stmt->execute();
             return true;
@@ -271,7 +270,6 @@ class Crud_usuario extends Usuario{
                     segundo_nome = :segundo_nome,
                     email = :email,
                     telefone = :telefone,
-                    endereco = :endereco,
                     data_atualizacao = NOW()
                     WHERE id_usuario = :id";
             
@@ -281,7 +279,6 @@ class Crud_usuario extends Usuario{
             $stmt->bindParam(":segundo_nome", $dados['segundo_nome'], PDO::PARAM_STR);
             $stmt->bindParam(":email", $dados['email'], PDO::PARAM_STR);
             $stmt->bindParam(":telefone", $dados['telefone'], PDO::PARAM_STR);
-            $stmt->bindParam(":endereco", $dados['endereco'], PDO::PARAM_STR);
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             
             $stmt->execute();

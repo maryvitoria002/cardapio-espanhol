@@ -21,8 +21,6 @@ try {
     $telefone = trim($_POST['telefone'] ?? '');
     $senha = $_POST['senha'] ?? '';
     $confirmar_senha = $_POST['confirmar_senha'] ?? '';
-    $endereco = trim($_POST['endereco'] ?? '');
-    $data_nascimento = $_POST['data_nascimento'] ?? '';
     $aceitar_termos = isset($_POST['aceitar_termos']) ? 1 : 0;
 
     // Validações básicas
@@ -47,7 +45,7 @@ try {
     }
 
     // Verificar se email já existe
-    $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
     $stmt->execute([$email]);
     
     if ($stmt->fetch()) {
@@ -59,11 +57,11 @@ try {
 
     // Inserir usuário no banco
     $stmt = $pdo->prepare("
-        INSERT INTO usuarios (nome, sobrenome, email, telefone, senha, endereco, data_nascimento, data_cadastro) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+        INSERT INTO usuario (primeiro_nome, segundo_nome, email, telefone, senha, data_criacao) 
+        VALUES (?, ?, ?, ?, ?, NOW())
     ");
     
-    $success = $stmt->execute([$nome, $sobrenome, $email, $telefone, $senha_hash, $endereco, $data_nascimento ?: null]);
+    $success = $stmt->execute([$nome, $sobrenome, $email, $telefone, $senha_hash]);
 
     if (!$success) {
         throw new Exception('Erro ao cadastrar usuário');

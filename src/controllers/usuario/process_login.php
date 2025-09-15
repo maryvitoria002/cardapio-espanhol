@@ -1,5 +1,9 @@
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
 session_start();
 
 // Incluir conexão com banco
@@ -9,6 +13,11 @@ try {
     // Criar instância da conexão
     $database = new Database();
     $pdo = $database->getInstance();
+    
+    if (!$pdo) {
+        throw new Exception('Falha ao conectar com o banco de dados');
+    }
+    
     // Verificar se é uma requisição POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception('Método não permitido');
@@ -29,7 +38,7 @@ try {
     }
 
     // Buscar usuário no banco
-    $stmt = $pdo->prepare("SELECT id_usuario as id, primeiro_nome as nome, segundo_nome as sobrenome, email, senha, imagem_perfil FROM usuario WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT id_usuario, primeiro_nome, segundo_nome, email, senha, imagem_perfil FROM usuario WHERE email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -50,8 +59,17 @@ try {
         
         // Migrar para password_hash
         $nova_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        $stmt_update = $pdo->prepare("UPDATE usuarios SET senha = ? WHERE id = ?");
-        $stmt_update->execute([$nova_senha_hash, $usuario['id']]);
+        $stmt_update = $pdo->prepare("UPDATE usuario SET senha = ? WHERE id_usuario = ?");
+        $stmt_update->execute([$nova_senha_hash, $usuario['id_usuario']]);
+    }
+    // Se ainda não funcionar, tentar texto plano (para migração)
+    else if ($senha === $usuario['senha']) {
+        $senha_valida = true;
+        
+        // Migrar para password_hash
+        $nova_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+        $stmt_update = $pdo->prepare("UPDATE usuario SET senha = ? WHERE id_usuario = ?");
+        $stmt_update->execute([$nova_senha_hash, $usuario['id_usuario']]);
     }
 
     if (!$senha_valida) {
@@ -59,18 +77,18 @@ try {
     }
 
     // Criar sessão
-    $_SESSION['id'] = $usuario['id'];
-    $_SESSION['primeiro_nome'] = $usuario['nome'];
-    $_SESSION['segundo_nome'] = $usuario['sobrenome'];
+    $_SESSION['id'] = $usuario['id_usuario'];
+    $_SESSION['primeiro_nome'] = $usuario['primeiro_nome'];
+    $_SESSION['segundo_nome'] = $usuario['segundo_nome'];
     $_SESSION['email'] = $usuario['email'];
     $_SESSION['foto_perfil'] = $usuario['imagem_perfil'];
 
     // Configurar cookie se "lembrar" estiver marcado
     if ($lembrar) {
         $cookie_value = base64_encode(json_encode([
-            'id' => $usuario['id'],
+            'id' => $usuario['id_usuario'],
             'email' => $usuario['email'],
-            'hash' => password_hash($usuario['email'] . $usuario['id'], PASSWORD_DEFAULT)
+            'hash' => password_hash($usuario['email'] . $usuario['id_usuario'], PASSWORD_DEFAULT)
         ]));
         setcookie('lembrar_login', $cookie_value, time() + (30 * 24 * 60 * 60), '/'); // 30 dias
     }

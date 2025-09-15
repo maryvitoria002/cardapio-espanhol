@@ -11,10 +11,10 @@ try {
     $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
     echo "Tabelas existentes: " . implode(', ', $tables) . "\n";
     
-    // Verificar estrutura da tabela usuarios
-    if (in_array('usuarios', $tables)) {
-        $columns = $pdo->query("DESCRIBE usuarios")->fetchAll(PDO::FETCH_ASSOC);
-        echo "Colunas da tabela usuarios:\n";
+    // Verificar estrutura da tabela usuario
+    if (in_array('usuario', $tables)) {
+        $columns = $pdo->query("DESCRIBE usuario")->fetchAll(PDO::FETCH_ASSOC);
+        echo "Colunas da tabela usuario:\n";
         foreach ($columns as $col) {
             echo "- " . $col['Field'] . " (" . $col['Type'] . ")\n";
         }
@@ -29,18 +29,32 @@ try {
         }
     }
     
-    // 1. Adicionar coluna foto_perfil na tabela usuarios (se não existir)
-    if (in_array('usuarios', $tables)) {
-        $sqlCheckColumn = "SHOW COLUMNS FROM usuarios LIKE 'foto_perfil'";
+    // 1. Adicionar coluna foto_perfil na tabela usuario (se não existir)
+    if (in_array('usuario', $tables)) {
+        $sqlCheckColumn = "SHOW COLUMNS FROM usuario LIKE 'foto_perfil'";
         $stmt = $pdo->prepare($sqlCheckColumn);
         $stmt->execute();
         
         if ($stmt->rowCount() == 0) {
-            $sqlAddColumn = "ALTER TABLE usuarios ADD COLUMN foto_perfil VARCHAR(255) NULL";
+            $sqlAddColumn = "ALTER TABLE usuario ADD COLUMN foto_perfil VARCHAR(255) NULL";
             $pdo->exec($sqlAddColumn);
-            echo "Coluna 'foto_perfil' adicionada na tabela usuarios!\n";
+            echo "Coluna 'foto_perfil' adicionada na tabela usuario!\n";
         } else {
-            echo "Coluna 'foto_perfil' já existe na tabela usuarios.\n";
+            echo "Coluna 'foto_perfil' já existe na tabela usuario.\n";
+        }
+        
+        // Verificar e corrigir tamanho da coluna senha
+        $sqlCheckSenha = "SHOW COLUMNS FROM usuario LIKE 'senha'";
+        $stmt = $pdo->prepare($sqlCheckSenha);
+        $stmt->execute();
+        $senhaColumn = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($senhaColumn && strpos($senhaColumn['Type'], 'varchar(50)') !== false) {
+            $sqlFixSenha = "ALTER TABLE usuario MODIFY COLUMN senha VARCHAR(255) NOT NULL";
+            $pdo->exec($sqlFixSenha);
+            echo "Coluna 'senha' expandida para VARCHAR(255)!\n";
+        } else {
+            echo "Coluna 'senha' já tem tamanho adequado.\n";
         }
     }
     
