@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once '../../controllers/categoria/Crud_categoria.php';
-require_once '../../controllers/produto/Crud_produto.php';
+require_once '../../models/Crud_categoria.php';
+require_once '../../models/Crud_produto.php';
+require_once '../../helpers/image_helper.php';
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ../login.php');
@@ -359,7 +360,7 @@ unset($_SESSION['message'], $_SESSION['message_type']);
                         <?php foreach ($produtos as $produto): ?>
                             <div class="product-card">
                                 <?php if ($produto['imagem']): ?>
-                                    <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                    <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                                          alt="<?= htmlspecialchars($produto['nome_produto']) ?>" 
                                          class="product-image">
                                 <?php else: ?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../../controllers/produto/Crud_produto.php';
-require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../models/Crud_produto.php';
+require_once '../../models/Crud_categoria.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática

@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../db/conection.php';
-require_once __DIR__ . '/../../controllers/pedido/Crud_pedido.php';
+require_once __DIR__ . '/../../models/Crud_pedido.php';
 
 // Criar instância da conexão
 $database = new Database();

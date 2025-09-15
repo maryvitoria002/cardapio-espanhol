@@ -12,11 +12,11 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
 
 // Incluir controllers necessários
 require_once __DIR__ . '/../db/conection.php';
-require_once __DIR__ . '/../controllers/usuario/Crud_usuario.php';
-require_once __DIR__ . '/../controllers/produto/Crud_produto.php';
-require_once __DIR__ . '/../controllers/pedido/Crud_pedido.php';
-require_once __DIR__ . '/../controllers/funcionario/Crud_funcionario.php';
-require_once __DIR__ . '/../controllers/categoria/Crud_categoria.php';
+require_once __DIR__ . '/../models/Crud_usuario.php';
+require_once __DIR__ . '/../models/Crud_produto.php';
+require_once __DIR__ . '/../models/Crud_pedido.php';
+require_once __DIR__ . '/../models/Crud_funcionario.php';
+require_once __DIR__ . '/../models/Crud_categoria.php';
 
 // Obter estatísticas
 try {

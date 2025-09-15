@@ -11,10 +11,10 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="./assets/favicon.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="./assets/favicon.jpg">
-    <link rel="stylesheet" href="./styles/style.css">
-    <link rel="stylesheet" href="./styles/<?=$titulo?>.css">
+    <link rel="icon" type="image/jpeg" href="../assets/favicon.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="../assets/favicon.jpg">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/<?=$titulo?>.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -42,31 +42,31 @@ session_start();
                 <!-- Top nav primária -->
                 <ul class="nav-list primary-nav">
                     <li class="nav-item">
-                        <a href="./index.php" class="nav-link">
+                        <a href="../views/index.php" class="nav-link">
                             <img src="./assets/inicio.png" alt="inicio">
                             <span class="nav-label">Início</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./cardapio.php" class="nav-link">
+                        <a href="../views/cardapio.php" class="nav-link">
                             <img src="./assets/cardapio.png" alt="cardapio">
                             <span class="nav-label">Cardápio</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./carrinho.php" class="nav-link">
+                        <a href="../views/carrinho.php" class="nav-link">
                             <img src="./assets/carrinho.png" alt="carrinho">
                             <span class="nav-label">Carrinho</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./historico.php" class="nav-link">
+                        <a href="../views/historico.php" class="nav-link">
                             <img src="./assets/historico.png" alt="historico">
                             <span class="nav-label">Histórico</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./configuracoes.php" class="nav-link">
+                        <a href="../views/configuracoes.php" class="nav-link">
                             <img src="./assets/configuracoes.png" alt="configuracoes">
                             <span class="nav-label">Configurações</span>
                         </a>
@@ -76,7 +76,7 @@ session_start();
                 <!-- Top nav secundária -->
                 <ul class="nav-list secondary-nav">
                     <li class="nav-item">
-                        <a href="./sair.php" class="nav-link">
+                        <a href="../views/sair.php" class="nav-link">
                             <img src="./assets/sair.png" alt="sair">
                             <span class="nav-label">Sair</span>
                         </a>

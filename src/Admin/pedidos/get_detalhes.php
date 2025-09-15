@@ -1,7 +1,8 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../db/conection.php';
-require_once __DIR__ . '/../../controllers/pedido/Crud_pedido.php';
+require_once __DIR__ . '/../../models/Crud_pedido.php';
+require_once __DIR__ . '/../../helpers/image_helper.php';
 
 // Criar instância da conexão
 $database = new Database();
@@ -127,7 +128,7 @@ try {
                 <td>
                     <div class="d-flex align-items-center">
                         <?php if (!empty($produto['imagem'])): ?>
-                        <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                        <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                              alt="<?= htmlspecialchars($produto['nome']) ?>"
                              class="me-2 rounded" style="width: 40px; height: 40px; object-fit: cover;">
                         <?php endif; ?>

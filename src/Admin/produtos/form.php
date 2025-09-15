@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once '../../controllers/produto/Crud_produto.php';
-require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../models/Crud_produto.php';
+require_once '../../models/Crud_categoria.php';
+require_once '../../helpers/image_helper.php';
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ../login.php');
@@ -297,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <label>Imagem do Produto</label>
                                     <div class="image-upload">
                                         <?php if ($isEdit && $produto['imagem']): ?>
-                                            <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                            <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                                                  alt="<?= htmlspecialchars($produto['nome_produto']) ?>" 
                                                  id="imagePreview" class="image-preview">
                                         <?php else: ?>

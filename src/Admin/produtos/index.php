@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../../controllers/produto/Crud_produto.php';
-require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../models/Crud_produto.php';
+require_once '../../models/Crud_categoria.php';
 require_once '../../helpers/image_helper.php';
 
 // Permitir acesso direto - criar sessão admin automática se não existir

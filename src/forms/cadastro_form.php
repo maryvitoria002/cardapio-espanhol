@@ -1,5 +1,5 @@
 <?php 
-require_once "../controllers/usuario/Crud_usuario.php";
+require_once "../models/Crud_usuario.php";
 
 if(isset($_POST["cadastrar"])){
     if(empty($_POST["primeiro_nome"]) || empty($_POST["segundo_nome"]) || empty($_POST["email"]) || empty($_POST["senha"]) || empty($_POST["telefone"])) {

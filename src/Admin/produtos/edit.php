@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once '../../controllers/produto/Crud_produto.php';
-require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../models/Crud_produto.php';
+require_once '../../models/Crud_categoria.php';
+require_once '../../helpers/image_helper.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática
@@ -136,7 +137,7 @@ if ($_POST) {
                                     <label>Imagem Atual</label>
                                     <div class="current-image">
                                         <?php if ($produto['imagem']): ?>
-                                            <img src="../../images/comidas/<?= htmlspecialchars($produto['imagem']) ?>" 
+                                            <img src="<?= getImageSrcAdmin($produto['imagem']) ?>" 
                                                  alt="<?= htmlspecialchars($produto['nome_produto']) ?>" 
                                                  id="currentImage">
                                         <?php else: ?>

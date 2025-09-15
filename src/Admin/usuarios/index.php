@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     $_SESSION['admin_acesso'] = 'admin';
 }
 
-require_once '../../controllers/usuario/Crud_usuario.php';
+require_once '../../models/Crud_usuario.php';
 
 $crudUsuario = new Crud_usuario();
 $message = '';
