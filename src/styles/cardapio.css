@@ -23,25 +23,7 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Poppins', 'Raleway', sans-serif;
-    background: var(--gradiente-principal);
-    min-height: 100vh;
-    color: var(--texto-escuro);
-}
 
-/* Container principal */
-.container {
-    background: var(--fundo-claro);
-    border-radius: 25px;
-    width: 95%;
-    max-width: 1400px;
-    min-height: 95vh;
-    margin: 2vh auto;
-    display: flex;
-    overflow: hidden;
-    box-shadow: 0 20px 40px var(--sombra-leve);
-}
 
 /* Sidebar - removido !important para permitir comportamento responsivo */
 .container .sidebar {

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../controllers/produto/Crud_produto.php';
-require_once '../controllers/categoria/Crud_categoria.php';
+require_once '../../controllers/produto/Crud_produto.php';
+require_once '../../controllers/categoria/Crud_categoria.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática
@@ -46,16 +46,18 @@ if ($_POST) {
             $imagem_atual = $crudProduto->uploadImagem($_FILES['imagem'], $imagem_atual);
         }
         
-        // Atualizar produto
-        $resultado = $crudProduto->update(
-            $id,
-            $_POST['nome_produto'],
-            $_POST['descricao'],
-            $_POST['preco'],
-            $_POST['id_categoria'],
-            $imagem_atual,
-            isset($_POST['ativo']) ? 1 : 0
-        );
+        // Atualizar produto usando setters
+        $crudProduto->setNome_produto($_POST['nome_produto']);
+        $crudProduto->setDescricao($_POST['descricao']);
+        $crudProduto->setPreco($_POST['preco']);
+        $crudProduto->setId_categoria($_POST['id_categoria']);
+        $crudProduto->setImagem($imagem_atual);
+        $crudProduto->setEstoque((int)$_POST['estoque']); // Usar valor do formulário
+        // Converter checkbox para enum do banco
+        $status = isset($_POST['ativo']) ? 'Disponivel' : 'Indisponivel';
+        $crudProduto->setStatus($status);
+        
+        $resultado = $crudProduto->update($id);
         
         if ($resultado) {
             $message = 'Produto atualizado com sucesso!';
@@ -185,6 +187,13 @@ if ($_POST) {
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="estoque">Estoque *</label>
+                                    <input type="number" id="estoque" name="estoque" class="form-control" 
+                                           value="<?= htmlspecialchars($produto['estoque'] ?? 1) ?>" 
+                                           min="0" required>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="descricao">Descrição</label>
                                     <textarea id="descricao" name="descricao" class="form-control" 
                                               rows="6" placeholder="Descreva o produto..."><?= htmlspecialchars($produto['descricao']) ?></textarea>
@@ -193,7 +202,7 @@ if ($_POST) {
                                 <div class="form-group">
                                     <div class="checkbox-wrapper">
                                         <label class="checkbox-label">
-                                            <input type="checkbox" name="ativo" <?= $produto['ativo'] ? 'checked' : '' ?>>
+                                            <input type="checkbox" name="ativo" <?= ($produto['status'] == 'Disponivel') ? 'checked' : '' ?>>
                                             <span class="checkmark"></span>
                                             Produto ativo
                                         </label>

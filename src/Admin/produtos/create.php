@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../controllers/produto/Crud_produto.php';
-require_once '../controllers/categoria/Crud_categoria.php';
+require_once '../../controllers/produto/Crud_produto.php';
+require_once '../../controllers/categoria/Crud_categoria.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática
@@ -33,15 +33,18 @@ if ($_POST) {
             $imagem = $crudProduto->uploadImagem($_FILES['imagem']);
         }
         
-        // Criar produto
-        $resultado = $crudProduto->create(
-            $_POST['nome_produto'],
-            $_POST['descricao'],
-            $_POST['preco'],
-            $_POST['id_categoria'],
-            $imagem ?: '',  // Se não há imagem, usar string vazia
-            isset($_POST['ativo']) ? 1 : 0
-        );
+        // Criar produto usando setters
+        $crudProduto->setNome_produto($_POST['nome_produto']);
+        $crudProduto->setDescricao($_POST['descricao']);
+        $crudProduto->setPreco($_POST['preco']);
+        $crudProduto->setId_categoria($_POST['id_categoria']);
+        $crudProduto->setImagem($imagem ?: '');  // Se não há imagem, usar string vazia
+        $crudProduto->setEstoque((int)($_POST['estoque'] ?? 1)); // Usar valor do formulário ou 1 como padrão
+        // Converter checkbox para enum do banco
+        $status = isset($_POST['ativo']) ? 'Disponivel' : 'Indisponivel';
+        $crudProduto->setStatus($status);
+        
+        $resultado = $crudProduto->create();
         
         if ($resultado) {
             $message = 'Produto criado com sucesso!';
@@ -156,6 +159,13 @@ if ($_POST) {
                                                value="<?= htmlspecialchars($_POST['preco'] ?? '') ?>" 
                                                step="0.01" min="0" placeholder="0,00" required>
                                     </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estoque">Estoque *</label>
+                                    <input type="number" id="estoque" name="estoque" class="form-control" 
+                                           value="<?= htmlspecialchars($_POST['estoque'] ?? '1') ?>" 
+                                           min="0" placeholder="1" required>
                                 </div>
 
                                 <div class="form-group">

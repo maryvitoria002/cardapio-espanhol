@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../controllers/produto/Crud_produto.php';
-require_once '../controllers/categoria/Crud_categoria.php';
+require_once '../../controllers/produto/Crud_produto.php';
+require_once '../../controllers/categoria/Crud_categoria.php';
 
 // Permitir acesso direto - criar sessão admin automática se não existir
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
@@ -134,6 +134,7 @@ try {
                                 <th>Nome</th>
                                 <th>Categoria</th>
                                 <th>Preço</th>
+                                <th>Estoque</th>
                                 <th>Status</th>
                                 <th>Data</th>
                                 <th>Ações</th>
@@ -170,6 +171,11 @@ try {
                                         </span>
                                     </td>
                                     <td class="price">R$ <?= number_format($produto['preco'], 2, ',', '.') ?></td>
+                                    <td class="text-center">
+                                        <span class="badge <?= $produto['estoque'] > 0 ? 'bg-success' : 'bg-danger' ?>">
+                                            <?= $produto['estoque'] ?? 0 ?> un.
+                                        </span>
+                                    </td>
                                     <td>
                                         <span class="status-badge status-<?= $produto['status'] == 'Disponivel' ? 'disponivel' : 'indisponivel' ?>">
                                             <?= $produto['status'] == 'Disponivel' ? 'Disponível' : 'Indisponível' ?>

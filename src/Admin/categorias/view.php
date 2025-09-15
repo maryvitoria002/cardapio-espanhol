@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../controllers/categoria/Crud_categoria.php';
-require_once '../controllers/produto/Crud_produto.php';
+require_once '../../controllers/categoria/Crud_categoria.php';
+require_once '../../controllers/produto/Crud_produto.php';
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ../login.php');
@@ -371,8 +371,8 @@ unset($_SESSION['message'], $_SESSION['message_type']);
                                 <div class="product-content">
                                     <h4 class="product-name"><?= htmlspecialchars($produto['nome_produto']) ?></h4>
                                     <div class="product-price">R$ <?= number_format($produto['preco'], 2, ',', '.') ?></div>
-                                    <span class="product-status <?= $produto['ativo'] ? 'status-active' : 'status-inactive' ?>">
-                                        <?= $produto['ativo'] ? 'Ativo' : 'Inativo' ?>
+                                    <span class="product-status <?= ($produto['status'] == 'Disponivel') ? 'status-active' : 'status-inactive' ?>">
+                                        <?= ($produto['status'] == 'Disponivel') ? 'Ativo' : 'Inativo' ?>
                                     </span>
                                     
                                     <div style="margin-top: 10px; display: flex; gap: 5px;">

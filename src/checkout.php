@@ -1,5 +1,5 @@
 <?php 
-$titulo = "Finalizar Pedido";
+$titulo = "checkout";
 include_once "./components/_base-header.php";
 
 // Verifica se o usuário está logado
@@ -67,203 +67,7 @@ try {
 }
 ?>
 
-<style>
-    .checkout-container {
-        max-width: 800px;
-        margin: 15px auto;
-        padding: 15px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        box-sizing: border-box;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-    
-    .checkout-header {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
-    
-    .checkout-sections {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 20px;
-        overflow: hidden;
-    }
-    
-    .section {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 6px;
-        border: 1px solid #e9ecef;
-        box-sizing: border-box;
-        max-width: 100%;
-        overflow-wrap: break-word;
-    }
-    
-    .section h3 {
-        margin-top: 0;
-        margin-bottom: 15px;
-        color: #495057;
-        border-bottom: 2px solid #007bff;
-        padding-bottom: 10px;
-    }
-    
-    .endereco-salvo {
-        background: #e8f4fd;
-        padding: 12px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        border-left: 4px solid #007bff;
-    }
-    
-    #form-endereco {
-        margin-top: 20px !important;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #495057;
-    }
-    
-    .form-group input, .form-group select, .form-group textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        font-size: 14px;
-        box-sizing: border-box;
-    }
-    
-    .form-group textarea {
-        resize: vertical;
-        height: 80px;
-    }
-    
-    .resumo-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #e9ecef;
-    }
-    
-    .resumo-item:last-child {
-        border-bottom: none;
-        font-weight: bold;
-        font-size: 16px;
-        margin-top: 10px;
-        padding-top: 15px;
-        border-top: 2px solid #007bff;
-    }
-    
-    .item-nome {
-        flex: 1;
-    }
-    
-    .item-quantidade {
-        margin: 0 15px;
-        color: #6c757d;
-    }
-    
-    .item-preco {
-        font-weight: bold;
-    }
-    
-    .checkout-actions {
-        text-align: center;
-        margin-top: 30px;
-    }
-    
-    .btn {
-        padding: 12px 30px;
-        border: none;
-        border-radius: 4px;
-        font-size: 16px;
-        text-decoration: none;
-        display: inline-block;
-        margin: 0 10px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-    
-    .btn-secondary {
-        background: #6c757d;
-        color: white;
-    }
-    
-    .btn-secondary:hover {
-        background: #545b62;
-    }
-    
-    .endereco-salvo {
-        background: #d4edda;
-        color: #155724;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        border: 1px solid #c3e6cb;
-    }
-    
-    @media (max-width: 768px) {
-        .checkout-sections {
-            grid-template-columns: 1fr;
-        }
-        
-        .checkout-container {
-            margin: 10px;
-            padding: 15px;
-            max-width: 95%;
-        }
-        
-        .checkout-sections {
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        .section {
-            padding: 15px;
-            width: 100%;
-            min-width: 0;
-        }
-        
-        .form-group input, 
-        .form-group select, 
-        .form-group textarea {
-            min-width: 0;
-            max-width: 100%;
-        }
-    }
-    
-    /* Garantir que nada estoure o container */
-    * {
-        box-sizing: border-box;
-    }
-    
-    .checkout-container * {
-        max-width: 100%;
-        word-wrap: break-word;
-    }
-</style>
+
 
 <div class="checkout-container">
     <div class="checkout-header">
@@ -272,7 +76,7 @@ try {
     </div>
     
     <?php if (!empty($erro_checkout)): ?>
-        <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+        <div class="alert alert-danger">
             ❌ <?= htmlspecialchars($erro_checkout) ?>
         </div>
     <?php endif; ?>
@@ -281,7 +85,7 @@ try {
         <div class="checkout-sections">
             <!-- Seção de Endereço -->
             <div class="section">
-                <h3>📍 Endereço de Entrega</h3>
+                <h2>📍 Endereço de Entrega</h2>
                 
                 <?php if (!empty($usuario['endereco'])): ?>
                     <div class="endereco-salvo">
@@ -295,7 +99,7 @@ try {
                     </div>
                 <?php endif; ?>
                 
-                <div id="form-endereco" <?= !empty($usuario['endereco']) ? 'style="display:none; margin-top: 20px;"' : 'style="margin-top: 20px;"' ?>>
+                <div id="form-endereco" class="<?= !empty($usuario['endereco']) ? 'hidden' : '' ?>">
                     <div class="form-group">
                         <label for="endereco_entrega">Endereço Completo *</label>
                         <textarea name="endereco_entrega" id="endereco_entrega" 
@@ -337,35 +141,35 @@ try {
             
             <!-- Seção de Resumo -->
             <div class="section">
-                <h3>📋 Resumo do Pedido</h3>
+                <h2>📋 Resumo do Pedido</h2>
                 
                 <?php foreach ($itensCarrinho as $item): ?>
-                    <div class="resumo-item">
+                    <div class="resumo-linha">
                         <span class="item-nome"><?= htmlspecialchars($item['produto']['nome_produto']) ?></span>
                         <span class="item-quantidade"><?= $item['quantidade'] ?>x</span>
                         <span class="item-preco">R$ <?= number_format($item['subtotal'], 2, ',', '.') ?></span>
                     </div>
                 <?php endforeach; ?>
                 
-                <div class="resumo-item">
+                <div class="resumo-linha">
                     <span>Subtotal</span>
                     <span></span>
                     <span>R$ <?= number_format($total, 2, ',', '.') ?></span>
                 </div>
                 
-                <div class="resumo-item">
+                <div class="resumo-linha">
                     <span>Taxa de Entrega</span>
                     <span></span>
                     <span>R$ <?= number_format($frete, 2, ',', '.') ?></span>
                 </div>
                 
-                <div class="resumo-item" style="font-weight: bold; border-top: 2px solid #007bff; padding-top: 10px; margin-top: 10px;">
+                <div class="resumo-linha total">
                     <span>TOTAL</span>
                     <span></span>
                     <span>R$ <?= number_format($totalComFrete, 2, ',', '.') ?></span>
                 </div>
                 
-                <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px;">
+                <div class="alert alert-success">
                     <small><strong>ℹ️ Informações:</strong><br>
                     • Tempo estimado de entrega: 30-45 minutos<br>
                     • Taxa de entrega: R$ 2,00 (já incluída no valor total)<br>
@@ -373,12 +177,12 @@ try {
                 </div>
                 
                 <!-- BOTÃO FINALIZAR AQUI EMBAIXO DAS INFORMAÇÕES -->
-                <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                    <button type="submit" style="background: #28a745 !important; color: white !important; border: none !important; padding: 15px 40px !important; font-size: 18px !important; font-weight: bold !important; border-radius: 8px !important; cursor: pointer !important; box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;">
+                <div class="checkout-actions">
+                    <button type="submit" class="btn btn-success">
                         🛒 FINALIZAR PEDIDO - R$ <?= number_format($totalComFrete, 2, ',', '.') ?>
                     </button>
                     <br><br>
-                    <a href="carrinho.php" style="color: #6c757d; text-decoration: none; font-size: 14px;">← Voltar ao Carrinho</a>
+                    <a href="carrinho.php" class="btn btn-secondary">← Voltar ao Carrinho</a>
                 </div>
             </div>
             </div>
@@ -396,10 +200,10 @@ function toggleEndereco() {
     const enderecoTextarea = document.getElementById('endereco_entrega');
     
     if (checkbox.checked) {
-        formEndereco.style.display = 'none';
+        formEndereco.classList.add('hidden');
         enderecoTextarea.required = false;
     } else {
-        formEndereco.style.display = 'block';
+        formEndereco.classList.remove('hidden');
         enderecoTextarea.required = true;
     }
 }

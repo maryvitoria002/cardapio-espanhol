@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../controllers/categoria/Crud_categoria.php';
+require_once '../../controllers/categoria/Crud_categoria.php';
 
 // Permitir acesso direto - criar sessão admin automática se não existir
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {

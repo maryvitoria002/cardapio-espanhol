@@ -362,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <div class="checkbox-wrapper">
                                         <label class="checkbox-label">
                                             <input type="checkbox" name="ativo" 
-                                                   <?= ($isEdit ? $produto['ativo'] : true) ? 'checked' : '' ?>>
+                                                   <?= ($isEdit ? ($produto['status'] == 'Disponivel') : true) ? 'checked' : '' ?>>
                                             Produto ativo (visível no cardápio)
                                         </label>
                                     </div>

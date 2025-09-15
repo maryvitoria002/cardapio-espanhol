@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../../db/conection.php';
-require_once '../controllers/funcionario/Crud_funcionario.php';
+require_once '../../controllers/funcionario/Crud_funcionario.php';
 
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
     // Criar sessão admin automática

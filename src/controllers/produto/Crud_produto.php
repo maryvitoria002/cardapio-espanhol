@@ -149,13 +149,34 @@ class Crud_produto extends Produto {
     }
     
     // Método para contar todos os produtos
-    public function count() {
+    public function count($search = '', $categoria_filter = '') {
         try {
-            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}`";
+            $sql = "SELECT COUNT(*) as total FROM `{$this->tabela}` p";
+            $params = [];
+            $whereConditions = [];
+            
+            if (!empty($search)) {
+                $whereConditions[] = "(p.nome_produto LIKE :search OR p.descricao LIKE :search)";
+                $params['search'] = "%$search%";
+            }
+            
+            if (!empty($categoria_filter)) {
+                $whereConditions[] = "p.id_categoria = :categoria";
+                $params['categoria'] = $categoria_filter;
+            }
+            
+            if (!empty($whereConditions)) {
+                $sql .= " WHERE " . implode(" AND ", $whereConditions);
+            }
             
             $database = new Database();
             $conexao = $database->getInstance();
             $stmt = $conexao->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            
             $stmt->execute();
             
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -228,6 +249,106 @@ class Crud_produto extends Produto {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Exception("Erro ao buscar produtos relacionados: " . $e->getMessage());
+        }
+    }
+
+    // Método para buscar todos os produtos com paginação e filtros
+    public function readAll($search = '', $categoria_filter = '', $page = 1, $perPage = 10) {
+        try {
+            $offset = ($page - 1) * $perPage;
+            
+            $sql = "SELECT p.*, c.nome_categoria FROM `{$this->tabela}` p 
+                    LEFT JOIN categoria c ON p.id_categoria = c.id_categoria";
+            $params = [];
+            $whereConditions = [];
+            
+            if (!empty($search)) {
+                $whereConditions[] = "(p.nome_produto LIKE :search OR p.descricao LIKE :search)";
+                $params['search'] = "%$search%";
+            }
+            
+            if (!empty($categoria_filter)) {
+                $whereConditions[] = "p.id_categoria = :categoria";
+                $params['categoria'] = $categoria_filter;
+            }
+            
+            if (!empty($whereConditions)) {
+                $sql .= " WHERE " . implode(" AND ", $whereConditions);
+            }
+            
+            $sql .= " ORDER BY p.data_criacao DESC LIMIT :offset, :per_page";
+            
+            $database = new Database();
+            $conexao = $database->getInstance();
+            $stmt = $conexao->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindValue(':per_page', $perPage, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (PDOException $e) {
+            throw new Exception("Erro ao buscar produtos: " . $e->getMessage());
+        }
+    }
+
+    // Método para upload de imagem de produto
+    public function uploadImagem($arquivo, $imagem_anterior = null) {
+        try {
+            // Verificar se houve erro no upload
+            if ($arquivo['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception('Erro no upload do arquivo');
+            }
+
+            // Verificar tamanho do arquivo (máximo 5MB)
+            $tamanho_max = 5 * 1024 * 1024; // 5MB
+            if ($arquivo['size'] > $tamanho_max) {
+                throw new Exception('Arquivo muito grande. Máximo 5MB');
+            }
+
+            // Verificar tipo do arquivo
+            $tipos_permitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $tipo_arquivo = finfo_file($finfo, $arquivo['tmp_name']);
+            finfo_close($finfo);
+
+            if (!in_array($tipo_arquivo, $tipos_permitidos)) {
+                throw new Exception('Tipo de arquivo não permitido. Use JPG, PNG ou GIF');
+            }
+
+            // Gerar nome único para o arquivo
+            $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
+            $nome_arquivo = 'produto_' . uniqid() . '_' . time() . '.' . $extensao;
+            
+            // Definir caminho de destino
+            $diretorio_destino = __DIR__ . '/../../images/comidas/';
+            
+            // Criar diretório se não existir
+            if (!is_dir($diretorio_destino)) {
+                mkdir($diretorio_destino, 0755, true);
+            }
+            
+            $caminho_completo = $diretorio_destino . $nome_arquivo;
+
+            // Mover arquivo para o destino
+            if (!move_uploaded_file($arquivo['tmp_name'], $caminho_completo)) {
+                throw new Exception('Erro ao salvar arquivo');
+            }
+
+            // Remover imagem anterior se existir
+            if ($imagem_anterior && file_exists($diretorio_destino . $imagem_anterior)) {
+                unlink($diretorio_destino . $imagem_anterior);
+            }
+
+            return $nome_arquivo;
+
+        } catch (Exception $e) {
+            throw new Exception("Erro no upload da imagem: " . $e->getMessage());
         }
     }
 }
