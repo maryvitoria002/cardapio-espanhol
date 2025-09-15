@@ -83,8 +83,8 @@ try {
     $conexao = $database->getInstance();
     $user_id = $_SESSION['id'];
     
-    // Buscar pedido com nome correto da coluna total
-    $stmt = $conexao->prepare("SELECT *, total_pedido as total FROM pedido WHERE id_pedido = ? AND id_usuario = ?");
+    // Buscar pedido (sem coluna total que não existe)
+    $stmt = $conexao->prepare("SELECT * FROM pedido WHERE id_pedido = ? AND id_usuario = ?");
     $stmt->execute([$id_pedido, $user_id]);
     $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -130,7 +130,7 @@ try {
             <h3>Informações do Pedido</h3>
             <p><strong>Status:</strong> <?= htmlspecialchars($pedido['status_pedido']) ?></p>
             <p><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($pedido['data_pedido'])) ?></p>
-            <p><strong>Total:</strong> R$ <?= number_format($pedido['total'], 2, ',', '.') ?></p>
+            <p><strong>Modo de Pagamento:</strong> <?= htmlspecialchars($pedido['modo_pagamento'] ?? 'Não informado') ?></p>
         </div>
         
         <form method="POST">

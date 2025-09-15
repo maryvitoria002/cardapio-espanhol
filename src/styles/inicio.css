@@ -80,6 +80,116 @@
     box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
 }
 
+/* Sugestões de pesquisa */
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--fundo-branco);
+    border: 1px solid var(--fundo-claro);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px var(--sombra-leve);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 5px;
+    display: none;
+}
+
+.search-suggestions.show {
+    display: block;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: var(--fundo-claro);
+}
+
+.suggestion-item.active {
+    background-color: var(--azul-principal);
+    color: white;
+}
+
+.suggestion-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 12px;
+    background-color: var(--fundo-claro);
+}
+
+.suggestion-content {
+    flex: 1;
+}
+
+.suggestion-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--texto-escuro);
+    margin-bottom: 2px;
+}
+
+.suggestion-item.active .suggestion-name {
+    color: white;
+}
+
+.suggestion-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suggestion-category {
+    font-size: 0.8rem;
+    color: var(--cinza-medio);
+    background: var(--fundo-claro);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.suggestion-item.active .suggestion-category {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.suggestion-price {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--amarelo-destaque);
+}
+
+.suggestion-item.active .suggestion-price {
+    color: white;
+}
+
+.suggestion-loading {
+    padding: 16px;
+    text-align: center;
+    color: var(--cinza-medio);
+    font-size: 0.9rem;
+}
+
+.suggestion-empty {
+    padding: 16px;
+    text-align: center;
+    color: var(--cinza-medio);
+    font-size: 0.9rem;
+}
+
 .top-actions {
     display: flex;
     align-items: center;

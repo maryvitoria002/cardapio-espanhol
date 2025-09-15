@@ -80,7 +80,8 @@ function getImagemPadrao($nome_categoria) {
                 </div>
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="O que você quer comer hoje...Kelvin?Eu também!">
+                    <input type="text" id="searchInput" placeholder="O que você quer comer hoje...Kelvin?Eu também!" autocomplete="off">
+                    <div id="searchSuggestions" class="search-suggestions"></div>
                 </div>
                 <div class="top-actions">
                     <button class="icon-btn">
@@ -237,17 +238,126 @@ function getImagemPadrao($nome_categoria) {
             }, 200);
         }
 
-        // Funcionalidade de busca
-        const searchInput = document.querySelector('.search-bar input');
-        if (searchInput) {
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const termo = this.value.trim();
-                    if (termo) {
-                        window.location.href = `cardapio.php?busca=${encodeURIComponent(termo)}`;
+        // Funcionalidade de busca com sugestões
+        const searchInput = document.querySelector('#searchInput');
+        const suggestionsContainer = document.querySelector('#searchSuggestions');
+        let searchTimeout;
+        let selectedIndex = -1;
+        
+        if (searchInput && suggestionsContainer) {
+            // Buscar sugestões enquanto digita
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    hideSuggestions();
+                    return;
+                }
+                
+                // Debounce para evitar muitas requisições
+                searchTimeout = setTimeout(() => {
+                    fetchSuggestions(query);
+                }, 300);
+            });
+            
+            // Navegação com teclado
+            searchInput.addEventListener('keydown', function(e) {
+                const suggestions = suggestionsContainer.querySelectorAll('.suggestion-item');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = Math.min(selectedIndex + 1, suggestions.length - 1);
+                    updateSelection(suggestions);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = Math.max(selectedIndex - 1, -1);
+                    updateSelection(suggestions);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (selectedIndex >= 0 && suggestions[selectedIndex]) {
+                        selectProduct(suggestions[selectedIndex]);
+                    } else {
+                        const termo = this.value.trim();
+                        if (termo) {
+                            window.location.href = `cardapio.php?busca=${encodeURIComponent(termo)}`;
+                        }
                     }
+                } else if (e.key === 'Escape') {
+                    hideSuggestions();
                 }
             });
+            
+            // Fechar sugestões ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+        }
+        
+        function fetchSuggestions(query) {
+            suggestionsContainer.innerHTML = '<div class="suggestion-loading">🔍 Buscando...</div>';
+            suggestionsContainer.classList.add('show');
+            
+            fetch(`./api/search_suggestions.php?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displaySuggestions(data);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar sugestões:', error);
+                    suggestionsContainer.innerHTML = '<div class="suggestion-empty">❌ Erro ao buscar produtos</div>';
+                });
+        }
+        
+        function displaySuggestions(products) {
+            selectedIndex = -1;
+            
+            if (products.length === 0) {
+                suggestionsContainer.innerHTML = '<div class="suggestion-empty">😅 Nenhum produto encontrado</div>';
+                return;
+            }
+            
+            const html = products.map(product => `
+                <div class="suggestion-item" data-product-id="${product.id}">
+                    <img src="${product.imagem}" alt="${product.nome}" class="suggestion-image" onerror="this.src='./assets/default-food.png'">
+                    <div class="suggestion-content">
+                        <div class="suggestion-name">${product.nome}</div>
+                        <div class="suggestion-details">
+                            <span class="suggestion-category">${product.categoria}</span>
+                            <span class="suggestion-price">${product.preco}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            suggestionsContainer.innerHTML = html;
+            
+            // Adicionar eventos de clique
+            suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', () => selectProduct(item));
+            });
+        }
+        
+        function updateSelection(suggestions) {
+            suggestions.forEach((item, index) => {
+                item.classList.toggle('active', index === selectedIndex);
+            });
+        }
+        
+        function selectProduct(item) {
+            const productId = item.dataset.productId;
+            window.location.href = `produto.php?id=${productId}`;
+        }
+        
+        function hideSuggestions() {
+            suggestionsContainer.classList.remove('show');
+            selectedIndex = -1;
         }
 
         // Melhorar interação com categorias
