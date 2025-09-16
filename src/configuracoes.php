@@ -74,6 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 <span>Itens Favoritos</span>
             </a>
         </nav>
+
+        <!-- Botão de acesso administrativo -->
+        <div class="admin-button-container">
+            <a href="./Admin/login.php" class="btn-admin" title="Acesso ao painel administrativo">
+                <i class="fas fa-user-shield"></i>
+                Painel Admin
+            </a>
+        </div>
     </div>
 
     <div class="retangulo_branco2">
