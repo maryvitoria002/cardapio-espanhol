@@ -69,6 +69,39 @@ function getImagemPadrao($nome_categoria) {
     }
 }
 
+// Função para obter ícone específico para cada categoria
+function getIconeCategoria($nome_categoria) {
+    $nome_lower = strtolower($nome_categoria);
+    
+    if (strpos($nome_lower, 'bebida') !== false || strpos($nome_lower, 'drink') !== false || strpos($nome_lower, 'smoothie') !== false) {
+        return 'fas fa-glass-whiskey';
+    } elseif (strpos($nome_lower, 'bowl') !== false) {
+        return 'fas fa-bowl-food';
+    } elseif (strpos($nome_lower, 'carne') !== false || strpos($nome_lower, 'grelhado') !== false) {
+        return 'fas fa-drumstick-bite';
+    } elseif (strpos($nome_lower, 'lanche') !== false || strpos($nome_lower, 'sandwich') !== false || strpos($nome_lower, 'hambur') !== false) {
+        return 'fas fa-hamburger';
+    } elseif (strpos($nome_lower, 'sobremesa') !== false || strpos($nome_lower, 'doce') !== false || strpos($nome_lower, 'dessert') !== false) {
+        return 'fas fa-ice-cream';
+    } elseif (strpos($nome_lower, 'sopa') !== false || strpos($nome_lower, 'soup') !== false) {
+        return 'fas fa-bowl-hot';
+    } elseif (strpos($nome_lower, 'massa') !== false || strpos($nome_lower, 'noodle') !== false || strpos($nome_lower, 'pasta') !== false) {
+        return 'fas fa-stroopwafel';
+    } elseif (strpos($nome_lower, 'molho') !== false || strpos($nome_lower, 'condimento') !== false) {
+        return 'fas fa-pepper-hot';
+    } elseif (strpos($nome_lower, 'frito') !== false || strpos($nome_lower, 'petisco') !== false || strpos($nome_lower, 'entrada') !== false) {
+        return 'fas fa-cheese';
+    } elseif (strpos($nome_lower, 'pão') !== false || strpos($nome_lower, 'toast') !== false || strpos($nome_lower, 'sanduiche') !== false) {
+        return 'fas fa-bread-slice';
+    } elseif (strpos($nome_lower, 'pizza') !== false) {
+        return 'fas fa-pizza-slice';
+    } elseif (strpos($nome_lower, 'salada') !== false || strpos($nome_lower, 'verde') !== false) {
+        return 'fas fa-leaf';
+    } else {
+        return 'fas fa-utensils'; // padrão
+    }
+}
+
 ?>
 <link rel="stylesheet" href="./styles/inicio_produtos.css">
     <div class="container">
@@ -105,7 +138,7 @@ function getImagemPadrao($nome_categoria) {
                     <h3>VIVA O <span class="highlight">ENCANTO</span></h3>
                 </div>
                 <div class="banner-image">
-                    <img src="assets/Logo.png" alt="Pratos diversos">
+                    <img src="./images/favicon.png" alt="Pratos diversos">
                 </div>
             </section>
 
@@ -123,14 +156,7 @@ function getImagemPadrao($nome_categoria) {
                                  data-categoria-nome="<?= htmlspecialchars($categoria['nome_categoria']) ?>"
                                  onclick="navegarCategoria('<?= htmlspecialchars($categoria['nome_categoria']) ?>')">>
                                 <div class="category-icon">
-                                    <?php if (!empty($categoria['imagem'])): ?>
-                                        <img src="./images/categorias/<?= htmlspecialchars($categoria['imagem']) ?>" 
-                                             alt="<?= htmlspecialchars($categoria['nome_categoria']) ?>"
-                                             onerror="this.src='<?= getImagemPadrao($categoria['nome_categoria']) ?>'">
-                                    <?php else: ?>
-                                        <img src="<?= getImagemPadrao($categoria['nome_categoria']) ?>" 
-                                             alt="<?= htmlspecialchars($categoria['nome_categoria']) ?>">
-                                    <?php endif; ?>
+                                    <i class="<?= getIconeCategoria($categoria['nome_categoria']) ?>"></i>
                                 </div>
                                 <span><?= htmlspecialchars($categoria['nome_categoria']) ?></span>
                             </div>
@@ -139,31 +165,31 @@ function getImagemPadrao($nome_categoria) {
                         <!-- Categorias padrão caso não haja no banco -->
                         <div class="category-item active" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
-                                <img src="assets/bebidas.png" alt="Bebidas">
+                                <i class="fas fa-glass-whiskey"></i>
                             </div>
                             <span>Bebidas</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
-                                <img src="assets/bowls.png" alt="Bowls">
+                                <i class="fas fa-bowl-food"></i>
                             </div>
                             <span>Bowls</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
-                                <img src="assets/lanches.png" alt="Lanches">
+                                <i class="fas fa-hamburger"></i>
                             </div>
                             <span>Lanches</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
-                                <img src="assets/sobremesa.png" alt="Sobremesa">
+                                <i class="fas fa-ice-cream"></i>
                             </div>
                             <span>Sobremesa</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
-                                <img src="assets/carnes.png" alt="Carnes">
+                                <i class="fas fa-drumstick-bite"></i>
                             </div>
                             <span>Carnes</span>
                         </div>
