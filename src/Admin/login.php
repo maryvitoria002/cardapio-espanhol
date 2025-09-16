@@ -27,7 +27,7 @@ try {
 }
 
 if ($_POST && !$error) {
-    $email = $_POST['email'] ?? '';
+    $email = trim($_POST['email'] ?? '');
     $senha = $_POST['senha'] ?? '';
     
     if (empty($email) || empty($senha)) {
@@ -38,25 +38,37 @@ if ($_POST && !$error) {
             $database = new Database();
             $conexao = $database->getInstance();
             
-            $stmt = $conexao->prepare("SELECT * FROM funcionario WHERE email = ?");
+            // Preparar consulta com mais campos
+            $stmt = $conexao->prepare("SELECT id_funcionario, nome, email, senha, cargo, telefone, data_criacao FROM funcionario WHERE email = ? LIMIT 1");
             $stmt->execute([$email]);
-            $funcionario = $stmt->fetch();
+            $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($funcionario && password_verify($senha, $funcionario['senha'])) {
-                // Login bem-sucedido
+                // Login bem-sucedido - registrar dados da sessão
                 $_SESSION['admin_logado'] = true;
                 $_SESSION['admin_id'] = $funcionario['id_funcionario'];
-                $_SESSION['admin_nome'] = $funcionario['nome'] . ' ' . $funcionario['sobrenome'];
-                $_SESSION['admin_acesso'] = $funcionario['nivel_acesso'] ?? 'admin';
+                $_SESSION['admin_nome'] = $funcionario['nome'];
                 $_SESSION['admin_email'] = $funcionario['email'];
+                $_SESSION['admin_cargo'] = $funcionario['cargo'];
+                $_SESSION['admin_telefone'] = $funcionario['telefone'];
+                $_SESSION['login_time'] = time();
                 
-                header('Location: index.php');
-                exit();
+                // Registrar último login (opcional - se houver campo na tabela)
+                try {
+                    $updateStmt = $conexao->prepare("UPDATE funcionario SET ultimo_login = NOW() WHERE id_funcionario = ?");
+                    $updateStmt->execute([$funcionario['id_funcionario']]);
+                } catch (Exception $e) {
+                    // Ignorar se não houver campo ultimo_login
+                }
+                
+                $success = 'Login realizado com sucesso! Redirecionando...';
+                header('Refresh: 2; URL=index.php');
             } else {
-                $error = 'Email ou senha incorretos.';
+                $error = 'Email ou senha incorretos. Verifique suas credenciais.';
             }
         } catch (PDOException $e) {
-            $error = 'Erro no sistema: ' . $e->getMessage();
+            $error = 'Erro no sistema: Não foi possível processar o login.';
+            error_log('Erro de login admin: ' . $e->getMessage());
         }
     }
 }
@@ -76,13 +88,20 @@ if ($_POST && !$error) {
         <div class="login-box">
             <div class="login-header">
                 <div class="logo">
-                    <i class="fas fa-utensils"></i>
+                    <i class="fas fa-shield-alt"></i>
                 </div>
-                <h1>RestauranteSIS</h1>
+                <h1>Écoute Saveur</h1>
                 <p>Painel Administrativo</p>
             </div>
             
-            <form method="POST" class="login-form">
+            <form method="POST" class="login-form" id="adminLoginForm">
+                <?php if ($success): ?>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <?= htmlspecialchars($success) ?>
+                    </div>
+                <?php endif; ?>
+                
                 <?php if ($error): ?>
                     <div class="alert alert-error">
                         <i class="fas fa-exclamation-circle"></i>
@@ -93,14 +112,14 @@ if ($_POST && !$error) {
                 <!-- Credenciais de teste -->
                 <div class="test-credentials">
                     <small><strong>Credenciais de teste:</strong></small><br>
-                    <small>Email: maryleloli1811@gmail.com</small><br>
-                    <small>Senha: 123</small>
+                    <small><i class="fas fa-envelope"></i> Email: admin@restaurante.com</small><br>
+                    <small><i class="fas fa-key"></i> Senha: admin123</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">
                         <i class="fas fa-envelope"></i>
-                        Email
+                        Email Administrativo
                     </label>
                     <input 
                         type="email" 
@@ -108,7 +127,8 @@ if ($_POST && !$error) {
                         name="email" 
                         required 
                         value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                        placeholder="Digite seu email"
+                        placeholder="Digite seu email administrativo"
+                        autocomplete="email"
                     >
                 </div>
                 
@@ -117,25 +137,87 @@ if ($_POST && !$error) {
                         <i class="fas fa-lock"></i>
                         Senha
                     </label>
-                    <input 
-                        type="password" 
-                        id="senha" 
-                        name="senha" 
-                        required 
-                        placeholder="Digite sua senha"
-                    >
+                    <div class="password-input">
+                        <input 
+                            type="password" 
+                            id="senha" 
+                            name="senha" 
+                            required 
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
                 </div>
                 
-                <button type="submit" class="btn btn-login">
+                <button type="submit" class="btn btn-login" id="loginBtn">
                     <i class="fas fa-sign-in-alt"></i>
-                    Entrar
+                    <span>Acessar Painel</span>
                 </button>
+                
+                <div class="form-footer">
+                    <small><i class="fas fa-info-circle"></i> Acesso restrito apenas para funcionários autorizados</small>
+                </div>
             </form>
             
             <div class="login-footer">
-                <p>&copy; 2025 RestauranteSIS. Todos os direitos reservados.</p>
+                <p>&copy; 2025 Écoute Saveur. Todos os direitos reservados.</p>
+                <small>Sistema de gestão administrativo v2.0</small>
             </div>
         </div>
     </div>
+
+    <script>
+        // Função para mostrar/ocultar senha
+        function togglePassword() {
+            const senhaInput = document.getElementById('senha');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                senhaInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+
+        // Validação do formulário e feedback visual
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = loginBtn.querySelector('span');
+            const btnIcon = loginBtn.querySelector('i');
+            
+            // Desabilitar botão e mostrar loading
+            loginBtn.disabled = true;
+            btnIcon.className = 'fas fa-spinner fa-spin';
+            btnText.textContent = 'Verificando...';
+            
+            // Se houver erro na validação, reabilitar o botão
+            setTimeout(() => {
+                if (!e.defaultPrevented) {
+                    // Formulário será enviado
+                }
+            }, 100);
+        });
+
+        // Auto-focus no campo email
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').focus();
+        });
+
+        // Mensagens de sucesso/erro com auto-hide
+        <?php if ($success): ?>
+        setTimeout(() => {
+            const successAlert = document.querySelector('.alert-success');
+            if (successAlert) {
+                successAlert.style.opacity = '0';
+                setTimeout(() => successAlert.remove(), 300);
+            }
+        }, 3000);
+        <?php endif; ?>
+    </script>
 </body>
 </html>

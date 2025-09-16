@@ -77,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
         <!-- Botão de acesso administrativo -->
         <div class="admin-button-container">
-            <a href="./Admin/login.php" class="btn-admin" title="Acesso ao painel administrativo">
+            <button type="button" class="btn-admin" title="Acesso ao painel administrativo" onclick="redirectToAdmin()">
                 <i class="fas fa-user-shield"></i>
                 Painel Admin
-            </a>
+            </button>
         </div>
     </div>
 
@@ -346,6 +346,18 @@ function adicionarAoCarrinho(idProduto) {
         console.error('Erro:', error);
         showNotification('Erro ao adicionar produto ao carrinho', 'error');
     });
+}
+
+function redirectToAdmin() {
+    // Tentar diferentes caminhos para garantir que funcione
+    const possiblePaths = [
+        'Admin/login.php',
+        './Admin/login.php',
+        '/Projeto_final/src/Admin/login.php'
+    ];
+    
+    // Primeiro tentar o caminho direto
+    window.location.href = 'Admin/login.php';
 }
 </script>
 
