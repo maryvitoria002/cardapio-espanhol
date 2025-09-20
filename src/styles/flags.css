@@ -1,0 +1,223 @@
+/* Bandeiras CSS dos Países Hispânicos */
+
+.flag {
+    width: 30px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.flag-large {
+    width: 60px;
+    height: 40px;
+}
+
+.flag-small {
+    width: 20px;
+    height: 13px;
+}
+
+/* Bandeira da Colômbia */
+.flag-colombia {
+    background: linear-gradient(
+        to bottom,
+        #fcdd09 0%,
+        #fcdd09 50%,
+        #003087 50%,
+        #003087 75%,
+        #c41e3a 75%,
+        #c41e3a 100%
+    );
+}
+
+/* Bandeira da Espanha */
+.flag-spain {
+    background: linear-gradient(
+        to bottom,
+        #aa151b 0%,
+        #aa151b 25%,
+        #f1bf00 25%,
+        #f1bf00 75%,
+        #aa151b 75%,
+        #aa151b 100%
+    );
+}
+
+.flag-spain::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: #c41e3a;
+    border-radius: 50%;
+    border: 1px solid #333;
+}
+
+/* Bandeira do México */
+.flag-mexico {
+    background: linear-gradient(
+        to right,
+        #006847 0%,
+        #006847 33%,
+        #ffffff 33%,
+        #ffffff 66%,
+        #ce1126 66%,
+        #ce1126 100%
+    );
+}
+
+.flag-mexico::after {
+    content: '🦅';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    line-height: 1;
+}
+
+/* Bandeira do Uruguai */
+.flag-uruguay {
+    background: #ffffff;
+}
+
+.flag-uruguay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20%;
+    background: repeating-linear-gradient(
+        to bottom,
+        #0038a8 0,
+        #0038a8 2px,
+        #ffffff 2px,
+        #ffffff 4px
+    );
+}
+
+.flag-uruguay::after {
+    content: '☀️';
+    position: absolute;
+    top: 25%;
+    left: 20%;
+    font-size: 6px;
+    background: #fcd116;
+    border-radius: 50%;
+    padding: 1px;
+}
+
+/* Animações para as bandeiras */
+.flag:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Bandeiras com texto */
+.country-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--texto-escuro);
+    border: 1px solid rgba(196, 30, 58, 0.2);
+}
+
+.country-flag:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--azul-escuro);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Bandeiras específicas para categorias */
+.category-flag-colombia .flag {
+    background: linear-gradient(to bottom, #fcdd09 50%, #003087 25%, #c41e3a 25%);
+}
+
+.category-flag-spain .flag {
+    background: linear-gradient(to bottom, #aa151b 25%, #f1bf00 50%, #aa151b 25%);
+}
+
+.category-flag-mexico .flag {
+    background: linear-gradient(to right, #006847 33%, #ffffff 34%, #ce1126 33%);
+}
+
+.category-flag-uruguay .flag {
+    background: linear-gradient(to bottom, #0038a8 20%, #ffffff 20%);
+}
+
+/* Bandeirinhas no header */
+.header-flags {
+    display: flex;
+    gap: 10px;
+    margin: 1rem 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.header-flag-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.1);
+    transition: all 0.3s ease;
+}
+
+.header-flag-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.2);
+}
+
+.header-flag-item span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--texto-escuro);
+}
+
+/* Emojis como alternativa */
+.emoji-flag {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.colombia-emoji::before { content: '🇨🇴'; }
+.spain-emoji::before { content: '🇪🇸'; }
+.mexico-emoji::before { content: '🇲🇽'; }
+.uruguay-emoji::before { content: '🇺🇾'; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .flag {
+        width: 24px;
+        height: 16px;
+    }
+    
+    .header-flags {
+        gap: 5px;
+    }
+    
+    .header-flag-item {
+        padding: 3px 6px;
+    }
+    
+    .header-flag-item span {
+        font-size: 0.7rem;
+    }
+}

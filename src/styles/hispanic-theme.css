@@ -1,0 +1,338 @@
+/* Estética Hispânica - Sabores Latinos */
+
+:root {
+    /* Cores inspiradas nas bandeiras e cultura hispânica */
+    --primary-color: #c41e3a; /* Vermelho espanhol */
+    --secondary-color: #ffd700; /* Dourado mexicano */
+    --accent-color: #ff6b35; /* Laranja colombiano */
+    --text-dark: #2c2c2c;
+    --text-light: #6c7581;
+    --background-light: #fef9f3;
+    --border-light: #e8e8e8;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    
+    /* Cores específicas dos países */
+    --colombia-primary: #fcdd09;
+    --colombia-secondary: #003087;
+    --colombia-accent: #c41e3a;
+    
+    --spain-primary: #aa151b;
+    --spain-secondary: #f1bf00;
+    
+    --mexico-primary: #006847;
+    --mexico-secondary: #ce1126;
+    --mexico-accent: #ffffff;
+    
+    --uruguay-primary: #0038a8;
+    --uruguay-secondary: #ffffff;
+    --uruguay-accent: #fcd116;
+}
+
+/* Tipografia hispânica */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;500;600&display=swap');
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(135deg, #fef9f3 0%, #fff5eb 100%);
+    color: var(--text-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
+}
+
+/* Cards de produto hispânicos */
+.hispanic-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(196, 30, 58, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.hispanic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        var(--colombia-primary) 0%, 
+        var(--spain-primary) 25%, 
+        var(--mexico-primary) 50%, 
+        var(--uruguay-primary) 75%, 
+        var(--colombia-accent) 100%);
+}
+
+.hispanic-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(196, 30, 58, 0.2);
+    border-color: var(--accent-color);
+}
+
+/* Imagem do produto */
+.hispanic-card .product-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.hispanic-card .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.hispanic-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+/* Foto do chef */
+.chef-photo {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.chef-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.chef-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--text-light);
+    text-align: center;
+}
+
+.chef-placeholder i {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+    color: var(--accent-color);
+}
+
+/* Informações do produto */
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+}
+
+.product-description {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+}
+
+.product-origin {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+    padding: 0.5rem 0.75rem;
+    background: linear-gradient(135deg, var(--background-light), #fff);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.product-origin i {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+}
+
+.product-origin span {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.product-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 1rem 0 0 0;
+}
+
+/* Botão adicionar ao carrinho hispânico */
+.add-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+.add-btn:active {
+    transform: scale(0.95);
+}
+
+/* Categorias com bandeiras */
+.category-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.category-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Bandeiras como overlay nas categorias */
+.category-item[data-country="colombia"]::after {
+    background: linear-gradient(180deg, #fcdd09 33%, #003087 33%, #003087 66%, #c41e3a 66%);
+}
+
+.category-item[data-country="spain"]::after {
+    background: linear-gradient(180deg, #aa151b 25%, #f1bf00 25%, #f1bf00 50%, #aa151b 50%);
+}
+
+.category-item[data-country="mexico"]::after {
+    background: linear-gradient(90deg, #006847 33%, #ffffff 33%, #ffffff 66%, #ce1126 66%);
+}
+
+.category-item[data-country="uruguay"]::after {
+    background: linear-gradient(180deg, #0038a8 20%, #ffffff 20%, #ffffff 40%, #0038a8 40%);
+}
+
+.category-item:hover::after {
+    opacity: 0.1;
+}
+
+/* Animações suaves */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hispanic-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.hispanic-card:nth-child(2) { animation-delay: 0.1s; }
+.hispanic-card:nth-child(3) { animation-delay: 0.2s; }
+.hispanic-card:nth-child(4) { animation-delay: 0.3s; }
+.hispanic-card:nth-child(5) { animation-delay: 0.4s; }
+.hispanic-card:nth-child(6) { animation-delay: 0.5s; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+    }
+    
+    .chef-photo {
+        width: 40px;
+        height: 40px;
+        bottom: 8px;
+        right: 8px;
+    }
+    
+    .chef-placeholder {
+        font-size: 0.6rem;
+    }
+    
+    .chef-placeholder i {
+        font-size: 1rem;
+    }
+}
+
+/* Header com tema hispânico */
+.header {
+    background: linear-gradient(135deg, var(--background-light), #fff);
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, 
+        var(--colombia-primary), 
+        var(--spain-primary), 
+        var(--mexico-primary), 
+        var(--uruguay-primary)) 1;
+}
+
+.greeting h1 {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Barra de busca hispânica */
+.search-bar {
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+/* Seção de categorias */
+.categories h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
