@@ -1,3 +1,13 @@
+/* Variáveis hispânicas */
+:root {
+    --vermelho-principal: #C41E3A;
+    --laranja-quente: #FF6B35; 
+    --dourado-mexicano: #FFD700;
+    --terracota: #D2691E;
+    --fundo-claro: #FEF9F3;
+    --texto-escuro: #2C1810;
+}
+
 .config-container {
     display: flex;
     gap: 20px;
@@ -51,7 +61,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #007bff;
+    background: var(--vermelho-principal);
     border: none;
     color: white;
     cursor: pointer;
@@ -96,8 +106,8 @@
 }
 
 .menu-item.active {
-    background-color: #e3f2fd;
-    color: #007bff;
+    background-color: var(--fundo-claro);
+    color: var(--vermelho-principal);
 }
 
 .menu-item img {
@@ -175,7 +185,7 @@
 }
 
 .btn-save {
-    background-color: #007bff;
+    background-color: var(--vermelho-principal);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -185,7 +195,7 @@
 }
 
 .btn-save:hover {
-    background-color: #0056b3;
+    background-color: var(--terracota);
 }
 
 .form-row {

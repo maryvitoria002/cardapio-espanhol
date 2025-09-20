@@ -35,9 +35,9 @@ require_once './helpers/image_helper.php';
 $crudProduto = new Crud_produto();
 $crudCategoria = new Crud_categoria();
 
-// Buscar produtos em destaque (limitando a 6 para não sobrecarregar a página)
+// Buscar todos os produtos para mostrar na seção "Mais Pedidos"
 $produtos = $crudProduto->read();
-$produtosDestaque = array_slice($produtos, 0, 6); // Pegar apenas os 6 primeiros
+$produtosDestaque = $produtos; // Mostrar todos os produtos
 
 // Buscar categorias usando o método correto
 $categorias = $crudCategoria->readAll();
@@ -110,18 +110,18 @@ function getIconeCategoria($nome_categoria) {
             <!-- Cabeçalho -->
             <header class="header">
                 <div class="greeting">
-                    <h1>Olá, <?= isset($_SESSION["primeiro_nome"]) ? $_SESSION["primeiro_nome"] : "Usuário" ?></h1>
+                    <h1>Hola, <?= isset($_SESSION["primeiro_nome"]) ? $_SESSION["primeiro_nome"] : "Usuario" ?></h1>
                 </div>
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="O que você quer comer hoje...Kelvin?Eu também!" autocomplete="off">
+                    <input type="text" id="searchInput" placeholder="¿Qué quieres comer hoy...?" autocomplete="off">
                     <div id="searchSuggestions" class="search-suggestions"></div>
                 </div>
                 <div class="top-actions">
                     <button class="icon-btn">
                         <i class="fas fa-comment"></i>
                     </button>
-                    <button class="icon-btn" onclick="window.location.href='configuracoes.php#favoritos'" title="Meus Favoritos">
+                    <button class="icon-btn" onclick="window.location.href='configuracoes.php#favoritos'" title="Mis Favoritos">
                         <i class="fas fa-star"></i>
                     </button>
                     <div class="avatar">
@@ -134,8 +134,8 @@ function getIconeCategoria($nome_categoria) {
             <!-- Banner principal -->
             <section class="banner">
                 <div class="banner-content">
-                    <h2>OUÇA O SABOR</h2>
-                    <h3>VIVA O <span class="highlight">ENCANTO</span></h3>
+                    <h2>ESCUCHA EL SABOR</h2>
+                    <h3>VIVE EL <span class="highlight">ENCANTO</span></h3>
                 </div>
                 <div class="banner-image">
                     <img src="./images/favicon.png" alt="Pratos diversos">
@@ -145,8 +145,8 @@ function getIconeCategoria($nome_categoria) {
             <!-- Categorias -->
             <section class="categories">
                 <div class="section-header">
-                    <h2>CATEGORIAS</h2>
-                    <a href="cardapio.php" class="see-all">Ver tudo...</a>
+                    <h2>CATEGORÍAS</h2>
+                    <a href="cardapio.php" class="see-all">Ver todo...</a>
                 </div>
                 <div class="category-list">
                     <?php if (!empty($categorias)): ?>
@@ -179,13 +179,13 @@ function getIconeCategoria($nome_categoria) {
                             <div class="category-icon">
                                 <i class="fas fa-hamburger"></i>
                             </div>
-                            <span>Lanches</span>
+                            <span>Bocadillos</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
                                 <i class="fas fa-ice-cream"></i>
                             </div>
-                            <span>Sobremesa</span>
+                            <span>Postres</span>
                         </div>
                         <div class="category-item" onclick="navegarCategoria('todas')">
                             <div class="category-icon">
@@ -200,8 +200,8 @@ function getIconeCategoria($nome_categoria) {
             <!-- Produtos -->
             <section class="products">
                 <div class="section-header">
-                    <h2>MAIS PEDIDOS</h2>
-                    <a href="cardapio.php" class="see-all">Ver tudo...</a>
+                    <h2>MÁS PEDIDOS</h2>
+                    <a href="cardapio.php" class="see-all">Ver todo...</a>
                 </div>
                 <div class="product-list">
                     <?php if (!empty($produtosDestaque)): ?>

@@ -52,16 +52,13 @@ try {
         throw new Exception('Este email já está cadastrado');
     }
 
-    // Hash da senha
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-    // Inserir usuário no banco
+    // Inserir usuário no banco (senha sem criptografia)
     $stmt = $pdo->prepare("
         INSERT INTO usuario (primeiro_nome, segundo_nome, email, telefone, senha, data_criacao) 
         VALUES (?, ?, ?, ?, ?, NOW())
     ");
     
-    $success = $stmt->execute([$nome, $sobrenome, $email, $telefone, $senha_hash]);
+    $success = $stmt->execute([$nome, $sobrenome, $email, $telefone, $senha]);
 
     if (!$success) {
         throw new Exception('Erro ao cadastrar usuário');

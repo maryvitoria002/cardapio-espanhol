@@ -47,32 +47,8 @@ try {
     }
 
     // Verificar senha
-    $senha_valida = false;
-    
-    // Primeiro tentar com password_hash (novo sistema)
-    if (password_verify($senha, $usuario['senha'])) {
-        $senha_valida = true;
-    } 
-    // Se não funcionar, tentar com MD5 (sistema antigo) e migrar
-    else if (md5($senha) === $usuario['senha']) {
-        $senha_valida = true;
-        
-        // Migrar para password_hash
-        $nova_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        $stmt_update = $pdo->prepare("UPDATE usuario SET senha = ? WHERE id_usuario = ?");
-        $stmt_update->execute([$nova_senha_hash, $usuario['id_usuario']]);
-    }
-    // Se ainda não funcionar, tentar texto plano (para migração)
-    else if ($senha === $usuario['senha']) {
-        $senha_valida = true;
-        
-        // Migrar para password_hash
-        $nova_senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        $stmt_update = $pdo->prepare("UPDATE usuario SET senha = ? WHERE id_usuario = ?");
-        $stmt_update->execute([$nova_senha_hash, $usuario['id_usuario']]);
-    }
-
-    if (!$senha_valida) {
+    // Verificar senha sem criptografia
+    if ($senha !== $usuario['senha']) {
         throw new Exception('Email ou senha incorretos');
     }
 
@@ -87,8 +63,7 @@ try {
     if ($lembrar) {
         $cookie_value = base64_encode(json_encode([
             'id' => $usuario['id_usuario'],
-            'email' => $usuario['email'],
-            'hash' => password_hash($usuario['email'] . $usuario['id_usuario'], PASSWORD_DEFAULT)
+            'email' => $usuario['email']
         ]));
         setcookie('lembrar_login', $cookie_value, time() + (30 * 24 * 60 * 60), '/'); // 30 dias
     }

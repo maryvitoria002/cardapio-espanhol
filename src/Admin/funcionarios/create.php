@@ -38,7 +38,7 @@ try {
     $crudFuncionario->setEmail($_POST['email']);
     $crudFuncionario->setTelefone($_POST['telefone']);
     $crudFuncionario->setAcesso($_POST['acesso']);
-    $crudFuncionario->setSenha(password_hash($_POST['senha'], PASSWORD_DEFAULT));
+    $crudFuncionario->setSenha($_POST['senha']);
     
     // Upload da imagem se fornecida
     $imagem_nome = '';

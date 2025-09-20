@@ -195,7 +195,7 @@ $produtoAdicionado = isset($_GET['added']) && $_GET['added'] == '1';
 
                 <form method="POST" class="form-compra">
                     <div class="quantidade-container">
-                        <label for="quantidade">Quantidade:</label>
+                        <label for="quantidade">Cantidad:</label>
                         <div class="quantidade-controles">
                             <button type="button" class="qty-btn minus" onclick="alterarQuantidade(-1)">
                                 <i class="fas fa-minus"></i>
@@ -210,7 +210,7 @@ $produtoAdicionado = isset($_GET['added']) && $_GET['added'] == '1';
                     <div class="acoes-produto">
                         <button type="submit" name="add_to_cart" class="btn-adicionar-carrinho">
                             <i class="fas fa-shopping-cart"></i>
-                            Adicionar ao Carrinho
+                            Agregar al Carrito
                         </button>
                         
                         <button type="button" class="btn-favoritar" onclick="toggleFavorito(<?= $dadosProduto['id_produto'] ?>)">

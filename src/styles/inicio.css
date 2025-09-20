@@ -2,8 +2,8 @@
 
 /* Variáveis de cor do sistema */
 :root {
-    --azul-escuro: #053161;
-    --azul-principal: #1565c0;
+    --azul-escuro: #ff6b35;
+    --azul-principal: #c41e3a;
     --fundo-claro: #F0F3FF;
     --amarelo-destaque: #e9b004;
     --texto-escuro: #0d1836;
@@ -411,6 +411,27 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.product-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.product-list::-webkit-scrollbar-track {
+    background: var(--fundo-claro);
+    border-radius: 10px;
+}
+
+.product-list::-webkit-scrollbar-thumb {
+    background: var(--azul-principal);
+    border-radius: 10px;
+}
+
+.product-list::-webkit-scrollbar-thumb:hover {
+    background: var(--azul-escuro);
 }
 
 .product-card {

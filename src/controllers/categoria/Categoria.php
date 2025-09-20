@@ -5,6 +5,7 @@ class Categoria extends Database{
     protected $tabela = "categoria";
     private $id_categoria;
     private $nome_categoria;
+    private $descricao;
     private $data_criacao;
 
     public function getId_categoria():?string {
@@ -19,8 +20,21 @@ class Categoria extends Database{
         return $this->nome_categoria;
     }
 
-    public function setNome_categora($nome_categoria) {
-        $this->nome_categoria= $nome_categoria;
+    public function setNome_categoria($nome_categoria) {
+        $this->nome_categoria = $nome_categoria;
+    }
+    
+    // Alias para compatibilidade
+    public function setNomeCategoria($nome_categoria) {
+        $this->setNome_categoria($nome_categoria);
+    }
+
+    public function getDescricao():?string {
+        return $this->descricao;
+    }
+
+    public function setDescricao($descricao) {
+        $this->descricao = $descricao;
     }
 
     public function getData_criacao():string {

@@ -1,19 +1,21 @@
 /* CSS para página de cardápio - Écoute Saveur */
 
-/* Variáveis de cor do sistema */
+/* Variáveis de cor do sistema - Tema Hispânico */
 :root {
-    --azul-escuro: #053161;
-    --azul-principal: #1565c0;
-    --fundo-claro: #F0F3FF;
-    --amarelo-destaque: #e9b004;
-    --texto-escuro: #0d1836;
+    --vermelho-principal: #C41E3A; /* Vermelho espanhol vibrante */
+    --laranja-quente: #FF6B35; /* Laranja colombiano */
+    --dourado-mexicano: #FFD700; /* Dourado mexicano */
+    --terracota: #D2691E; /* Terracota do Uruguai */
+    --fundo-claro: #FEF9F3; /* Bege cálido */
+    --amarelo-destaque: #FFC107; /* Amarelo quente */
+    --texto-escuro: #2C1810; /* Marrom escuro */
     --fundo-branco: #ffffff;
     --cinza-claro: #f8f9fa;
     --cinza-medio: #6c757d;
     --verde-sucesso: #28a745;
     --vermelho-erro: #dc3545;
     --sombra-leve: rgba(0, 0, 0, 0.1);
-    --gradiente-principal: linear-gradient(135deg, var(--azul-principal), var(--azul-escuro));
+    --gradiente-principal: linear-gradient(135deg, var(--vermelho-principal), var(--terracota));
 }
 
 /* Reset e base */
@@ -27,7 +29,7 @@
 
 /* Sidebar - removido !important para permitir comportamento responsivo */
 .container .sidebar {
-    background: var(--azul-escuro);
+    background: var(--terracota);
     width: 300px;
     padding: 0;
     border: none;
@@ -64,7 +66,7 @@
 .greeting h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--azul-escuro);
+    color: var(--terracota);
     margin: 0 0 5px 0;
 }
 
@@ -108,7 +110,7 @@
 
 .search-form input[type="text"]:focus {
     outline: none;
-    border-color: var(--azul-principal);
+    border-color: var(--vermelho-principal);
     background: var(--fundo-branco);
     box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
 }
@@ -126,7 +128,7 @@
     border: none;
     border-radius: 50%;
     background: var(--fundo-claro);
-    color: var(--azul-principal);
+    color: var(--vermelho-principal);
     font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -137,7 +139,7 @@
 }
 
 .icon-btn:hover {
-    background: var(--azul-principal);
+    background: var(--vermelho-principal);
     color: var(--fundo-branco);
     transform: translateY(-2px);
 }
@@ -210,13 +212,13 @@
 .section-header h2 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--azul-escuro);
+    color: var(--terracota);
 }
 
 .clear-filter {
     background: none;
     border: none;
-    color: var(--azul-principal);
+    color: var(--vermelho-principal);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -224,7 +226,7 @@
 }
 
 .clear-filter:hover {
-    color: var(--azul-escuro);
+    color: var(--terracota);
 }
 
 .item-count {
@@ -258,11 +260,11 @@
 
 .category-item:hover,
 .category-item.active {
-    background: var(--azul-principal);
+    background: var(--vermelho-principal);
     color: var(--fundo-branco);
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(21, 101, 192, 0.3);
-    border-color: var(--azul-principal);
+    border-color: var(--vermelho-principal);
 }
 
 .category-icon {
@@ -291,7 +293,7 @@
 
 .category-icon i {
     font-size: 1.5rem;
-    color: var(--azul-principal);
+    color: var(--vermelho-principal);
 }
 
 .category-item:hover .category-icon i,
@@ -330,7 +332,7 @@
 .product-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    border-color: var(--azul-principal);
+    border-color: var(--vermelho-principal);
 }
 
 .product-link {
@@ -400,7 +402,7 @@
 .product-name {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--azul-escuro);
+    color: var(--terracota);
     margin: 0;
 }
 
@@ -479,7 +481,7 @@
     height: 35px;
     border: none;
     border-radius: 50%;
-    background: var(--azul-principal);
+    background: var(--vermelho-principal);
     color: var(--fundo-branco);
     font-size: 0.9rem;
     cursor: pointer;
@@ -490,7 +492,7 @@
 }
 
 .qty-btn:hover {
-    background: var(--azul-escuro);
+    background: var(--terracota);
     transform: scale(1.1);
 }
 
@@ -505,7 +507,7 @@
 .qty-display {
     font-weight: 700;
     font-size: 1.1rem;
-    color: var(--azul-escuro);
+    color: var(--terracota);
     min-width: 20px;
     text-align: center;
 }
@@ -539,7 +541,7 @@
 .empty-state h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;
-    color: var(--azul-escuro);
+    color: var(--terracota);
 }
 
 /* Carrinho flutuante */
@@ -555,11 +557,11 @@
     box-shadow: 0 20px 40px var(--sombra-leve);
     z-index: 1000;
     overflow: hidden;
-    border: 2px solid var(--azul-principal);
+    border: 2px solid var(--vermelho-principal);
 }
 
 .cart-header {
-    background: var(--azul-principal);
+    background: var(--vermelho-principal);
     color: var(--fundo-branco);
     padding: 20px;
     display: flex;
@@ -602,7 +604,7 @@
 .cart-total {
     margin-bottom: 15px;
     font-size: 1.2rem;
-    color: var(--azul-escuro);
+    color: var(--terracota);
 }
 
 .checkout-btn {
@@ -653,7 +655,7 @@
     .container .sidebar {
         width: 100%;
         order: -1;
-        background: var(--azul-escuro);
+        background: var(--terracota);
     }
     
     /* Em mobile, collapsed pode ser menor mas ainda funcional */
@@ -711,7 +713,7 @@
     }
     
     .container .sidebar {
-        background: var(--azul-escuro);
+        background: var(--terracota);
         padding: 0;
     }
     

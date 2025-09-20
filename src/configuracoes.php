@@ -13,13 +13,13 @@ $usuario = new Crud_usuario();
 $usuario->setId_usuario($_SESSION['id']);
 $dadosUsuario = $usuario->read();
 
-// Buscar favoritos do usuário
+// Buscar favoritos del usuario
 $crudFavorito = new Crud_favorito();
 $favoritos = $crudFavorito->getFavoritosByUsuario($_SESSION['id']);
 
-// Verificar se os dados do usuário foram encontrados
+// Verificar si los datos del usuario fueron encontrados
 if (!$dadosUsuario) {
-    echo "<script>alert('Erro ao carregar dados do usuário. Faça login novamente.'); window.location.href = './login.php';</script>";
+    echo "<script>alert('Error al cargar datos del usuario. Inicia sesión nuevamente.'); window.location.href = './login.php';</script>";
     exit();
 }
 
@@ -34,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $usuario->setData_atualizacao();
 
     if ($usuario->update()) {
-        echo "<script>alert('Informações atualizadas com sucesso!'); window.location.href = './configuracoes.php';</script>";
+        echo "<script>alert('¡Información actualizada con éxito!'); window.location.href = './configuracoes.php';</script>";
         exit();
     } else {
-        echo "<script>alert('Erro ao atualizar informações. Tente novamente.');</script>";
+        echo "<script>alert('Error al actualizar información. Inténtalo de nuevo.');</script>";
     }
 }
 ?>
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
             </a>
         </nav>
 
-        <!-- Botão de acesso administrativo -->
+        <!-- Botón de acceso administrativo -->
         <div class="admin-button-container">
             <button type="button" class="btn-admin" title="Acesso ao painel administrativo" onclick="redirectToAdmin()">
                 <i class="fas fa-user-shield"></i>
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     </div>
 
     <div class="retangulo_branco2">
-        <!-- Seção pra atualizar as informações Pessoais -->
+        <!-- Sección para actualizar la información Personal -->
         <div class="config-section active" id="informacoes">
             <h1>Informações Pessoais</h1>
             <form class="form-config" method="POST" action="./configuracoes.php">
@@ -112,39 +112,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                     </div>
                 </div>
                 
-                <button type="submit" class="btn-save" name="update">Salvar Alterações</button>
+                <button type="submit" class="btn-save" name="update">Guardar Cambios</button>
             </form>
         </div>
 
-        <!-- Seção de Segurança -->
+        <!-- Sección de Seguridad -->
         <div class="config-section" id="seguranca">
-            <h1>Login e Senha</h1>
+            <h1>Inicio de Sesión y Contraseña</h1>
             <form class="form-config">
                 <div class="form-group">
-                    <label>Senha Atual</label>
+                    <label>Contraseña Actual</label>
                     <input type="password">
                 </div>
                 <div class="form-group">
-                    <label>Nova Senha</label>
+                    <label>Nueva Contraseña</label>
                     <input type="password">
                 </div>
                 <div class="form-group">
-                    <label>Confirmar Nova Senha</label>
+                    <label>Confirmar Nueva Contraseña</label>
                     <input type="password">
                 </div>
-                <button type="submit" class="btn-save">Alterar Senha</button>
+                <button type="submit" class="btn-save">Cambiar Contraseña</button>
             </form>
         </div>
 
-        <!-- Seção de Favoritos -->
+        <!-- Sección de Favoritos -->
         <div class="config-section" id="favoritos">
-            <h1>Itens Favoritos</h1>
+            <h1>Artículos Favoritos</h1>
             <?php if (empty($favoritos)): ?>
                 <div class="empty-favorites">
                     <i class="fas fa-heart"></i>
-                    <h3>Nenhum produto favoritado ainda</h3>
-                    <p>Comece a adicionar produtos aos seus favoritos para vê-los aqui!</p>
-                    <a href="cardapio.php" class="btn-primary">Explorar Cardápio</a>
+                    <h3>Ningún producto favorito aún</h3>
+                    <p>¡Comienza a agregar productos a tus favoritos para verlos aquí!</p>
+                    <a href="cardapio.php" class="btn-primary">Explorar Menú</a>
                 </div>
             <?php else: ?>
                 <div class="favorites-counter">
@@ -184,15 +184,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 </div>
 
 <script>
-// Detectar hash na URL para mostrar seção específica
+// Detectar hash en la URL para mostrar sección específica
 document.addEventListener('DOMContentLoaded', function() {
-    const hash = window.location.hash.substring(1); // Remove o #
+    const hash = window.location.hash.substring(1); // Remover el #
     if (hash && document.getElementById(hash)) {
-        // Remove active de todos os itens
+        // Remover active de todos los elementos
         document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
         document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
         
-        // Ativa o item correspondente ao hash
+        // Activar el elemento correspondiente al hash
         const menuItem = document.querySelector(`[data-section="${hash}"]`);
         const section = document.getElementById(hash);
         
@@ -236,16 +236,16 @@ function uploadFotoPerfil(input) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Atualizar imagem com timestamp para forçar reload
+                // Actualizar imagen con timestamp para forzar reload
                 img.src = data.foto_url + '?t=' + new Date().getTime();
                 
-                // Atualizar todas as imagens de perfil na página
+                // Actualizar todas las imágenes de perfil en la página
                 updateAllProfileImages(data.foto_url);
                 
                 showNotification(data.message, 'success');
             } else {
                 showNotification(data.message, 'error');
-                input.value = ''; // Limpar input
+                input.value = ''; // Limpiar input
             }
         })
         .catch(error => {
@@ -257,7 +257,7 @@ function uploadFotoPerfil(input) {
 }
 
 function updateAllProfileImages(newImageUrl) {
-    // Atualizar todas as imagens de perfil na aplicação
+    // Actualizar todas las imágenes de perfil en la aplicación
     const profileImages = document.querySelectorAll('img[alt="Usuário"], img[alt="foto de perfil"]');
     profileImages.forEach(img => {
         img.src = newImageUrl + '?t=' + new Date().getTime();
@@ -265,7 +265,7 @@ function updateAllProfileImages(newImageUrl) {
 }
 
 function showNotification(message, type) {
-    // Criar elemento de notificação
+    // Crear elemento de notificación
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;

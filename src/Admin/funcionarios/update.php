@@ -43,7 +43,7 @@ try {
     
     // Só definir senha se foi fornecida
     if (!empty($_POST['senha'])) {
-        $crudFuncionario->setSenha(password_hash($_POST['senha'], PASSWORD_DEFAULT));
+        $crudFuncionario->setSenha($_POST['senha']);
     }
     
     // Upload da imagem se fornecida

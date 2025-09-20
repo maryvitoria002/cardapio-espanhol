@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1565c0 0%, #053161 100%);
+    background: linear-gradient(135deg, #C41E3A 0%, #D2691E 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -189,9 +189,9 @@ body {
 
 .form-group input:focus {
     outline: none;
-    border-color: #1565c0;
+    border-color: #C41E3A;
     background: white;
-    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
 }
 
 .form-group input.error {
@@ -419,7 +419,7 @@ body {
 /* Side Panel */
 .side-panel {
     flex: 0 0 450px;
-    background: linear-gradient(135deg, #1565c0 0%, #053161 100%);
+    background: linear-gradient(135deg, #C41E3A 0%, #D2691E 100%);
     padding: 40px;
     display: flex;
     flex-direction: column;

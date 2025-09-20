@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/cadastro.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Écoute Saveur | Cadastro</title>
+    <title>Écoute Saveur | Registro</title>
 </head>
 <body>
     <div class="container">
@@ -35,7 +35,7 @@
             <!-- Form Header -->
             <div class="form-header">
                 <h1><strong>Écoute</strong> <span>Saveur</span></h1>
-                <p class="step-title">Vamos começar seu cadastro!</p>
+                <p class="step-title">¡Comencemos tu registro!</p>
             </div>
 
             <!-- Messages -->
@@ -46,14 +46,14 @@
                 
                 <!-- Step 1: Dados Pessoais -->
                 <div class="form-step active" data-step="1">
-                    <h2>Dados Pessoais</h2>
-                    <p class="step-description">Vamos conhecer você melhor</p>
+                    <h2>Datos Personales</h2>
+                    <p class="step-description">Conozcámonos mejor</p>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="primeiro_nome">
                                 <i class="fas fa-user"></i>
-                                Primeiro Nome *
+                                Primer Nombre *
                             </label>
                             <input type="text" id="primeiro_nome" name="primeiro_nome" required>
                             <div class="error-message"></div>
@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <label for="segundo_nome">
                                 <i class="fas fa-user"></i>
-                                Segundo Nome *
+                                Segundo Nombre *
                             </label>
                             <input type="text" id="segundo_nome" name="segundo_nome" required>
                             <div class="error-message"></div>
@@ -72,7 +72,7 @@
                     <div class="form-group">
                         <label for="data_nascimento">
                             <i class="fas fa-calendar"></i>
-                            Data de Nascimento (opcional)
+                            Fecha de Nacimiento (opcional)
                         </label>
                         <input type="date" id="data_nascimento" name="data_nascimento">
                         <div class="error-message"></div>
@@ -81,8 +81,8 @@
 
                 <!-- Step 2: Contato -->
                 <div class="form-step" data-step="2">
-                    <h2>Informações de Contato</h2>
-                    <p class="step-description">Como podemos entrar em contato</p>
+                    <h2>Información de Contacto</h2>
+                    <p class="step-description">Cómo podemos contactarte</p>
                     
                     <div class="form-group">
                         <label for="email">
@@ -96,7 +96,7 @@
                     <div class="form-group">
                         <label for="telefone">
                             <i class="fas fa-phone"></i>
-                            Telefone *
+                            Teléfono *
                         </label>
                         <input type="tel" id="telefone" name="telefone" required placeholder="(00) 00000-0000">
                         <div class="error-message"></div>
@@ -105,17 +105,17 @@
                     <div class="form-group">
                         <label for="endereco">
                             <i class="fas fa-map-marker-alt"></i>
-                            Endereço (opcional)
+                            Dirección (opcional)
                         </label>
-                        <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro">
+                        <input type="text" id="endereco" name="endereco" placeholder="Calle, número, barrio">
                         <div class="error-message"></div>
                     </div>
                 </div>
 
                 <!-- Step 3: Segurança -->
                 <div class="form-step" data-step="3">
-                    <h2>Segurança da Conta</h2>
-                    <p class="step-description">Crie uma senha segura</p>
+                    <h2>Seguridad de la Cuenta</h2>
+                    <p class="step-description">Crea una contraseña segura</p>
                     
                     <div class="form-group">
                         <label for="senha">

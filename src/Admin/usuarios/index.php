@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'primeiro_nome' => $_POST['primeiro_nome'],
                     'segundo_nome' => $_POST['segundo_nome'], 
                     'email' => $_POST['email'],
-                    'senha' => password_hash($_POST['senha'], PASSWORD_DEFAULT),
+                    'senha' => $_POST['senha'],
                     'telefone' => $_POST['telefone'] ?? '',
                     'endereco' => $_POST['endereco'] ?? ''
                 ];
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Atualizar senha apenas se fornecida
                 if (!empty($_POST['senha'])) {
-                    $dados['senha'] = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+                    $dados['senha'] = $_POST['senha'];
                 }
                 
                 if ($crudUsuario->updateUser($id, $dados)) {

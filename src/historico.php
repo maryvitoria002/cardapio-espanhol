@@ -21,7 +21,7 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
         
         if (!$confirmar) {
             // Primeira tentativa - mostrar confirmação
-            $mensagem_acao = "⚠️ Tem certeza que deseja cancelar o pedido #$id_pedido? 
+            $mensagem_acao = "⚠️ ¿Estás seguro de que quieres cancelar el pedido #$id_pedido? 
                               <a href='?acao=cancelar&id=$id_pedido&confirmar=sim' 
                                  style='background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; margin: 0 5px;'>
                                  ✅ SIM, CANCELAR
@@ -49,11 +49,11 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
                     $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
                     
                     if (!$pedido) {
-                        $mensagem_acao = "❌ Pedido #$id_pedido não encontrado";
+                        $mensagem_acao = "❌ Pedido #$id_pedido no encontrado";
                     } elseif ($pedido['id_usuario'] != $user_id) {
-                        $mensagem_acao = "❌ Este pedido não pertence a você";
+                        $mensagem_acao = "❌ Este pedido no te pertenece";
                     } elseif (strtolower($pedido['status_pedido']) !== 'pendente') {
-                        $mensagem_acao = "❌ Só é possível cancelar pedidos pendentes. Status atual: " . $pedido['status_pedido'];
+                        $mensagem_acao = "❌ Solo es posible cancelar pedidos pendientes. Estado actual: " . $pedido['status_pedido'];
                     } else {
                         // Buscar itens do pedido para restituir estoque antes de cancelar
                         require_once "./controllers/produto/Crud_produto.php";
@@ -158,12 +158,12 @@ try {
     $historico = $crudPedidos->readByUser($_SESSION['id']);
 } catch (Exception $e) {
     $historico = [];
-    $erro = "Erro ao carregar histórico de pedidos: " . $e->getMessage();
+    $erro = "Error al cargar el historial de pedidos: " . $e->getMessage();
 }
 ?>
 
 <div class="historico-container">
-    <h1>Histórico de Pedidos</h1>
+    <h1>Historial de Pedidos</h1>
     
     <?php if ($mensagem_sucesso): ?>
         <div class="alert alert-success">
@@ -267,7 +267,7 @@ try {
     <?php else: ?>
         <div class="sem-pedidos">
             <img src="./assets/empty-order.png" alt="Sem pedidos">
-            <h2>Você ainda não fez nenhum pedido</h2>
+            <h2>Aún no has hecho ningún pedido</h2>
             <p>Que tal experimentar nossa deliciosa comida?</p>
             <a href="./cardapio.php" class="btn-cardapio">Ver Cardápio</a>
         </div>

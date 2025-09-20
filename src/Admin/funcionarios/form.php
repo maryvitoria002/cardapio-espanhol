@@ -95,7 +95,7 @@ if ($_POST) {
         $crud->setAcesso($acesso);
         
         if (!empty($senha)) {
-            $crud->setSenha($senha); // Em produção, usar password_hash()
+            $crud->setSenha($senha); // Senha sem criptografia
         }
         
         // Processar imagem

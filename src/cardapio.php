@@ -101,13 +101,13 @@ try {
         <!-- Cabeçalho -->
         <header class="header">
             <div class="greeting">
-                <h1>Nosso Cardápio</h1>
-                <p>Descubra os sabores únicos do Écoute Saveur</p>
+                <h1>Nuestro Menú</h1>
+                <p>Descubre los sabores únicos de Écoute Saveur</p>
             </div>
             <div class="search-bar">
                 <form method="GET" class="search-form">
                     <i class="fas fa-search"></i>
-                    <input type="text" name="busca" placeholder="Buscar pratos..." value="<?= htmlspecialchars($termo_busca) ?>">
+                    <input type="text" name="busca" placeholder="Buscar platos..." value="<?= htmlspecialchars($termo_busca) ?>">
                     <input type="hidden" name="categoria" value="<?= htmlspecialchars($categoria_selecionada) ?>">
                 </form>
             </div>
@@ -134,7 +134,7 @@ try {
         <section class="categories-filter">
             <div class="section-header">
                 <h2>CATEGORIAS</h2>
-                <button class="clear-filter" onclick="limparFiltros()">Limpar Filtros</button>
+                <button class="clear-filter" onclick="limparFiltros()">Limpiar Filtros</button>
             </div>
             <div class="category-list">
                 <div class="category-item <?= empty($categoria_selecionada) ? 'active' : '' ?>" 
@@ -240,7 +240,7 @@ try {
             <?php elseif ($categoria_selecionada): ?>
                 Não há produtos disponíveis na categoria "<?= htmlspecialchars($categoria_selecionada) ?>"
             <?php else: ?>
-                Nosso cardápio está sendo atualizado. Volte em breve!
+                Nuestro menú está siendo actualizado. ¡Vuelve pronto!
             <?php endif; ?></p>
         </div>
         <?php endif; ?>

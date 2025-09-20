@@ -65,7 +65,7 @@ if ($_POST) {
             $segundo_nome,
             $email,
             $telefone,
-            $senha, // Em produção, use password_hash()
+            $senha, // Senha sem criptografia
             $imagem_perfil
         ]);
         

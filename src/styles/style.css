@@ -3,12 +3,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-      /* Cores principais */
-      --azul-escuro: #053161;
-      --azul-principal: #1565c0;
-      --fundo-claro: #F0F3FF;
-      --amarelo-destaque: #e9b004;
-      --texto-escuro: #0d1836;
+      /* Cores hispânicas inspiradas em países latinos */
+      --vermelho-principal: #C41E3A; /* Vermelho espanhol vibrante */
+      --laranja-quente: #FF6B35; /* Laranja colombiano */
+      --dourado-mexicano: #FFD700; /* Dourado mexicano */
+      --terracota: #D2691E; /* Terracota do Uruguai */
+      --fundo-claro: #FEF9F3; /* Bege cálido */
+      --amarelo-destaque: #FFC107; /* Amarelo quente */
+      --texto-escuro: #2C1810; /* Marrom escuro */
       --fundo-branco: #ffffff;
 }
 
@@ -20,7 +22,7 @@
 }
 
 body {
-  background: var(--azul-principal);
+  background: var(--vermelho-principal);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,7 +71,7 @@ body {
 }
 
 .facebook {
-  background-color: var(--azul-principal);
+  background-color: var(--vermelho-principal);
   color: white;
 }
 
@@ -86,7 +88,7 @@ body {
 }
 
 #login {
-    color: var(--azul-principal); 
+    color: var(--vermelho-principal); 
     margin-bottom: 10px;
     font-weight: 700;  
   }
@@ -100,7 +102,7 @@ input {
 }
 
 label{
-    color: var(--azul-escuro);
+    color: var(--terracota);
     font-weight: 700; 
     margin-bottom: 5px;
 }
@@ -114,12 +116,12 @@ label{
 
 .links a {
   text-decoration: none;
-  color: var(--azul-escuro);
+  color: var(--terracota);
   font-weight: bold;
 }
 
 /* button {
-  background-color: var(--azul-escuro);
+  background-color: var(--terracota);
   color: var(--fundo-branco);
   border: none;
   padding: 10px;
@@ -183,7 +185,7 @@ label{
   /* margin: 15px auto 10px auto; */
   margin: auto;
   color: var(--fundo-branco);
-  background-color: var(--azul-escuro);
+  background-color: var(--terracota);
   padding: 8px;
   border: none;
   border-radius: 12px;
@@ -196,7 +198,7 @@ label{
   position: relative; /* já estava fixed no exemplo; aqui, como está dentro de .container, use relative */
   width: 300px;
   height: 100%;
-  background: var(--azul-escuro);
+  background: var(--terracota);
   transition: width 0.4s ease;
   flex-shrink: 0; /* não deixa encolher */
 }

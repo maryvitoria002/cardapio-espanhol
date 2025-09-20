@@ -1,10 +1,10 @@
-/* Login Styles */
+/* Login Styles - Tema Hispânico */
 :root {
-    --primary-color: #1155CC;
-    --secondary-color: #FFC400;
-    --dark-color: #0F172A;
+    --primary-color: #C41E3A; /* Vermelho espanhol */
+    --secondary-color: #FFD700; /* Dourado mexicano */
+    --dark-color: #2C1810; /* Marrom escuro */
     --gray-color: #6B7280;
-    --light-gray: #F8FAFC;
+    --light-gray: #FEF9F3; /* Bege cálido */
     --white: #FFFFFF;
     --error: #EF4444;
     --border-radius: 8px;
