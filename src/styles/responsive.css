@@ -1,0 +1,297 @@
+/* Arquivo CSS para melhorar a responsividade geral do sistema */
+
+/* Variáveis para breakpoints */
+:root {
+    --mobile-small: 480px;
+    --mobile: 640px;
+    --tablet: 768px;
+    --tablet-large: 968px;
+    --desktop-small: 1024px;
+    --desktop: 1200px;
+}
+
+/* Reset responsivo global */
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Container responsivo */
+.container {
+    transition: all 0.3s ease;
+}
+
+/* Sidebar responsiva */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 240px !important; /* Forçar largura específica */
+        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    
+    .sidebar.collapsed {
+        transform: translateX(0);
+    }
+    
+    .sidebar-menu-button {
+        display: flex !important;
+    }
+    
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    /* Overlay para fechar menu */
+    .sidebar.collapsed::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 240px;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+/* Tipografia responsiva */
+@media (max-width: 768px) {
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.1rem; }
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.1rem; }
+    h4 { font-size: 1rem; }
+}
+
+/* Buttons responsivos */
+@media (max-width: 768px) {
+    .btn, .button, button {
+        min-height: 44px; /* Touch target size */
+        font-size: 0.95rem;
+    }
+}
+
+/* Forms responsivos */
+@media (max-width: 768px) {
+    input, textarea, select {
+        min-height: 44px;
+        font-size: 16px; /* Previne zoom no iOS */
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        font-size: 0.9rem;
+    }
+}
+
+/* Cards responsivos */
+@media (max-width: 968px) {
+    .card, .product-card {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 640px) {
+    .card, .product-card {
+        border-radius: 12px;
+        padding: 15px;
+    }
+}
+
+/* Grid responsivo geral */
+.responsive-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 768px) {
+    .responsive-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+/* Espaçamento responsivo */
+@media (max-width: 768px) {
+    .container, .main-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    section {
+        margin-bottom: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 200px !important; /* Forçar largura ainda menor */
+        border-radius: 0 20px 20px 0;
+    }
+    
+    .sidebar.collapsed::after {
+        left: 200px;
+    }
+    
+    /* Sidebar mais compacta */
+    .sidebar .nav-item {
+        padding: 6px 12px;
+    }
+    
+    .sidebar .nav-link {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .sidebar .nav-label {
+        font-size: 0.8rem;
+    }
+    
+    .sidebar-header {
+        padding: 12px;
+    }
+    
+    .sidebar-header .header-logo span {
+        font-size: 1.2rem;
+    }
+    
+    .sidebar .nav-link img {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Espaçamento geral */
+    .container, .main-content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    section {
+        margin-bottom: 20px;
+    }
+}
+
+/* Navegação responsiva */
+@media (max-width: 768px) {
+    .nav-horizontal {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-item {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Tabelas responsivas */
+@media (max-width: 768px) {
+    .responsive-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+}
+
+/* Utilitários de visibilidade */
+.hide-mobile {
+    display: block;
+}
+
+.show-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+    
+    .show-mobile {
+        display: block;
+    }
+}
+
+/* Flexbox helpers responsivos */
+@media (max-width: 768px) {
+    .flex-row-mobile {
+        flex-direction: column;
+    }
+    
+    .flex-center-mobile {
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Scroll customizado para mobile */
+@media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+    }
+}
+
+/* Performance otimizations para mobile */
+@media (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .smooth-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .no-select {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
+
+/* Loading states responsivos */
+@media (max-width: 768px) {
+    .loading {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

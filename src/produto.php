@@ -1,15 +1,18 @@
 <?php 
-$titulo = "produto";
-include_once "./components/_base-header.php";
+session_start();
 require_once "./controllers/produto/Crud_produto.php";
 require_once "./controllers/categoria/Crud_categoria.php";
 require_once "./controllers/avaliacao/Crud_avaliacao.php";
 require_once "./helpers/image_helper.php";
 
+// Verificar se o usuário está logado ANTES de incluir o header
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
     exit();
 }
+
+$titulo = "produto";
+include_once "./components/_base-header.php";
 
 // Verificar se o ID do produto foi fornecido
 if (!isset($_GET['id']) || empty($_GET['id'])) {

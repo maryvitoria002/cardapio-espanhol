@@ -1,15 +1,17 @@
 <?php 
-$titulo = "favoritos";
-include_once "./components/_base-header.php";
-
+// Iniciar sessão se não estiver ativa
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// Verificar se o usuário está logado ANTES de incluir o header
 if (empty($_SESSION["id"])) {
     header("Location: ./login.php");
     exit();
 }
+
+$titulo = "favoritos";
+include_once "./components/_base-header.php";
 
 // Carregar foto de perfil na sessão se não estiver definida
 if (!isset($_SESSION['foto_perfil'])) {

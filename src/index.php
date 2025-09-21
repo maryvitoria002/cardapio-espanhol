@@ -1,15 +1,13 @@
 <?php 
-$titulo = "inicio";
-include_once "./components/_base-header.php";
-
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+session_start();
 
 if (empty($_SESSION["id"])) {
     header("Location: ./login.php");
     exit();
 }
+
+$titulo = "inicio";
+include_once "./components/_base-header.php";
 
 // Carregar foto de perfil na sessão se não estiver definida
 if (!isset($_SESSION['foto_perfil'])) {

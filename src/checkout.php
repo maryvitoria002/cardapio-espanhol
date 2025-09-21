@@ -1,8 +1,7 @@
 <?php 
-$titulo = "checkout";
-include_once "./components/_base-header.php";
+session_start();
 
-// Verifica se o usuário está logado
+// Verifica se o usuário está logado ANTES de incluir o header
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
     exit();
@@ -10,10 +9,13 @@ if (!isset($_SESSION['id'])) {
 
 // Verifica se há itens no carrinho
 if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
-    $_SESSION['erro_checkout'] = "Seu carrinho está vazio!";
+    $_SESSION['erro_checkout'] = "¡Tu carrito está vacío!";
     header("Location: ./carrinho.php");
     exit();
 }
+
+$titulo = "checkout";
+include_once "./components/_base-header.php";
 
 // Verificar mensagens de erro
 $erro_checkout = '';
@@ -72,7 +74,7 @@ try {
 <div class="checkout-container">
     <div class="checkout-header">
         <h1>🛒 Finalizar Pedido</h1>
-        <p>Confirme suas informações de entrega e finalize seu pedido</p>
+        <p>Confirma tu información de entrega y finaliza tu pedido</p>
     </div>
     
     <?php if (!empty($erro_checkout)): ?>
@@ -85,51 +87,51 @@ try {
         <div class="checkout-sections">
             <!-- Seção de Endereço -->
             <div class="section">
-                <h2>📍 Endereço de Entrega</h2>
+                <h2>📍 Dirección de Entrega</h2>
                 
                 <div id="form-endereco">
                     <div class="form-group">
-                        <label for="endereco_entrega">Endereço Completo *</label>
+                        <label for="endereco_entrega">Dirección Completa *</label>
                         <textarea name="endereco_entrega" id="endereco_entrega" 
-                                  placeholder="Rua, número, complemento, bairro, cidade - CEP"
+                                  placeholder="Calle, número, complemento, barrio, ciudad - Código Postal"
                                   required></textarea>
                     </div>
                     
                     <div class="form-group">
-                        <label for="referencia">Ponto de Referência (opcional)</label>
+                        <label for="referencia">Punto de Referencia (opcional)</label>
                         <input type="text" name="referencia" id="referencia" 
-                               placeholder="Ex: Próximo ao mercado, casa azul...">
+                               placeholder="Ej: Cerca del mercado, casa azul...">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="telefone_contato">Telefone para Contato *</label>
+                    <label for="telefone_contato">Teléfono de Contacto *</label>
                     <input type="tel" name="telefone_contato" id="telefone_contato" 
                            value="<?= htmlspecialchars($usuario['telefone'] ?? '') ?>"
                            placeholder="(11) 99999-9999" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="modo_pagamento">Forma de Pagamento *</label>
+                    <label for="modo_pagamento">Forma de Pago *</label>
                     <select name="modo_pagamento" id="modo_pagamento" required>
-                        <option value="">Selecione...</option>
-                        <option value="Dinheiro">💵 Dinheiro</option>
-                        <option value="Cartão de Débito">💳 Cartão de Débito</option>
-                        <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
+                        <option value="">Selecciona...</option>
+                        <option value="Dinheiro">💵 Efectivo</option>
+                        <option value="Cartão de Débito">💳 Tarjeta de Débito</option>
+                        <option value="Cartão de Crédito">💳 Tarjeta de Crédito</option>
                         <option value="PIX">📱 PIX</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="observacoes">Observações (opcional)</label>
+                    <label for="observacoes">Observaciones (opcional)</label>
                     <textarea name="observacoes" id="observacoes" 
-                              placeholder="Instruções especiais para o entregador..."></textarea>
+                              placeholder="Instrucciones especiales para el repartidor..."></textarea>
                 </div>
             </div>
             
             <!-- Seção de Resumo -->
             <div class="section">
-                <h2>📋 Resumo do Pedido</h2>
+                <h2>📋 Resumen del Pedido</h2>
                 
                 <?php foreach ($itensCarrinho as $item): ?>
                     <div class="resumo-linha">
@@ -146,7 +148,7 @@ try {
                 </div>
                 
                 <div class="resumo-linha">
-                    <span>Taxa de Entrega</span>
+                    <span>Tasa de Entrega</span>
                     <span></span>
                     <span>R$ <?= number_format($frete, 2, ',', '.') ?></span>
                 </div>
@@ -158,10 +160,10 @@ try {
                 </div>
                 
                 <div class="alert alert-success">
-                    <small><strong>ℹ️ Informações:</strong><br>
-                    • Tempo estimado de entrega: 30-45 minutos<br>
-                    • Taxa de entrega: R$ 2,00 (já incluída no valor total)<br>
-                    • Formas de pagamento aceitas na entrega</small>
+                    <small><strong>ℹ️ Información:</strong><br>
+                    • Tiempo estimado de entrega: 30-45 minutos<br>
+                    • Tasa de entrega: R$ 2,00 (ya incluida en el valor total)<br>
+                    • Formas de pago aceptadas en la entrega</small>
                 </div>
                 
                 <!-- BOTÃO FINALIZAR AQUI EMBAIXO DAS INFORMAÇÕES -->
@@ -170,7 +172,7 @@ try {
                         🛒 FINALIZAR PEDIDO - R$ <?= number_format($totalComFrete, 2, ',', '.') ?>
                     </button>
                     <br><br>
-                    <a href="carrinho.php" class="btn btn-secondary">← Voltar ao Carrinho</a>
+                    <a href="carrinho.php" class="btn btn-secondary">← Volver al Carrito</a>
                 </div>
             </div>
             </div>
@@ -188,14 +190,14 @@ document.getElementById('checkout-form').addEventListener('submit', function(e) 
     
     // Verificar se tem endereço
     if (!enderecoTextarea.value.trim()) {
-        alert('Por favor, preencha o endereço de entrega.');
+        alert('Por favor, completa la dirección de entrega.');
         e.preventDefault();
         return;
     }
     
     // Confirmação final
     const total = '<?= number_format($totalComFrete, 2, ',', '.') ?>';
-    if (!confirm(`Confirmar pedido no valor de R$ ${total}?`)) {
+    if (!confirm(`¿Confirmar pedido por un valor de R$ ${total}?`)) {
         e.preventDefault();
     }
 });

@@ -539,87 +539,222 @@
         width: 98%;
         margin: 1vh auto;
     }
+    
+    .main-content {
+        padding: 25px;
+    }
+    
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
 }
 
 @media (max-width: 968px) {
-    .container {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-    }
-    
-    .container .sidebar {
-        width: 100% !important;
-        order: -1;
-        background: var(--azul-escuro) !important;
+    .main-content {
+        padding: 20px;
     }
     
     .header {
         flex-direction: column;
         gap: 20px;
         text-align: center;
+        padding: 15px 0;
     }
     
     .search-bar {
         margin: 0;
         max-width: 100%;
+        order: 1;
+    }
+    
+    .top-actions {
+        order: 2;
+        justify-content: center;
+    }
+    
+    .greeting {
+        order: 0;
     }
     
     .banner {
         flex-direction: column;
         text-align: center;
         gap: 20px;
+        padding: 25px;
     }
     
     .banner-content h2 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .banner-content h3 {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 640px) {
-    .container {
-        border-radius: 0;
-        width: 100%;
-        margin: 0;
-        min-height: 100vh;
-    }
-    
-    .main-content {
-        padding: 20px;
-    }
-    
-    .container .sidebar {
-        background: var(--azul-escuro) !important;
-        padding: 0 !important;
-    }
-    
-    .banner {
-        padding: 30px 20px;
-    }
-    
-    .banner-content h2 {
-        font-size: 2rem;
-    }
-    
-    .banner-content h3 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
     
     .category-list {
         gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
     }
     
     .category-item {
-        min-width: 100px;
-        padding: 15px 10px;
+        min-width: 110px;
+        flex: 0 0 calc(50% - 10px);
+    }
+    
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-content {
+        padding: 15px;
+    }
+    
+    .header {
+        padding: 10px 0;
+        gap: 15px;
+    }
+    
+    .greeting h1 {
+        font-size: 2rem;
+    }
+    
+    .search-bar input {
+        padding: 12px 12px 12px 40px;
+        font-size: 0.95rem;
+    }
+    
+    .icon-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+    
+    .banner {
+        padding: 20px 15px;
+        margin: 15px 0;
+    }
+    
+    .banner-content h2 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .banner-content h3 {
+        font-size: 1.4rem;
+    }
+    
+    .banner-content p {
+        font-size: 0.9rem;
+        margin: 10px 0;
+    }
+    
+    .category-list {
+        gap: 12px;
+        padding: 0 5px;
+    }
+    
+    .category-item {
+        min-width: 95px;
+        padding: 12px 8px;
+        flex: 0 0 calc(33.333% - 8px);
+    }
+    
+    .category-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+    
+    .category-icon img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .category-item span {
+        font-size: 0.8rem;
     }
     
     .product-list {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 15px;
+        max-height: 70vh;
+    }
+    
+    .product-card {
+        padding: 20px;
+    }
+    
+    .product-image {
+        height: 180px;
+        margin-bottom: 15px;
+    }
+    
+    .product-name {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+    
+    .product-price {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+    
+    .add-btn {
+        width: 45px;
+        height: 45px;
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .see-all {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 10px;
+    }
+    
+    .greeting h1 {
+        font-size: 1.8rem;
+    }
+    
+    .banner-content h2 {
+        font-size: 1.6rem;
+    }
+    
+    .banner-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .category-item {
+        flex: 0 0 calc(50% - 6px);
+        min-width: 85px;
+    }
+    
+    .product-list {
+        gap: 12px;
+    }
+    
+    .product-card {
+        padding: 15px;
+    }
+    
+    .product-image {
+        height: 160px;
+    }
+    
+    .search-suggestions {
+        max-height: 300px;
     }
 }

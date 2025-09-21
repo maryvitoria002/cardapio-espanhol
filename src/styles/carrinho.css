@@ -91,6 +91,55 @@
     border-radius: var(--border-radius);
     padding: 1rem; /* Reduzido de 1.5rem para 1rem */
     border: 1px solid var(--border-color);
+    max-height: 70vh; /* Altura máxima de 70% da viewport */
+    overflow-y: auto; /* Scroll vertical quando necessário */
+    overflow-x: hidden; /* Evita scroll horizontal */
+    scroll-behavior: smooth; /* Scroll suave */
+}
+
+/* Scrollbar personalizada para carrinho-items */
+.carrinho-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.carrinho-items::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 4px;
+}
+
+.carrinho-items::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.carrinho-items::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-blue);
+}
+
+/* Estilos para Firefox */
+.carrinho-items {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) var(--light-gray);
+    position: relative;
+}
+
+/* Indicador sutil de scroll - gradiente no final */
+.carrinho-items::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carrinho-items.has-scroll::after {
+    opacity: 1;
 }
 
 /* Estados de alerta */
@@ -599,6 +648,51 @@
     background: var(--dark-blue);
 }
 
+/* Cupom aplicado */
+.cupom-aplicado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: var(--border-radius);
+    color: #065f46;
+    font-weight: 500;
+}
+
+.cupom-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cupom-info i {
+    color: #10b981;
+    font-size: 1.1rem;
+}
+
+.btn-remover-cupom {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+}
+
+.btn-remover-cupom:hover {
+    background: #fef2f2;
+    color: #dc2626;
+    transform: scale(1.1);
+}
+
 /* Finalizar pedido */
 .finalizar-pedido {
     margin: 2rem 0;
@@ -703,13 +797,6 @@
 }
 
 @media (max-width: 768px) {
-    .container {
-        width: 100%;
-        margin: 0;
-        border-radius: 0;
-        min-height: 100vh;
-    }
-    
     .carrinho-container {
         padding: 1rem;
     }
@@ -717,6 +804,67 @@
     .carrinho-content {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+    
+    .carrinho-items {
+        max-height: 65vh; /* Altura para tablets */
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 10px 0;
+    }
+    
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .voltar-btn {
+        align-self: center;
+        margin-bottom: 10px;
+    }
+    
+    .carrinho-item {
+        padding: 1rem;
+        grid-template-columns: 80px 1fr auto;
+        gap: 1rem;
+    }
+    
+    .item-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .item-info h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .item-price {
+        font-size: 1.1rem;
+    }
+    
+    .quantity-controls {
+        gap: 8px;
+    }
+    
+    .quantity-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .quantity-display {
+        min-width: 40px;
+        font-size: 0.9rem;
+    }
+    
+    .remove-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
     
     .carrinho-resumo {
@@ -803,6 +951,7 @@
     .carrinho-items,
     .resumo-card {
         padding: 1rem;
+        max-height: 60vh; /* Altura menor para mobile */
     }
     
     .carrinho-item {
@@ -811,6 +960,16 @@
     
     .cupom-form {
         flex-direction: column;
+    }
+    
+    .cupom-aplicado {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+    
+    .cupom-aplicado .cupom-info {
+        justify-content: center;
     }
     
     .btn-aplicar-cupom {

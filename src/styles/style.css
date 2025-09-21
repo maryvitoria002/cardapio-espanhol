@@ -395,6 +395,35 @@ label{
 }
 /* Responsive media query code for small screens */
 @media (max-width: 768px) {
+  .container {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -240px !important;
+    height: 100vh;
+    width: 240px !important;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    transform: none !important;
+  }
+  
+  .sidebar.collapsed {
+    left: 0 !important;
+    transform: none !important;
+  }
+  
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+    padding: 15px;
+  }
+  
   .sidebar-menu-button {
     position: fixed;
     left: 20px;
@@ -404,15 +433,53 @@ label{
     display: flex;
     color: #F1F4FF;
     background: #151A2D;
+    border: none;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    cursor: pointer;
   }
-  .sidebar.collapsed {
-    width: 270px;
-    left: -270px;
-  }
+  
   .sidebar.collapsed .sidebar-header .sidebar-toggler {
     transform: none;
   }
+  
   .sidebar.collapsed .sidebar-nav .primary-nav {
     transform: translateY(15px);
+  }
+}
+
+/* Media query para telas muito pequenas */
+@media (max-width: 480px) {
+  .container {
+    padding: 0;
+  }
+  
+  .main-content {
+    padding: 10px;
+  }
+  
+  .sidebar {
+    width: 200px !important;
+    left: -200px !important;
+  }
+  
+  .sidebar.collapsed {
+    left: 0 !important;
+  }
+  
+  /* Sidebar mais compacta */
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .sidebar .nav-label {
+    font-size: 0.85rem;
+  }
+  
+  .sidebar-header {
+    padding: 12px 15px;
   }
 }

@@ -1,12 +1,14 @@
 <?php 
-$titulo = "historico";
-include_once "./components/_base-header.php";
+session_start();
 
-// Verifica se o usuário está logado
+// Verifica se o usuário está logado ANTES de incluir o header
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
     exit();
 }
+
+$titulo = "historico";
+include_once "./components/_base-header.php";
 
 // Processar ações de cancelamento e avaliação
 $mensagem_acao = '';
@@ -24,11 +26,11 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
             $mensagem_acao = "⚠️ ¿Estás seguro de que quieres cancelar el pedido #$id_pedido? 
                               <a href='?acao=cancelar&id=$id_pedido&confirmar=sim' 
                                  style='background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; margin: 0 5px;'>
-                                 ✅ SIM, CANCELAR
+                                 ✅ SÍ, CANCELAR
                               </a>
                               <a href='?' 
                                  style='background: #6c757d; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; margin: 0 5px;'>
-                                 ❌ NÃO
+                                 ❌ NO
                               </a>";
         } else {
             // Confirmação recebida - prosseguir com cancelamento
@@ -81,14 +83,14 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
                         $resultado = $stmt->execute([$id_pedido]);
                         
                         if ($resultado) {
-                            $mensagem_acao = "✅ Pedido #$id_pedido cancelado com sucesso! Estoque de $estoque_restaurado itens restaurado.";
+                            $mensagem_acao = "✅ ¡Pedido #$id_pedido cancelado con éxito! Stock de $estoque_restaurado artículos restaurado.";
                         } else {
-                            $mensagem_acao = "❌ Falha ao executar o cancelamento";
+                            $mensagem_acao = "❌ Error al ejecutar la cancelación";
                         }
                     }
                 }
             } catch (Exception $e) {
-                $mensagem_acao = "❌ Erro ao cancelar pedido: " . $e->getMessage();
+                $mensagem_acao = "❌ Error al cancelar pedido: " . $e->getMessage();
             }
         }
     } elseif ($acao === 'avaliar' && $id_pedido > 0) {
@@ -110,7 +112,7 @@ if (isset($_GET['acao']) && isset($_GET['id'])) {
             } elseif ($pedido['id_usuario'] != $user_id) {
                 $mensagem_acao = "❌ Este pedido não pertence a você";
             } elseif (strtolower($pedido['status_pedido']) !== 'concluido') {
-                $mensagem_acao = "❌ Só é possível avaliar pedidos concluídos";
+                $mensagem_acao = "❌ Solo es posible evaluar pedidos completados";
             } else {
                 // Verificar se já foi avaliado
                 $stmt = $conexao->prepare("SELECT id_avaliacao FROM avaliacao WHERE id_pedido = ?");
@@ -251,11 +253,11 @@ try {
                                 <?php if (!$jaAvaliado): ?>
                                     <a href="?acao=avaliar&id=<?= $pedido['id_pedido'] ?>" 
                                        style="background: #28a745; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; margin: 5px; display: inline-block;">
-                                        ⭐ Avaliar Pedido
+                                        ⭐ Evaluar Pedido
                                     </a>
                                 <?php else: ?>
                                     <span class="ja-avaliado">
-                                        Já avaliado
+                                        Ya evaluado
                                     </span>
                                 <?php endif; ?>
                             <?php endif; ?>
@@ -266,10 +268,10 @@ try {
         </div>
     <?php else: ?>
         <div class="sem-pedidos">
-            <img src="./assets/empty-order.png" alt="Sem pedidos">
+            <img src="./assets/empty-order.png" alt="Sin pedidos">
             <h2>Aún no has hecho ningún pedido</h2>
-            <p>Que tal experimentar nossa deliciosa comida?</p>
-            <a href="./cardapio.php" class="btn-cardapio">Ver Cardápio</a>
+            <p>¿Qué tal probar nuestra deliciosa comida?</p>
+            <a href="./cardapio.php" class="btn-cardapio">Ver Menú</a>
         </div>
     <?php endif; ?>
 </div>

@@ -1,9 +1,9 @@
 <?php 
-$titulo = "configuracoes";
-include_once "./components/_base-header.php";
+session_start();
 require_once "./controllers/usuario/Crud_usuario.php";
 require_once "./controllers/favorito/Crud_favorito.php";
 
+// Verificar se o usuário está logado ANTES de incluir o header
 if (!isset($_SESSION['id'])) {
     header("Location: ./login.php");
     exit();
@@ -23,6 +23,7 @@ if (!$dadosUsuario) {
     exit();
 }
 
+// Processar atualizações de perfil ANTES de incluir o header
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $primeiro_nome = $_POST['primeiro_nome'] ?? '';
     $segundo_nome = $_POST['segundo_nome'] ?? '';
@@ -40,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         echo "<script>alert('Error al actualizar información. Inténtalo de nuevo.');</script>";
     }
 }
+
+// Agora incluir o header após todo processamento
+$titulo = "configuracoes";
+include_once "./components/_base-header.php";
 ?>
 
 <div class="config-container">
@@ -61,41 +66,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         <nav class="menu-config">
             <a href="#" class="menu-item active" data-section="informacoes">
                 <img src="./assets/avatar.png" alt="">
-                <span>Informações Pessoais</span>
+                <span>Información Personal</span>
             </a>
 
             <a href="#" class="menu-item" data-section="seguranca">
                 <img src="./assets/cadeado.png" alt="">
-                <span>Login e Senha</span>
+                <span>Login y Contraseña</span>
             </a>
 
             <a href="#" class="menu-item" data-section="favoritos">
                 <img src="./assets/estrela.png" alt="">
-                <span>Itens Favoritos</span>
+                <span>Artículos Favoritos</span>
             </a>
         </nav>
 
-        <!-- Botón de acceso administrativo -->
-        <div class="admin-button-container">
-            <button type="button" class="btn-admin" title="Acesso ao painel administrativo" onclick="redirectToAdmin()">
-                <i class="fas fa-user-shield"></i>
-                Painel Admin
-            </button>
-        </div>
     </div>
 
     <div class="retangulo_branco2">
         <!-- Sección para actualizar la información Personal -->
         <div class="config-section active" id="informacoes">
-            <h1>Informações Pessoais</h1>
+            <h1>Información Personal</h1>
             <form class="form-config" method="POST" action="./configuracoes.php">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Nome</label>
+                        <label>Nombre</label>
                         <input type="text" name="primeiro_nome" value="<?= htmlspecialchars($dadosUsuario['primeiro_nome']) ?>">
                     </div>
                     <div class="form-group">
-                        <label>Sobrenome</label>
+                        <label>Apellido</label>
                         <input type="text" name="segundo_nome" value="<?= htmlspecialchars($dadosUsuario['segundo_nome']) ?>">
                     </div>
                 </div>
@@ -107,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Telefone</label>
+                        <label>Teléfono</label>
                         <input type="tel" name="telefone" value="<?= htmlspecialchars($dadosUsuario['telefone'] ?? '') ?>">
                     </div>
                 </div>
@@ -148,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 </div>
             <?php else: ?>
                 <div class="favorites-counter">
-                    <p><?= count($favoritos) ?> <?= count($favoritos) == 1 ? 'produto favoritado' : 'produtos favoritados' ?></p>
+                    <p><?= count($favoritos) ?> <?= count($favoritos) == 1 ? 'producto favorito' : 'productos favoritos' ?></p>
                 </div>
                 <div class="favorites-grid-config">
                     <?php foreach ($favoritos as $produto): ?>
